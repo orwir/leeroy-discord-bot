@@ -10,10 +10,19 @@ const commands = shared.commands
 const config = shared.config
 const one_arg_commands = ['poll']
 
+function configure_guild(guild) {
+    if (config[guild.id] == null) {
+        config[guild.id] = {
+            prefix: config.prefix
+        }
+    }
+}
+
 bot.on('message', msg => {
-    var guild_id = msg.guild.id
+    configure_guild(msg.guild)
+
     var text = msg.content
-    var prefix = (config[guild_id] != null) ? config[guild_id].prefix : config.prefix
+    var prefix = config[msg.guild.id].prefix
     
     if (text.substring(0, prefix.length) == prefix) {
         var args = text.substring(prefix.length).split(' ')

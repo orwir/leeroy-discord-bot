@@ -7,3 +7,12 @@ commands.cmdpoll = (msg, question) => {
         shard.react('👎')
     })
 }
+
+commands.manpoll = () => {
+    return {
+        title: 'poll',
+        description: 'Creates "yes/no" poll with positive 👍 and negative 👎 reactions.',
+        usage: 'poll [question]',
+        examples: 'poll Am I the best bot?'
+    }
+}
