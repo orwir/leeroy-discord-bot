@@ -8,7 +8,7 @@ const Roles = require('./commands/roles.js')
 const bot = new Discord.Client()
 const commands = shared.commands
 const config = shared.config
-const one_arg_commands = ['poll']
+const single_arg_cmd = ['poll']
 
 function configure_guild(guild) {
     if (config[guild.id] == null) {
@@ -27,13 +27,12 @@ bot.on('message', msg => {
     if (text.substring(0, prefix.length) == prefix) {
         var args = text.substring(prefix.length).split(' ')
         var cmd = args[0]
-        args = args.splice(1)
         
-        if (one_arg_commands.includes(cmd)) {
+        if (single_arg_cmd.includes(cmd)) {
             var arg = text.substring(prefix.length + cmd.length)
             commands['cmd' + cmd](msg, arg)
         } else {
-            commands['cmd' + cmd](msg, ...args)
+            commands['cmd' + cmd](msg, ...args.splice(1))
         }
     }
 })
