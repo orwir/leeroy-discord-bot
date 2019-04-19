@@ -60,7 +60,7 @@ commands.cmdwtf = (msg) => {
                 },
                 {
                     name: 'Prefix',
-                    value: (config[guild.id] != null) ? config[guild.id].prefix : config.prefix
+                    value: config[guild.id].prefix
                 }
             ]
         }
