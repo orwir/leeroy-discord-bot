@@ -1,0 +1,20 @@
+{
+    "name": "executor",
+    "version": "1.0.0",
+    "description": "Follow the rules or be burned",
+    "main": "bot.js",
+    "author": "orwir",
+
+    "scripts": {
+        "start": "node app/bot.js"
+    },
+
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/npm/npm.git"
+    },
+    
+    "dependencies": {
+        "discord.js": "11.4.2"
+    }
+}
