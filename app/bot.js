@@ -1,47 +1,61 @@
-const Discord = require('discord.js')
+const discord = require('discord.js')
 const global = require('./global.js')
 
-const Utility = require('./commands/utility.js')
-const Fun = require('./commands/fun.js')
-const Roles = require('./commands/roles.js')
+require('./utility/index.js')
+require('./fun/index.js')
+require('./roles/index.js')
 
-const CMD_PREFIX = 'cmd'
-const CMD_POLL = 'poll'
-const CMD_WTF = 'wtf'
-const EVT_MESSAGE = 'message'
+const singleArgumentCommands = Object.keys(global.commands)
+    .filter(e => { return global.commands[e].singleArgument })
 
-const COMMANDS = global.COMMANDS
-const CONFIG = global.CONFIG
-const SINGLE_ARG_COMMANDS = [CMD_POLL]
-const bot = new Discord.Client()
+const staticPrefixCommands = Object.keys(global.commands)
+    .filter(e => { return global.commands[e].staticPrefix })
 
-function configure_guild(guild) {
-    if (CONFIG[guild.id] == null) {
-        CONFIG[guild.id] = {
-            PREFIX: CONFIG.PREFIX
+const bot = new discord.Client()
+
+function configureGuild(guild) {
+    if (global.config[guild.id] == null) {
+        global.config[guild.id] = {
+            prefix: global.config.prefix
         }
     }
 }
 
-bot.on(EVT_MESSAGE, msg => {
-    configure_guild(msg.guild)
+function isStaticPrefixCommand(text) {
+    return staticPrefixCommands.filter(e => { return text.includes(e) }).length > 0
+}
 
-    var text = msg.content
-    var prefix = CONFIG[msg.guild.id].PREFIX
+bot.on(global.events.message, msg => {
+    configureGuild(msg.guild)
+
+    let text = msg.content
+    let prefix = global.config[msg.guild.id].prefix
+
+    if (text.startsWith(global.config.prefix) && isStaticPrefixCommand(text)) {
+        prefix = global.config.prefix
+    } else if (!text.startsWith(prefix)) {
+        text = null
+    }
     
-    if (text.substring(0, prefix.length) == prefix) {
-        var args = text.substring(prefix.length).split(' ')
-        var cmd = args[0]
-        
-        if (SINGLE_ARG_COMMANDS.includes(cmd)) {
-            var arg = text.substring(prefix.length + cmd.length)
-            COMMANDS[CMD_PREFIX + cmd](msg, arg)
+    if (text != null) {
+        text = text.substring(prefix.length)
+        let command = text.substring(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
+        text = text.substring(command.length + 1)
+
+        if (singleArgumentCommands.includes(command)) {
+            global.commands[command].action(msg, text)
+        } else if (Object.keys(global.commands).includes(command)) {
+            global.commands[command].action(msg, ...text.split(' '))
         } else {
-            COMMANDS[CMD_PREFIX + cmd](msg, ...args.splice(1))
+            msg.channel.send('', {
+                embed: {
+                    title: `${command} not found`,
+                    description: 'How dare you asking me about it?',
+                    color: global.colors.highlightError
+                }
+            })
         }
-    } else if (text == CONFIG.PREFIX + CMD_WTF) {
-        COMMANDS.cmdwtf(msg)
     }
 })
 
-bot.login(CONFIG.AUTH_TOKEN)
+bot.login(global.config.token)

@@ -1,4 +1,6 @@
 module.exports = {
-    AUTH_TOKEN: process.env.auth_token,
-    PREFIX: 'e!'
+    token: process.env.executor_auth_token,
+    prefix: 'e!',
+    dev: process.env.executor_dev,
+    devAccount: process.env.executor_dev_account
 }
