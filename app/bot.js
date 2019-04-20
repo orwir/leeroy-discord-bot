@@ -1,42 +1,47 @@
 const Discord = require('discord.js')
-const shared = require('./shared.js')
+const global = require('./global.js')
 
 const Utility = require('./commands/utility.js')
 const Fun = require('./commands/fun.js')
 const Roles = require('./commands/roles.js')
 
+const CMD_PREFIX = 'cmd'
+const CMD_POLL = 'poll'
+const CMD_WTF = 'wtf'
+const EVT_MESSAGE = 'message'
+
+const COMMANDS = global.COMMANDS
+const CONFIG = global.CONFIG
+const SINGLE_ARG_COMMANDS = [CMD_POLL]
 const bot = new Discord.Client()
-const commands = shared.commands
-const config = shared.config
-const single_arg_cmd = ['poll']
 
 function configure_guild(guild) {
-    if (config[guild.id] == null) {
-        config[guild.id] = {
-            prefix: config.prefix
+    if (CONFIG[guild.id] == null) {
+        CONFIG[guild.id] = {
+            PREFIX: CONFIG.PREFIX
         }
     }
 }
 
-bot.on('message', msg => {
+bot.on(EVT_MESSAGE, msg => {
     configure_guild(msg.guild)
 
     var text = msg.content
-    var prefix = config[msg.guild.id].prefix
+    var prefix = CONFIG[msg.guild.id].PREFIX
     
     if (text.substring(0, prefix.length) == prefix) {
         var args = text.substring(prefix.length).split(' ')
         var cmd = args[0]
         
-        if (single_arg_cmd.includes(cmd)) {
+        if (SINGLE_ARG_COMMANDS.includes(cmd)) {
             var arg = text.substring(prefix.length + cmd.length)
-            commands['cmd' + cmd](msg, arg)
+            COMMANDS[CMD_PREFIX + cmd](msg, arg)
         } else {
-            commands['cmd' + cmd](msg, ...args.splice(1))
+            COMMANDS[CMD_PREFIX + cmd](msg, ...args.splice(1))
         }
-    } else if (text == config.prefix + 'wtf') { // default prefix should always works for wtf command
-        commands.cmdwtf(msg)
+    } else if (text == CONFIG.PREFIX + CMD_WTF) {
+        COMMANDS.cmdwtf(msg)
     }
 })
 
-bot.login(config.auth_token)
+bot.login(CONFIG.AUTH_TOKEN)

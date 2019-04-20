@@ -1,16 +1,23 @@
-const shared = require('../shared.js')
-const commands = shared.commands
-const group = ':smile:fun'
+const global = require('../global.js')
 
-commands.cmdpoll = (msg, question) => {
-    msg.channel.send('@here' + question).then(shard => {
-        shard.react('👍')
-        shard.react('👎')
-    })
+const COMMANDS = global.COMMANDS
+const GROUP_NAME = 'fun'
+const GROUP_ICON = ':smile:'
+
+COMMANDS.cmdpoll = (msg, question) => {
+    if (question != null) {
+        msg.channel.send('@here ' + question).then(shard => {
+            shard.react('👍')
+            shard.react('👎')
+        })
+    } else {
+        COMMANDS.cmdman(msg, 'poll')
+    }
 }
 
-commands.manpoll = {
-    group: group,
+COMMANDS.manpoll = {
+    group_name: GROUP_NAME,
+    group_icon: GROUP_ICON,
     title: 'poll',
     description: 'Creates "yes/no" poll with positive 👍 and negative 👎 reactions.',
     usage: 'poll [question]',

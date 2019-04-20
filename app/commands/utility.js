@@ -1,33 +1,34 @@
-const shared = require('../shared.js')
-const commands = shared.commands
-const config = shared.config
-const color_success = shared.color_success
-const color_error = shared.color_error
-const color_default = shared.color_default
-const group = ':gear:utility'
+const global = require('../global.js')
 
-commands.cmdman = (msg, name) => {
-    var man = commands['man' + name]
+const COMMANDS = global.COMMANDS
+const CONFIG = global.CONFIG
+const COLORS = global.COLORS
+const GROUP_NAME = 'utility'
+const GROUP_ICON = ':gear:'
+const MAN_PREFIX = 'man'
+
+COMMANDS.cmdman = (msg, name) => {
+    var man = COMMANDS[MAN_PREFIX + name]
     if (name == null) {
-        var mans = Object.keys(commands)
-            .filter(e => { return e.startsWith('man') })
+        var mans = Object.keys(COMMANDS)
+            .filter(e => { return e.startsWith(MAN_PREFIX) })
             .sort((a, b) => {
-                var ag = commands[a].group.substring(commands[a].group.lastIndexOf(':'))
-                var bg = commands[b].group.substring(commands[b].group.lastIndexOf(':'))
+                var ag = COMMANDS[a].group_name
+                var bg = COMMANDS[b].group_name
                 return ag > bg ? 1 : ((bg > ag ? -1 : 0))
             })
         embed = {
             title: 'Commands overview',
-            color: color_default,
+            color: COLORS.MSG_DEFAULT,
             fields: []
         }
         var group = null
         mans.forEach(m => {
-            var current = commands[m]
-            if (group != current.group) {
-                group = current.group
+            var current = COMMANDS[m]
+            if (group != current.group_name) {
+                group = current.group_name
                 embed.fields.push({
-                    name: group,
+                    name: current.group_icon + current.group_name,
                     inline: true,
                     value: ''
                 })
@@ -42,13 +43,13 @@ commands.cmdman = (msg, name) => {
         embed = {
             title: name,
             description: 'My apologies but command not found.',
-            color: color_error
+            color: COLORS.MSG_ERROR
         }
     } else {
         embed = {
             title: man.title,
             description: man.description,
-            color: color_default,
+            color: COLORS.MSG_DEFAULT,
             fields: [
                 {
                     name: 'Usage',
@@ -66,22 +67,23 @@ commands.cmdman = (msg, name) => {
     msg.channel.send('', { embed: embed })
 }
 
-commands.manman = {
-    group: group,
+COMMANDS.manman = {
+    group_name: GROUP_NAME,
+    group_icon: GROUP_ICON,
     title: 'man',
     description: 'Shows manual for commands',
     usage: 'man [command]',
     examples: 'man man\nman prefix'
 }
 
-commands.cmdwtf = (msg) => {
+COMMANDS.cmdwtf = (msg) => {
     const guild = msg.guild
 
     msg.channel.send('', {
         embed: {
             title: 'Greetings mortals!',
             description: `I'm The Executor and I'm here to rule!`,
-            color: color_default,
+            color: COLORS.MSG_DEFAULT,
             fields: [
                 {
                     name: 'Server',
@@ -89,7 +91,7 @@ commands.cmdwtf = (msg) => {
                 },
                 {
                     name: 'Prefix',
-                    value: config[guild.id].prefix
+                    value: CONFIG[guild.id].PREFIX
                 },
                 {
                     name: 'Commands overview',
@@ -100,31 +102,36 @@ commands.cmdwtf = (msg) => {
     })
 }
 
-commands.manwtf = {
-    group: group,
+COMMANDS.manwtf = {
+    group_name: GROUP_NAME,
+    group_icon: GROUP_ICON,
     title: 'wtf',
     description: 'Shows information about bot',
     usage: 'wtf',
     examples: 'wtf'
 }
 
-commands.cmdprefix = (msg, prefix) => {
+COMMANDS.cmdprefix = (msg, prefix) => {
     if (prefix != null) {
-        config[msg.guild.id].prefix = prefix
+        if (prefix == 'reset') {
+            prefix = CONFIG.PREFIX
+        }
+        CONFIG[msg.guild.id].PREFIX = prefix
         msg.channel.send('', {
             embed: {
                 title: 'Prefix successfully changed!',
                 description: `Summon me now by "${prefix}"`,
-                color: color_success
+                color: COLORS.MSG_SUCCESS
             }
         })
     } else {
-        commands.cmdman(msg, 'prefix')
+        COMMANDS.cmdman(msg, 'prefix')
     }
 }
 
-commands.manprefix = {
-    group: group,
+COMMANDS.manprefix = {
+    group_name: GROUP_NAME,
+    group_icon: GROUP_ICON,
     title: 'prefix',
     description: 'Changes prefix to new value ("reset" restores default value)',
     usage: 'prefix [new value]',
