@@ -34,6 +34,8 @@ bot.on('message', msg => {
         } else {
             commands['cmd' + cmd](msg, ...args.splice(1))
         }
+    } else if (text == config.prefix + 'wtf') { // default prefix should always works for wtf command
+        commands.cmdwtf(msg)
     }
 })
 
