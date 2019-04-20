@@ -14,7 +14,7 @@ const staticPrefixCommands = Object.keys(global.commands)
 const bot = new discord.Client()
 
 function configureGuild(guild) {
-    if (global.config[guild.id] == null) {
+    if (!global.config[guild.id]) {
         global.config[guild.id] = {
             prefix: global.config.prefix
         }
@@ -37,7 +37,7 @@ bot.on(global.events.message, msg => {
         text = null
     }
     
-    if (text != null) {
+    if (text) {
         text = text.substring(prefix.length)
         let command = text.substring(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
         text = text.substring(command.length + 1)
