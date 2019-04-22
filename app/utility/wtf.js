@@ -2,7 +2,7 @@ const global = require('../global.js')
 
 global.commands.wtf = {
 
-    title: 'wtf',
+    name: 'wtf',
 
     group: global.groups.utility,
 
@@ -33,7 +33,7 @@ global.commands.wtf = {
                     },
                     {
                         name: 'Commands overview',
-                        value: global.commands.man.title
+                        value: global.commands.man.name
                     }
                 ]
             }

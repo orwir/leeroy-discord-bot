@@ -2,7 +2,7 @@ const global = require('../global.js')
 
 global.commands.man = {
 
-    title: 'man',
+    name: 'man',
 
     group: global.groups.utility,
 
@@ -30,7 +30,7 @@ global.commands.man = {
                     if (group !== cmd.group) {
                         group = cmd.group
                         embed.fields.push({
-                            name: `${cmd.group.icon} ${cmd.group.title}`,
+                            name: `${cmd.group.icon} ${cmd.group.name}`,
                             inline: true,
                             value: ''
                         })
@@ -39,10 +39,10 @@ global.commands.man = {
                     if (last.value.length > 0) {
                         last.value += ' '
                     }
-                    last.value += cmd.title
+                    last.value += cmd.name
                 })
 
-        } else if (global.commands[command] == null) {
+        } else if (!(global.commands[command] || global.config[msg.guild.id].aliases[command])) {
             // command not found
             embed = {
                 title: `${command} not found`,
@@ -53,8 +53,11 @@ global.commands.man = {
         } else {
             // shows manual for command
             let cmd = global.commands[command]
+            if (!cmd) {
+                cmd = global.config[msg.guild.id].aliases[command]
+            }
             embed = {
-                title: cmd.title,
+                title: cmd.name,
                 description: cmd.description,
                 color: global.colors.highlightDefault,
                 fields: [

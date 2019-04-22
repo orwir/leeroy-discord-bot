@@ -2,7 +2,7 @@ const global = require('../global.js')
 
 global.commands.prefix = {
 
-    title: 'prefix',
+    name: 'prefix',
 
     group: global.groups.utility,
 
@@ -25,7 +25,7 @@ global.commands.prefix = {
                 }
             })
         } else {
-            global.commands.man.action(msg, global.commands.prefix.title)
+            global.commands.man.action(msg, global.commands.prefix.name)
         }
     }
 

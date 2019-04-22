@@ -15,21 +15,21 @@ module.exports = {
 
     groups: {
         fun: {
-            title: 'Fun',
+            name: 'Fun',
             icon: ':ok_hand:',
             order: 0
         },
         roles: {
-            title: 'Roles',
+            name: 'Roles',
             icon: ':busts_in_silhouette:',
             order: 1
         },
         utility: {
-            title: 'Utility',
+            name: 'Utility',
             icon: ':gear:',
             order: 2
         }
     },
 
-    commands: {}, // command: { title: ..., group: ..., action: ... }
+    commands: {}
 }

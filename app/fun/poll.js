@@ -2,7 +2,7 @@ const global = require('../global.js')
 
 global.commands.poll = {
 
-    title: 'poll',
+    name: 'poll',
 
     group: global.groups.fun,
 
