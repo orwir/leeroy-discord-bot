@@ -3,13 +3,10 @@ const global = require('./global.js')
 
 require('./utility/index.js')
 require('./fun/index.js')
-require('./roles/index.js')
-
-const singleArgumentCommands = Object.keys(global.commands)
-    .filter(e => { return global.commands[e].singleArgument })
+require('./access/index.js')
 
 const staticPrefixCommands = Object.keys(global.commands)
-    .filter(e => { return global.commands[e].staticPrefix })
+    .filter(e => global.commands[e].staticPrefix)
 
 const bot = new discord.Client()
 
@@ -25,7 +22,7 @@ function configureGuild(guild) {
 }
 
 function isStaticPrefixCommand(text) {
-    return staticPrefixCommands.filter(e => { return text.includes(e) }).length > 0
+    return staticPrefixCommands.filter(e => text.includes(e)).length > 0
 }
 
 bot.on(global.events.message, msg => {
@@ -43,27 +40,38 @@ bot.on(global.events.message, msg => {
     
     if (text) {
         text = text.substring(prefix.length)
-        let command = text.substring(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
+        let name = text.substring(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
         
-        if (!global.commands[command] && !guildConfig.aliases[command]) {
+        if (!global.commands[name] && !guildConfig.aliases[name]) {
             msg.channel.send('', {
                 embed: {
-                    title: `${command} not found`,
+                    title: `${name} not found`,
                     description: 'How dare you asking me about it?',
                     color: global.colors.highlightError
                 }
             })
         } else {
-            text = text.substring(command.length + 1)
-            if (!global.commands[command]) {
-                command = guildConfig.aliases[command].name
+            text = text.substring(name.length + 1)
+            if (!global.commands[name]) {
+                name = guildConfig.aliases[name].name
             }
-            // TODO: subject for refactoring
-            if (singleArgumentCommands.includes(command)) {
-                global.commands[command].action(msg, text)
-            } else if (Object.keys(global.commands).includes(command)) {
-                global.commands[command].action(msg, ...text.split(' '))
+            let command = global.commands[name]
+            let args = []
+            if (command.arguments) {
+                for (i = 1; i <= command.arguments; i++) {
+                    let arg
+                    if (i < command.arguments) {
+                        arg = text.substring(0, text.indexOf(' '))
+                        text = text.substring(arg.length + 1)
+                    } else {
+                        arg = text
+                    }
+                    args.push(arg)
+                }
+            } else {
+                args = text.split(' ')
             }
+            command.action(msg, ...args)
         }
     }
 })

@@ -12,7 +12,7 @@ global.commands.poll = {
 
     examples: 'poll Am I the best bot?',
 
-    singleArgument: true,
+    arguments: 1,
 
     action: (msg, question) => {
         if (question) {

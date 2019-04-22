@@ -15,13 +15,14 @@ global.commands.alias = {
     action: (msg, command, alias, remove) => {
         if (!command || !global.commands[command]) {
             global.commands.man.action(msg, global.commands.alias.name)
+            
         } else if (!alias) {
             // shows list of aliases
             let aliases = global.config[msg.guild.id].aliases
             let known = Object.keys(aliases)
                 .filter(e => { return aliases[e].name === command })
                 .reduce((accumulator, name) => {
-                    if (accumulator.length > 0) {
+                    if (accumulator) {
                         accumulator += '\n'
                     }
                     return accumulator += name
@@ -33,6 +34,7 @@ global.commands.alias = {
                     color: global.colors.highlightDefault
                 }
             })
+
         } else {
             // add or remove alias
             let title

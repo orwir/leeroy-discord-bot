@@ -12,7 +12,7 @@ global.commands.prefix = {
 
     examples: 'prefix e!\nprefix reset',
 
-    singleArgument: true,
+    arguments: 1,
 
     action: (msg, prefix) => {
         if (prefix) {
