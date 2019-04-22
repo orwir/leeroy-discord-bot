@@ -17,22 +17,19 @@ global.commands.debug = {
     action: (msg, user) => {
         if (user) {
             global.developers.push(user)
-            msg.channel.send('', {
-                embed: {
-                    title: 'New developer added!',
-                    description: `${user} will receive error notifications.`,
-                    color: global.colors.highlightSuccess
-                }
-            })
-        } else {
-            msg.channel.send('', {
-                embed: {
-                    title: 'List of developers:',
-                    description: global.developers.length > 0 ? global.developers.join('\n') : 'Developers are not set.',
-                    color: global.colors.highlightDefault
-                }
-            })
         }
+        let description = user ?
+            `${user} will receive error notifications.` :
+            (global.developers.length > 0 ? global.developers.join('\n') : 'Developers are not set.')
+
+        global.sendMessage({
+            channel: msg.channel,
+            embed: {
+                title: user ? 'Developer added!' : 'List of developers:',
+                description: description,
+                color: user ? global.colors.highlightSuccess : global.colors.highlightDefault
+            }
+        })
     }
 
 }

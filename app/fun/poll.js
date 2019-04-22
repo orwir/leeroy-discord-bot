@@ -16,10 +16,14 @@ global.commands.poll = {
 
     action: (msg, question) => {
         if (question) {
-            msg.channel.send(`@here ${question}`).then(shard => {
-                shard.react('👍')
-                shard.react('👎')
-            })
+            global.sendMessage({
+                    channel: msg.channel,
+                    text: `@here ${question}`
+                })
+                .then(result => {
+                    result.react('👍')
+                    result.react('👎')
+                })
         } else {
             global.commands.man.action(msg, global.commands.poll.name)
         }

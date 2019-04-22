@@ -15,8 +15,8 @@ global.commands.man = {
     action: (msg, command) => {
         let embed
 
+        // shows full commands list
         if (!command) {
-            // shows full commands list
             embed = {
                 title: 'Commands list',
                 color: global.colors.highlightDefault,
@@ -42,16 +42,16 @@ global.commands.man = {
                     last.value += cmd.name
                 })
 
+        // command not found
         } else if (!(global.commands[command] || global.config[msg.guild.id].aliases[command])) {
-            // command not found
             embed = {
-                title: `${command} not found`,
-                description: 'How dare you asking me about it?',
+                title: `Command "${name}" not found!`,
+                description: 'How dare you asking me about it?!',
                 color: global.colors.highlightError
             }
 
+        // shows user manual for command
         } else {
-            // shows manual for command
             let cmd = global.commands[command]
             if (!cmd) {
                 cmd = global.config[msg.guild.id].aliases[command]
@@ -75,7 +75,10 @@ global.commands.man = {
             }
         }
         
-        msg.channel.send('', { embed: embed })
+        global.sendMessage({
+            channel: msg.channel,
+            embed: embed
+        })
     }
     
 }

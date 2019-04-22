@@ -17,9 +17,10 @@ global.commands.prefix = {
     action: (msg, prefix) => {
         if (prefix) {
             global.config[msg.guild.id].prefix = (prefix === 'reset') ? global.config.prefix : prefix
-            msg.channel.send('', {
+            global.sendMessage({
+                channel: msg.channel,
                 embed: {
-                    title: 'Prefix successfully changed!',
+                    title: 'Prefix changed!',
                     description: `Summon me now by "${prefix}"`,
                     color: global.colors.highlightSuccess
                 }

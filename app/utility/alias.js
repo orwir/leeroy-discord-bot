@@ -13,48 +13,35 @@ global.commands.alias = {
     examples: 'alias prefix summon\nalias prefix',
 
     action: (msg, command, alias) => {
+        // invalid command call
         if (!command || !global.commands[command]) {
             global.commands.man.action(msg, global.commands.alias.name)
             
+        // shows list of aliases
         } else if (!alias) {
-            // shows list of aliases
             let aliases = global.config[msg.guild.id].aliases
-            let known = Object.keys(aliases)
-                .filter(e => { return aliases[e].name === command })
-                .reduce((accumulator, name) => {
-                    if (accumulator) {
-                        accumulator += '\n'
-                    }
-                    return accumulator += name
-                }, '')
-            msg.channel.send('', {
+            global.sendMessage({
+                channel: msg.channel,
                 embed: {
-                    title: `Aliases for "${command}"`,
-                    description: known,
+                    title: `"${command}" aliases:`,
+                    description: Object.keys(aliases).filter(e => aliases[e].name === command).join('\n'),
                     color: global.colors.highlightDefault
                 }
             })
 
+        // add or remove alias
         } else {
-            // add or remove alias
-            let title
-            let description
-            let aliases = global.config[msg.guild.id].aliases
             if (aliases[alias]) {
                 delete aliases[alias]
-                title = 'Alias successfully removed!'
-                description = `Alias ${alias} is unbound from "${command}"`
             } else {
                 aliases[alias] = global.commands[command]
-                title = 'Alias successfully added!'
-                description = `Alias "${alias}" is bound to "${command}"`
-
             }
-            msg.channel.send('', {
+
+            global.sendMessage({
+                channel: msg.channel,
                 embed: {
-                    title: title,
-                    description: description,
-                    color: global.colors.highlightSuccess
+                    title: aliases[alias] ? 'Alias added!' : 'Alias removed!',
+                    description: aliases[alias] ? `"${alias}" bound to "${command}"` : `"${alias}" unbound from "${command}"`
                 }
             })
         }

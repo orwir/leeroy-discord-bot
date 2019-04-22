@@ -17,7 +17,8 @@ global.commands.wtf = {
     action: (msg) => {
         const guild = msg.guild
 
-        msg.channel.send('', {
+        global.sendMessage({
+            channel: msg.channel,
             embed: {
                 title: 'Greetings mortals!',
                 description: `I'm The Executor and I'm here to rule!`,
