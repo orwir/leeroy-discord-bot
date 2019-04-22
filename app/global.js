@@ -1,5 +1,9 @@
 const colors = require('../res/colors.json')
 
+String.prototype.isBlank = function() {
+    return !this || !this.trim()
+}
+
 module.exports = {
     config: require('../config.js'),
     
@@ -33,5 +37,12 @@ module.exports = {
 
     commands: {},
 
-    developers: []
+    developers: [],
+
+    sendMessage: (args) => {
+        if (args.channel) {
+            return args.channel.send(args.text, { embed: args.embed })
+        }
+        return new Promise()
+    }
 }

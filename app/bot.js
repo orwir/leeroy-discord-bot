@@ -5,10 +5,92 @@ require('./utility/index.js')
 require('./fun/index.js')
 require('./access/index.js')
 
-const staticPrefixCommands = Object.keys(global.commands)
-    .filter(e => global.commands[e].staticPrefix)
-
 const bot = new discord.Client()
+
+bot.on(global.events.message, msg => {
+    if (msg.author.bot || msg.content.isBlank()) {
+        return
+    }
+
+    configureGuild(msg.guild)
+    let guildConfig = global.config[msg.guild.id]
+    let text = msg.content
+
+    // verify prefix
+    let prefix
+    let onlyStable = false
+    if (text.startsWith(guildConfig.prefix)) {
+        prefix = guildConfig.prefix
+    } else if (text.startsWith(global.config.prefix)) {
+        prefix = global.config.prefix
+        onlyStable = true
+    }
+    if (!prefix) {
+        return
+    }
+    text = text.slice(prefix.length).trim()
+    if (text.isBlank()) {
+        return
+    }
+    
+    // verify command
+    let command
+    let name = text.slice(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
+    text = text.slice(name.length + 1)
+    command = global.commands[name]
+    if (!command) {
+        command = guildConfig.aliases[name]
+    }
+    if (!command) {
+        global.sendMessage({
+            channel: msg.channel,
+            embed: {
+                title: `Command "${name}" not found!`,
+                description: 'How dare you asking me about it?!',
+                color: global.colors.highlightError
+            }
+        })
+        return
+    }
+    if (onlyStable && !command.stable) {
+        return
+    }
+    if (command.dev && !global.config.dev) {
+        return
+    }
+
+    // resolve arguments
+    let args = []
+    if (command.arguments) {
+        for (i = 1; i <= command.arguments; i++) {
+            let arg
+            if (i < command.arguments) {
+                arg = text.slice(0, text.indexOf(' '))
+                text = text.slice(arg.length + 1)
+            } else {
+                arg = text
+            }
+            args.push(arg)
+        }
+    } else {
+        args = text.split(' ')
+    }
+
+    // invoke command
+    try {
+        command.action(msg, ...args)
+    } catch (error) {
+        global.sendMessage({
+            channel: msg.channel,
+            text: global.config.dev ? `@${msg.author.tag} is trying to kill me! Help me please ${global.developers.join(', ')}` : null,
+            embed: {
+                title: `Internal error!`,
+                description: global.config.dev ? error.stack : 'Are you trying to destabilize me?',
+                color: global.colors.highlightError
+            }
+        })
+    }
+})
 
 function configureGuild(guild) {
     if (!global.config[guild.id]) {
@@ -20,76 +102,5 @@ function configureGuild(guild) {
         }
     }
 }
-
-function isStaticPrefixCommand(text) {
-    return staticPrefixCommands.filter(e => text.includes(e)).length > 0
-}
-
-bot.on(global.events.message, msg => {
-    configureGuild(msg.guild)
-
-    let guildConfig = global.config[msg.guild.id]
-    let text = msg.content
-    let prefix = guildConfig.prefix
-
-    if (text.startsWith(global.config.prefix) && isStaticPrefixCommand(text)) {
-        prefix = global.config.prefix
-    } else if (!text.startsWith(prefix)) {
-        text = null
-    }
-    
-    if (text) {
-        text = text.substring(prefix.length)
-        let name = text.substring(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
-        
-        if (!global.commands[name] && !guildConfig.aliases[name]) {
-            msg.channel.send('', {
-                embed: {
-                    title: `${name} not found`,
-                    description: 'How dare you asking me about it?',
-                    color: global.colors.highlightError
-                }
-            })
-            
-        } else {
-            text = text.substring(name.length + 1)
-            if (!global.commands[name]) {
-                name = guildConfig.aliases[name].name
-            }
-            let command = global.commands[name]
-            if (global.config.dev || !command.dev) {
-                let args = []
-                if (command.arguments) {
-                    for (i = 1; i <= command.arguments; i++) {
-                        let arg
-                        if (i < command.arguments) {
-                            arg = text.substring(0, text.indexOf(' '))
-                            text = text.substring(arg.length + 1)
-                        } else {
-                            arg = text
-                        }
-                        args.push(arg)
-                    }
-                } else {
-                    args = text.split(' ')
-                }
-
-                try {
-                    command.action(msg, ...args)
-                } catch (error) {
-                    if (global.config.dev) {
-                        msg.channel.send(`They are trying to kill me! Help me please ${global.developers.join(', ')}`, {
-                            embed: {
-                                title: 'Error',
-                                description: error.stack,
-                                color: global.colors.highlightError
-                            }
-                        })
-                    }
-                }
-            }
-        }
-    }
-})
 
 bot.login(global.config.token)

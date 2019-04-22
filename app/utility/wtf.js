@@ -12,7 +12,7 @@ global.commands.wtf = {
 
     examples: 'wtf',
 
-    staticPrefix: true,
+    stable: true,
 
     action: (msg) => {
         const guild = msg.guild
