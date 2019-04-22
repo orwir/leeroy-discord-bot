@@ -50,28 +50,44 @@ bot.on(global.events.message, msg => {
                     color: global.colors.highlightError
                 }
             })
+            
         } else {
             text = text.substring(name.length + 1)
             if (!global.commands[name]) {
                 name = guildConfig.aliases[name].name
             }
             let command = global.commands[name]
-            let args = []
-            if (command.arguments) {
-                for (i = 1; i <= command.arguments; i++) {
-                    let arg
-                    if (i < command.arguments) {
-                        arg = text.substring(0, text.indexOf(' '))
-                        text = text.substring(arg.length + 1)
-                    } else {
-                        arg = text
+            if (global.config.dev || !command.dev) {
+                let args = []
+                if (command.arguments) {
+                    for (i = 1; i <= command.arguments; i++) {
+                        let arg
+                        if (i < command.arguments) {
+                            arg = text.substring(0, text.indexOf(' '))
+                            text = text.substring(arg.length + 1)
+                        } else {
+                            arg = text
+                        }
+                        args.push(arg)
                     }
-                    args.push(arg)
+                } else {
+                    args = text.split(' ')
                 }
-            } else {
-                args = text.split(' ')
+
+                try {
+                    command.action(msg, ...args)
+                } catch (error) {
+                    if (global.config.dev) {
+                        msg.channel.send(`They are trying to kill me! Help me please ${global.developers.join(', ')}`, {
+                            embed: {
+                                title: 'Error',
+                                description: error.stack,
+                                color: global.colors.highlightError
+                            }
+                        })
+                    }
+                }
             }
-            command.action(msg, ...args)
         }
     }
 })

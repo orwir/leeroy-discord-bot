@@ -12,7 +12,7 @@ global.commands.alias = {
 
     examples: 'alias prefix summon\nalias prefix',
 
-    action: (msg, command, alias, remove) => {
+    action: (msg, command, alias) => {
         if (!command || !global.commands[command]) {
             global.commands.man.action(msg, global.commands.alias.name)
             

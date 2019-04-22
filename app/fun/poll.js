@@ -6,7 +6,7 @@ global.commands.poll = {
 
     group: global.groups.fun,
 
-    description: 'Creates "yes/no" poll with positive 👍 and negative 👎 reactions.',
+    description: 'Creates "yes/no" poll with positive (👍) and negative (👎) reactions.',
 
     usage: 'poll [question]',
 
@@ -21,7 +21,7 @@ global.commands.poll = {
                 shard.react('👎')
             })
         } else {
-            global.commands.man.action(msg, global.commands.poll.title)
+            global.commands.man.action(msg, global.commands.poll.name)
         }
     }
 
