@@ -1,0 +1,47 @@
+{
+    "commandNotFound": "Command \"{{name}}\" not found!",
+    "commandNotFoundDescription": "How dare you asking me about it?!",
+
+    "internalErrorMessage": "{{- author}} is trying to kill me! Help me please {{developers}}",
+    "internalError": "Internal error!",
+    "internalErrorDescription": "Are you trying to destabilize me?",
+
+    "groupFun": "Fun",
+    "groupAccess": "Access",
+    "groupUtility": "Utility",
+
+    "pollDescription": "Creates \"yes/no\" poll with positive (👍) and negative (👎) reactions.",
+    
+    "aliasDescription": "Add or remove alias for command. To see aliases for command type just command.",
+    "aliasesForCommandTitle": "\"{{command}}\" aliases:",
+    "aliasAdded": "Alias added!",
+    "aliasRemoved": "Alias removed!",
+    "aliasBound": "\"{{alias}}\" bound to \"{{command}}\"",
+    "aliasUnbound": "\"{{alias}}\" unbound from \"{{command}}\"",
+
+    "debugDescription": "Sets user to send debug messages.",
+    "userWillReceiveErrorNotifications": "{{user}} will receive error notifications.",
+    "developersNotSet": "Developers are not set.",
+    "developerAdded": "Developer added!",
+    "lisfOfDevelopers": "List of developers:",
+
+    "languageDescription": "Change bot's language.",
+    "languageChanged": "Language changed!",
+    "languageChangedDescription": "New language for this server is: \"{{language}}\"",
+
+    "manDescription": "Shows manual for commands (without arg shows full list).",
+    "commandsList": "Commands list:",
+    "usage": "Usage",
+    "examples": "Examples",
+
+    "prefixDescription": "Changes prefix to new value (\"reset\" restores default value)",
+    "prefixChanged": "Prefix changed!",
+    "prefixChangedDescription": "Summon me now by \"{{prefix}}\"",
+
+    "wtfDescription": "Shows information about bot",
+    "wtfMessageTitle": "Greetings mortals!",
+    "wtfMessageDescription": "I'm The Executor and I'm here to rule!",
+    "server": "Server",
+    "prefix": "Prefix",
+    "commandsOverview": "Commands overview:"
+}

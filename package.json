@@ -12,6 +12,7 @@
         "url": "https://github.com/npm/npm.git"
     },
     "dependencies": {
-        "discord.js": "11.4.2"
+        "discord.js": "11.4.2",
+        "i18next": "15.0.9"
     }
 }

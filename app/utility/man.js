@@ -6,19 +6,20 @@ global.commands.man = {
 
     group: global.groups.utility,
 
-    description: 'Shows manual for commands (without arg shows full list)',
+    description: 'manDescription',
 
     usage: 'man [command]',
 
     examples: 'man man\nman prefix',
 
     action: (msg, command) => {
+        const t = global.config[msg.guild.id].t
         let embed
 
         // shows full commands list
         if (!command) {
             embed = {
-                title: 'Commands list',
+                title: t('commandsList'),
                 color: global.colors.highlightDefault,
                 fields: []
             }
@@ -30,14 +31,14 @@ global.commands.man = {
                     if (group !== cmd.group) {
                         group = cmd.group
                         embed.fields.push({
-                            name: `${cmd.group.icon} ${cmd.group.name}`,
+                            name: `${cmd.group.icon} ${t(cmd.group.name)}`,
                             inline: true,
                             value: ''
                         })
                     }
                     let last = embed.fields[embed.fields.length - 1]
                     if (last.value.length > 0) {
-                        last.value += ' '
+                        last.value += '\n'
                     }
                     last.value += cmd.name
                 })
@@ -45,8 +46,8 @@ global.commands.man = {
         // command not found
         } else if (!(global.commands[command] || global.config[msg.guild.id].aliases[command])) {
             embed = {
-                title: `Command "${name}" not found!`,
-                description: 'How dare you asking me about it?!',
+                title: t('commandNotFound'),
+                description: t('commandNotFoundDescription'),
                 color: global.colors.highlightError
             }
 
@@ -58,16 +59,16 @@ global.commands.man = {
             }
             embed = {
                 title: cmd.name,
-                description: cmd.description,
+                description: t(cmd.description),
                 color: global.colors.highlightDefault,
                 fields: [
                     {
-                        name: 'Usage',
+                        name: t('usage'),
                         value: cmd.usage,
                         inline: true
                     },
                     {
-                        name: 'Examples',
+                        name: t('examples'),
                         value: cmd.examples,
                         inline: true
                     }

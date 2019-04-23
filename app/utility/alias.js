@@ -6,13 +6,15 @@ global.commands.alias = {
 
     group: global.groups.utility,
 
-    description: 'Add or remove alias for command. To see aliases for command type just command.',
+    description: 'aliasDescription',
 
     usage: 'alias [command] [alias]\nalias [command]',
 
     examples: 'alias prefix summon\nalias prefix',
 
     action: (msg, command, alias) => {
+        const t = global.config[msg.guild.id].t
+
         // invalid command call
         if (!command || !global.commands[command]) {
             global.commands.man.action(msg, global.commands.alias.name)
@@ -23,7 +25,7 @@ global.commands.alias = {
             global.sendMessage({
                 channel: msg.channel,
                 embed: {
-                    title: `"${command}" aliases:`,
+                    title: t('aliasesForCommandTitle', { command: command }),
                     description: Object.keys(aliases).filter(e => aliases[e].name === command).join('\n'),
                     color: global.colors.highlightDefault
                 }
@@ -40,8 +42,8 @@ global.commands.alias = {
             global.sendMessage({
                 channel: msg.channel,
                 embed: {
-                    title: aliases[alias] ? 'Alias added!' : 'Alias removed!',
-                    description: aliases[alias] ? `"${alias}" bound to "${command}"` : `"${alias}" unbound from "${command}"`
+                    title: t(aliases[alias] ? 'aliasAdded' : 'aliasRemoved'),
+                    description: t(aliases[alias] ? 'aliasBound' : 'aliasUnbound', { alias: alias, command: command })
                 }
             })
         }

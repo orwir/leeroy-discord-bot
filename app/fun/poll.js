@@ -6,7 +6,7 @@ global.commands.poll = {
 
     group: global.groups.fun,
 
-    description: 'Creates "yes/no" poll with positive (👍) and negative (👎) reactions.',
+    description: 'pollDescription',
 
     usage: 'poll [question]',
 

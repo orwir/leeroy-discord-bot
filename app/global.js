@@ -5,7 +5,10 @@ String.prototype.isBlank = function() {
 }
 
 module.exports = {
+    
     config: require('../config.js'),
+
+    i18n: require('i18next'),
     
     colors: {
         highlightDefault: parseInt(colors.electricViolet),
@@ -19,17 +22,17 @@ module.exports = {
 
     groups: {
         fun: {
-            name: 'Fun',
+            name: 'groupFun',
             icon: ':ok_hand:',
             order: 0
         },
         roles: {
-            name: 'Roles',
+            name: 'groupAccess',
             icon: ':busts_in_silhouette:',
             order: 1
         },
         utility: {
-            name: 'Utility',
+            name: 'groupUtility',
             icon: ':gear:',
             order: 2
         }

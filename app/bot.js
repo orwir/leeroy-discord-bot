@@ -5,6 +5,24 @@ require('./utility/index.js')
 require('./fun/index.js')
 require('./access/index.js')
 
+global.i18n.init({
+
+    lng: 'en',
+
+    fallbackLng: 'en',
+
+    preload: true,
+
+    resources: {
+        en: {
+            translation: require('../res/locales/en.json')
+        },
+        ru: {
+            translation: require('../res/locales/ru.json')
+        }
+    }
+})
+
 const bot = new discord.Client()
 
 bot.on(global.events.message, msg => {
@@ -13,7 +31,7 @@ bot.on(global.events.message, msg => {
     }
 
     configureGuild(msg.guild)
-    let guildConfig = global.config[msg.guild.id]
+    const guildConfig = global.config[msg.guild.id]
     let text = msg.content
 
     // verify prefix
@@ -45,8 +63,8 @@ bot.on(global.events.message, msg => {
         global.sendMessage({
             channel: msg.channel,
             embed: {
-                title: `Command "${name}" not found!`,
-                description: 'How dare you asking me about it?!',
+                title: guildConfig.t('commandNotFound', { name: name }),
+                description: guildConfig.t('commandNotFoundDescription'),
                 color: global.colors.highlightError
             }
         })
@@ -76,16 +94,20 @@ bot.on(global.events.message, msg => {
         args = text.split(' ')
     }
 
-    // invoke command
     try {
         command.action(msg, ...args)
     } catch (error) {
+        let developers = global.developers.length > 0 ? global.developers.join('\n') : t('developersNotFound')
+        let message = global.config.dev ?
+            guildConfig.t('internalErrorMessage', { author: msg.author, developers: developers }) :
+            null
+
         global.sendMessage({
             channel: msg.channel,
-            text: global.config.dev ? `@${msg.author.tag} is trying to kill me! Help me please ${global.developers.join(', ')}` : null,
+            text: message,
             embed: {
-                title: `Internal error!`,
-                description: global.config.dev ? error.stack : 'Are you trying to destabilize me?',
+                title: guildConfig.t('internalError'),
+                description: global.config.dev ? error.stack : guildConfig.t('internalErrorDescription'),
                 color: global.colors.highlightError
             }
         })
@@ -95,10 +117,15 @@ bot.on(global.events.message, msg => {
 function configureGuild(guild) {
     if (!global.config[guild.id]) {
         global.config[guild.id] = {
+
+            t: global.i18n.getFixedT('en'),
+
             prefix: global.config.prefix,
+
             aliases: {
                 help: global.commands.wtf
             }
+
         }
     }
 }

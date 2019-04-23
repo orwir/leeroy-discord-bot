@@ -6,7 +6,7 @@ global.commands.wtf = {
 
     group: global.groups.utility,
 
-    description: 'Shows information about bot',
+    description: 'wtfDescription',
 
     usage: 'wtf',
 
@@ -16,24 +16,25 @@ global.commands.wtf = {
 
     action: (msg) => {
         const guild = msg.guild
+        const t = global.config[guild.id].t
 
         global.sendMessage({
             channel: msg.channel,
             embed: {
-                title: 'Greetings mortals!',
-                description: `I'm The Executor and I'm here to rule!`,
+                title: t('wtfMessageTitle'),
+                description: t('wtfMessageDescription'),
                 color: global.colors.highlightDefault,
                 fields: [
                     {
-                        name: 'Server',
+                        name: t('server'),
                         value: guild.name
                     },
                     {
-                        name: 'Prefix',
+                        name: t('prefix'),
                         value: global.config[guild.id].prefix
                     },
                     {
-                        name: 'Commands overview',
+                        name: t('commandsOverview'),
                         value: global.commands.man.name
                     }
                 ]

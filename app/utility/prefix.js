@@ -6,7 +6,7 @@ global.commands.prefix = {
 
     group: global.groups.utility,
 
-    description: 'Changes prefix to new value ("reset" restores default value)',
+    description: 'prefixDescription',
 
     usage: 'prefix [new value]',
 
@@ -16,12 +16,14 @@ global.commands.prefix = {
 
     action: (msg, prefix) => {
         if (prefix) {
-            global.config[msg.guild.id].prefix = (prefix === 'reset') ? global.config.prefix : prefix
+            const guildConfig = global.config[msg.guild.id]
+
+            guildConfig.prefix = (prefix === 'reset') ? global.config.prefix : prefix
             global.sendMessage({
                 channel: msg.channel,
                 embed: {
-                    title: 'Prefix changed!',
-                    description: `Summon me now by "${prefix}"`,
+                    title: guildConfig.t('prefixChanged'),
+                    description: guildConfig.t('prefixChangedDescription', { prefix: prefix }),
                     color: global.colors.highlightSuccess
                 }
             })

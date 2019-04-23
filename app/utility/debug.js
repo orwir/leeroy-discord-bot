@@ -6,7 +6,7 @@ global.commands.debug = {
 
     group: global.groups.utility,
 
-    description: 'Sets user to send debug messages',
+    description: 'debugDescription',
 
     usage: 'debug [user]',
 
@@ -18,14 +18,15 @@ global.commands.debug = {
         if (user) {
             global.developers.push(user)
         }
+        const t = global.config[msg.guild.id].t
         let description = user ?
-            `${user} will receive error notifications.` :
-            (global.developers.length > 0 ? global.developers.join('\n') : 'Developers are not set.')
+            t('userWillReceiveErrorNotifications', { user: user }) :
+            (global.developers.length > 0 ? global.developers.join('\n') : t('developersNotSet'))
 
         global.sendMessage({
             channel: msg.channel,
             embed: {
-                title: user ? 'Developer added!' : 'List of developers:',
+                title: user ? t('developerAdded') : t('lisfOfDevelopers'),
                 description: description,
                 color: user ? global.colors.highlightSuccess : global.colors.highlightDefault
             }
