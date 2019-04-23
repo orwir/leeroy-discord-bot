@@ -26,7 +26,13 @@ global.commands.man = {
             let group = null
             Object.keys(global.commands)
                 .map(e => global.commands[e])
-                .sort((a, b) => a.group.order - b.group.order)
+                .sort((a, b) => {
+                   if (a.group.order == b.group.order) {
+                        return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0
+                   } else {
+                       return a.group.order - b.group.order
+                   }
+                })
                 .forEach(cmd => {
                     if (group !== cmd.group) {
                         group = cmd.group
