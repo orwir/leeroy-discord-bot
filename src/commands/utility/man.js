@@ -1,10 +1,16 @@
-const global = require('../global.js')
+const common = require('../../common')
 
-global.commands.man = {
+const commands = common.commands
+const groups = common.groups
+const guilds = common.guilds
+const colors = common.colors
+const send = common.send
+
+commands.man = {
 
     name: 'man',
 
-    group: global.groups.utility,
+    group: groups.utility,
 
     description: 'manDescription',
 
@@ -12,20 +18,23 @@ global.commands.man = {
 
     examples: 'man man\nman prefix',
 
-    action: (msg, command) => {
-        const t = global.config[msg.guild.id].t
+    arguments: 1,
+
+    action: (msg, name) => {
+        const t = guilds[msg.guild.id].t
+        const aliases = guilds[msg.guild.id].aliases
         let embed
 
         // shows full commands list
-        if (!command) {
+        if (!name) {
             embed = {
                 title: t('commandsList'),
-                color: global.colors.highlightDefault,
+                color: colors.highlightDefault,
                 fields: []
             }
             let group = null
-            Object.keys(global.commands)
-                .map(e => global.commands[e])
+            Object.keys(commands)
+                .map(e => commands[e])
                 .sort((a, b) => {
                    if (a.group.order == b.group.order) {
                         return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0
@@ -50,39 +59,39 @@ global.commands.man = {
                 })
 
         // command not found
-        } else if (!(global.commands[command] || global.config[msg.guild.id].aliases[command])) {
+        } else if (!(commands[name] || aliases[name])) {
             embed = {
                 title: t('commandNotFound'),
                 description: t('commandNotFoundDescription'),
-                color: global.colors.highlightError
+                color: colors.highlightError
             }
 
         // shows user manual for command
         } else {
-            let cmd = global.commands[command]
-            if (!cmd) {
-                cmd = global.config[msg.guild.id].aliases[command]
+            let command = commands[name]
+            if (!command) {
+                command = aliases[name]
             }
             embed = {
-                title: cmd.name,
-                description: t(cmd.description),
-                color: global.colors.highlightDefault,
+                title: command.name,
+                description: t(command.description),
+                color: colors.highlightDefault,
                 fields: [
                     {
                         name: t('usage'),
-                        value: cmd.usage,
+                        value: command.usage,
                         inline: true
                     },
                     {
                         name: t('examples'),
-                        value: cmd.examples,
+                        value: command.examples,
                         inline: true
                     }
                 ]
             }
         }
         
-        global.sendMessage({
+        send({
             channel: msg.channel,
             embed: embed
         })

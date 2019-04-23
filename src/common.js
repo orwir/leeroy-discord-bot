@@ -5,19 +5,19 @@ String.prototype.isBlank = function() {
 }
 
 module.exports = {
+
+    // properties
     
-    config: require('../config.js'),
+    config: require('./config'),
 
     i18n: require('i18next'),
+
+    guilds: {},
     
     colors: {
         highlightDefault: parseInt(colors.electricViolet),
         highlightSuccess: parseInt(colors.malachite),
         highlightError: parseInt(colors.torchRed)
-    },
-
-    events: {
-        message: 'message'
     },
 
     groups: {
@@ -42,7 +42,10 @@ module.exports = {
 
     developers: [],
 
-    sendMessage: (args) => {
+
+    // functions
+
+    send: (args) => {
         if (args.channel) {
             return args.channel.send(args.text, { embed: args.embed })
         }

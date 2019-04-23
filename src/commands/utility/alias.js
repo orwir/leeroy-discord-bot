@@ -1,10 +1,16 @@
-const global = require('../global.js')
+const common = require('../../common')
 
-global.commands.alias = {
+const commands = common.commands
+const guilds = common.guilds
+const groups = common.groups
+const colors = common.colors
+const send = common.send
+
+commands.alias = {
 
     name: 'alias',
 
-    group: global.groups.utility,
+    group: groups.utility,
 
     description: 'aliasDescription',
 
@@ -13,21 +19,22 @@ global.commands.alias = {
     examples: 'alias prefix summon\nalias prefix',
 
     action: (msg, command, alias) => {
-        const t = global.config[msg.guild.id].t
+        const guild = guilds[msg.guild.id]
+        const aliases = guild.aliases
+        const t = guild.t
 
         // invalid command call
-        if (!command || !global.commands[command]) {
-            global.commands.man.action(msg, global.commands.alias.name)
+        if (!command || !commands[command]) {
+            commands.man.action(msg, 'alias')
             
         // shows list of aliases
         } else if (!alias) {
-            let aliases = global.config[msg.guild.id].aliases
-            global.sendMessage({
+            send({
                 channel: msg.channel,
                 embed: {
                     title: t('aliasesForCommandTitle', { command: command }),
                     description: Object.keys(aliases).filter(e => aliases[e].name === command).join('\n'),
-                    color: global.colors.highlightDefault
+                    color: colors.highlightDefault
                 }
             })
 
@@ -36,10 +43,10 @@ global.commands.alias = {
             if (aliases[alias]) {
                 delete aliases[alias]
             } else {
-                aliases[alias] = global.commands[command]
+                aliases[alias] = commands[command]
             }
 
-            global.sendMessage({
+            send({
                 channel: msg.channel,
                 embed: {
                     title: t(aliases[alias] ? 'aliasAdded' : 'aliasRemoved'),

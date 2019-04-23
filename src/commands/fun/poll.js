@@ -1,10 +1,14 @@
-const global = require('../global.js')
+const common = require('../../common')
 
-global.commands.poll = {
+const commands = common.commands
+const groups = common.groups
+const send = common.send
+
+commands.poll = {
 
     name: 'poll',
 
-    group: global.groups.fun,
+    group: groups.fun,
 
     description: 'pollDescription',
 
@@ -16,7 +20,7 @@ global.commands.poll = {
 
     action: (msg, question) => {
         if (question) {
-            global.sendMessage({
+            send({
                     channel: msg.channel,
                     text: `@here ${question}`
                 })
@@ -25,7 +29,7 @@ global.commands.poll = {
                     result.react('👎')
                 })
         } else {
-            global.commands.man.action(msg, global.commands.poll.name)
+            commands.man.action(msg, 'poll')
         }
     }
 

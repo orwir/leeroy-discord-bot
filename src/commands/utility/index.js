@@ -1,0 +1,6 @@
+require('./man')
+require('./wtf')
+require('./prefix')
+require('./alias')
+require('./debug')
+require('./language')

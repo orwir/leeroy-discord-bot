@@ -1,10 +1,16 @@
-const global = require('../global.js')
+const common = require('../../common')
 
-global.commands.wtf = {
+const commands = common.commands
+const groups = common.groups
+const guilds = common.guilds
+const colors = common.colors
+const send = common.send
+
+commands.wtf = {
 
     name: 'wtf',
 
-    group: global.groups.utility,
+    group: groups.utility,
 
     description: 'wtfDescription',
 
@@ -15,27 +21,28 @@ global.commands.wtf = {
     stable: true,
 
     action: (msg) => {
-        const guild = msg.guild
-        const t = global.config[guild.id].t
+        const t = guilds[msg.guild.id].t
+        const prefix = guilds[msg.guild.id].prefix
+        const name = msg.guild.name
 
-        global.sendMessage({
+        send({
             channel: msg.channel,
             embed: {
                 title: t('wtfMessageTitle'),
                 description: t('wtfMessageDescription'),
-                color: global.colors.highlightDefault,
+                color: colors.highlightDefault,
                 fields: [
                     {
                         name: t('server'),
-                        value: guild.name
+                        value: name
                     },
                     {
                         name: t('prefix'),
-                        value: global.config[guild.id].prefix
+                        value: prefix
                     },
                     {
                         name: t('commandsOverview'),
-                        value: global.commands.man.name
+                        value: commands.man.name
                     }
                 ]
             }
