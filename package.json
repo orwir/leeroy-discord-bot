@@ -16,6 +16,9 @@
         "i18next": "15.0.9"
     },
     "devDependencies": {
-        "mocha": "6.1.4"
+        "mocha": "6.1.4",
+        "chai": "4.2.0",
+        "chai-as-promised": "7.1.1",
+        "sinon": "7.3.2"
     }
 }
