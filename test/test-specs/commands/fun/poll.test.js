@@ -3,7 +3,7 @@ const rewire = common.rewire
 const sinon = common.sinon
 const expect = common.expect
 
-describe('Poll', () => {
+describe('poll', () => {
 
     // tested
     const tested = rewire('../../src/commands/fun/poll')
