@@ -7,7 +7,7 @@ const tested = require('../../../src/common').commands
 
 describe('Commands Test Suite', () => {
 
-    describe('Commands integrity', () => {
+    describe('commands integrity', () => {
 
         it('should contains required fields', () => {
             Object.keys(tested)
