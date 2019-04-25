@@ -62,7 +62,6 @@ module.exports = {
 
     developers: [],
 
-
     // functions
 
     send: async (args) => {
@@ -74,15 +73,12 @@ module.exports = {
 
             if (promise) {
                 promise
-                    .then(result => {
-                        resolve(result)
-                    })
-                    .catch(error => {
-                        reject(error)
-                    })
+                    .then(result => resolve(result))
+                    .catch(error => reject(error))
             } else {
                 reject(new Error('Destination is not passed!'))
             }
         })
     }
+
 }

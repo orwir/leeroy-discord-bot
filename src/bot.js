@@ -1,10 +1,7 @@
 const discord = require('discord.js')
 const common = require('./common')
 const events = require('./events')
-
-require('./commands/utility')
-require('./commands/fun')
-require('./commands/access')
+require('./commands')
 
 const bot = new discord.Client()
 bot.on('message', events.message)
