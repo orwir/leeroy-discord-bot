@@ -9,6 +9,7 @@ module.exports = {
 
     configure: (guild) => {
         if (!guilds[guild.id]) {
+
             guilds[guild.id] = {
 
                 t: i18n.getFixedT('en'),
@@ -17,7 +18,9 @@ module.exports = {
 
                 aliases: {
                     help: commands.wtf
-                }
+                },
+
+                developers: []
 
             }
         }

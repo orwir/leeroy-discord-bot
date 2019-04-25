@@ -53,7 +53,6 @@ describe('alias', () => {
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'two')
         alias(msg, 'alias')
-        await send
 
         const description = send.lastCall.args[0].embed.description
         expect(description).to.be.equals('one\ntwo')

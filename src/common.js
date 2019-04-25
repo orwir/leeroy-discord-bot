@@ -60,8 +60,6 @@ module.exports = {
 
     commands: {},
 
-    developers: [],
-
     // functions
 
     send: async (args) => {

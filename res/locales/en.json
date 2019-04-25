@@ -19,10 +19,12 @@
     "aliasBound": "\"{{alias}}\" bound to \"{{command}}\"",
     "aliasUnbound": "\"{{alias}}\" unbound from \"{{command}}\"",
 
-    "debugDescription": "Sets user to send debug messages.",
-    "userWillReceiveErrorNotifications": "{{user}} will receive error notifications.",
+    "debugDescription": "Add/remove user as a developer to receive debug notifications.",
+    "userWillReceiveDebugNotifications": "{{user}} will receive debug notifications.",
+    "userWontReceiveDebugNotifications": "{{user}} won't receive debug notifications.",
     "developersNotSet": "Developers are not set.",
     "developerAdded": "Developer added!",
+    "developerRemoved": "Developer removed!",
     "lisfOfDevelopers": "List of developers:",
 
     "languageDescription": "Change bot's language.",

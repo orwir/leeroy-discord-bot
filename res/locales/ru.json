@@ -19,10 +19,12 @@
     "aliasBound": "\"{{alias}}\" связан с \"{{command}}\"",
     "aliasUnbound": "\"{{alias}}\" отвязан от \"{{command}}\"",
 
-    "debugDescription": "Добавить юзера для получения дебаг-информации.",
-    "userWillReceiveErrorNotifications": "{{user}} теперь будет получать сообщения об ошибках.",
+    "debugDescription": "Добавить/удалить пользователя как разработчика для получения отладочных уведомлений.",
+    "userWillReceiveDebugNotifications": "{{user}} теперь будет получать отладочную информацию.",
+    "userWontReceiveDebugNotifications": "{{user}} теперь не будет получать отладочную информацию.",
     "developersNotSet": "Разработчики не добавлены.",
     "developerAdded": "Разработчик добавлен!",
+    "developerRemoved": "Разрабочик удален!",
     "lisfOfDevelopers": "Список разработчиков:",
 
     "languageDescription": "Изменить язык бота.",
