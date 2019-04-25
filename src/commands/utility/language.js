@@ -13,7 +13,7 @@ commands.language = {
 
     group: groups.utility,
 
-    description: 'languageDescription',
+    description: 'language.description',
 
     usage: 'language [lang]',
 
@@ -22,13 +22,14 @@ commands.language = {
     action: (msg, language) => {
         if (language) {
             const t = i18n.getFixedT(language)
-            guilds[msg.guild.id] = t
+            guilds[msg.guild.id].t = t
+            guilds[msg.guild.id].language = language
 
             send({
                 channel: msg.channel,
                 embed: {
-                    title: t('languageChanged'),
-                    description: t('languageChangedDescription', { language: language }),
+                    title: t('language.changedTitle'),
+                    description: t('language.changedDescription', { language: language }),
                     color: colors.highlightSuccess
                 }
             })

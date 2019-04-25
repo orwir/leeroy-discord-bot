@@ -12,7 +12,7 @@ commands.man = {
 
     group: groups.utility,
 
-    description: 'manDescription',
+    description: 'man.description',
 
     usage: 'man [command]',
 
@@ -28,7 +28,7 @@ commands.man = {
         // shows full commands list
         if (!name) {
             embed = {
-                title: t('commandsList'),
+                title: t('man.listTitle'),
                 color: colors.highlightDefault,
                 fields: []
             }
@@ -78,12 +78,12 @@ commands.man = {
                 color: colors.highlightDefault,
                 fields: [
                     {
-                        name: t('usage'),
+                        name: t('man.usage'),
                         value: command.usage,
                         inline: true
                     },
                     {
-                        name: t('examples'),
+                        name: t('man.examples'),
                         value: command.examples,
                         inline: true
                     }

@@ -12,7 +12,7 @@ commands.debug = {
 
     group: groups.utility,
 
-    description: 'debugDescription',
+    description: 'debug.description',
 
     usage: 'debug [user]',
 
@@ -28,8 +28,8 @@ commands.debug = {
         // show list of developers
         if (!user) {
             embed = {
-                title: t('lisfOfDevelopers'),
-                description: developers.length > 0 ? developers.join('\n') : t('developersNotSet'),
+                title: t('debug.listTitle'),
+                description: developers.length > 0 ? developers.join('\n') : t('debug.listDescriptionEmpty'),
                 color: colors.highlightDefault
             }
         } else {
@@ -44,8 +44,8 @@ commands.debug = {
             }
 
             embed = {
-                title: addded ? t('developerAdded') : t('developerRemoved'),
-                description: t(addded ? 'userWillReceiveDebugNotifications' : 'userWontReceiveDebugNotifications', { user: user }),
+                title: addded ? t('debug.addedTitle') : t('debug.removedTitle'),
+                description: t(addded ? 'debug.addedDescription' : 'debug.removedDescription', { user: user }),
                 color: colors.highlightSuccess
             }
         }

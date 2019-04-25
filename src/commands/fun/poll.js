@@ -10,7 +10,7 @@ commands.poll = {
 
     group: groups.fun,
 
-    description: 'pollDescription',
+    description: 'poll.description',
 
     usage: 'poll [question]',
 

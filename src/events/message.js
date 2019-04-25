@@ -80,9 +80,10 @@ module.exports = (msg) => {
     try {
         command.action(msg, ...args)
     } catch (error) {
-        let receivers = developers.length > 0 ? developers.join('\n') : t('developersNotFound')
+        // TODO: send to logs
+        
         let message = config.dev ?
-            guildConfig.t('internalErrorMessage', { author: msg.author, developers: receivers }) :
+            guildConfig.t('internalErrorMessage', { author: msg.author, developers: developers.join('\n') }) :
             null
 
         send({
@@ -95,4 +96,5 @@ module.exports = (msg) => {
             }
         })
     }
+
 }

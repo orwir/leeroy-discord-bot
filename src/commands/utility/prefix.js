@@ -13,7 +13,7 @@ commands.prefix = {
 
     group: groups.utility,
 
-    description: 'prefixDescription',
+    description: 'prefix.description',
 
     usage: 'prefix [new value]',
 
@@ -30,8 +30,8 @@ commands.prefix = {
             send({
                 channel: msg.channel,
                 embed: {
-                    title: t('prefixChanged'),
-                    description: t('prefixChangedDescription', { prefix: prefix }),
+                    title: t('prefix.changedTitle'),
+                    description: t('prefix.changedDescription', { prefix: prefix }),
                     color: colors.highlightSuccess
                 }
             })

@@ -12,7 +12,7 @@ commands.wtf = {
 
     group: groups.utility,
 
-    description: 'wtfDescription',
+    description: 'wtf.description',
 
     usage: 'wtf',
 
@@ -21,27 +21,33 @@ commands.wtf = {
     stable: true,
 
     action: (msg) => {
-        const t = guilds[msg.guild.id].t
-        const prefix = guilds[msg.guild.id].prefix
+        const guild = guilds[msg.guild.id]
+        const t = guild.t
         const name = msg.guild.name
 
         send({
             channel: msg.channel,
             embed: {
-                title: t('wtfMessageTitle'),
-                description: t('wtfMessageDescription'),
+                title: t('wtf.messageTitle'),
+                description: t('wtf.messageDescription'),
                 color: colors.highlightDefault,
                 fields: [
                     {
-                        name: t('server'),
+                        name: t('wtf.server'),
                         value: name
                     },
                     {
-                        name: t('prefix'),
-                        value: prefix
+                        name: t('wtf.prefix'),
+                        value: guild.prefix,
+                        inline: true
                     },
                     {
-                        name: t('commandsOverview'),
+                        name: t('wtf.language'),
+                        value: guild.language,
+                        inline: true
+                    },
+                    {
+                        name: t('wtf.commands'),
                         value: commands.man.name
                     }
                 ]

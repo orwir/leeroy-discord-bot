@@ -1,49 +1,67 @@
 {
-    "commandNotFound": "Command \"{{name}}\" not found!",
+    "commandNotFound": "Command '{{name}}' not found!",
     "commandNotFoundDescription": "How dare you asking me about it?!",
 
     "internalErrorMessage": "{{- author}} is trying to kill me! Help me please {{developers}}",
     "internalError": "Internal error!",
     "internalErrorDescription": "Are you trying to destabilize me?",
 
-    "groupFun": "Fun",
-    "groupAccess": "Access",
-    "groupUtility": "Utility",
+    "group": {
+        "fun": "Fun",
+        "access": "Access",
+        "utility": "Utility"
+    },
 
-    "pollDescription": "Creates \"yes/no\" poll with positive (👍) and negative (👎) reactions.",
-    
-    "aliasDescription": "Add or remove alias for command. To see aliases for command type just command.",
-    "aliasesForCommandTitle": "\"{{command}}\" aliases:",
-    "aliasAdded": "Alias added!",
-    "aliasRemoved": "Alias removed!",
-    "aliasBound": "\"{{alias}}\" bound to \"{{command}}\"",
-    "aliasUnbound": "\"{{alias}}\" unbound from \"{{command}}\"",
+    "poll": {
+        "description": "Create 'yes/no' poll. React with 👍 for yes, and 👎 for no."
+    },
 
-    "debugDescription": "Add/remove user as a developer to receive debug notifications.",
-    "userWillReceiveDebugNotifications": "{{user}} will receive debug notifications.",
-    "userWontReceiveDebugNotifications": "{{user}} won't receive debug notifications.",
-    "developersNotSet": "Developers are not set.",
-    "developerAdded": "Developer added!",
-    "developerRemoved": "Developer removed!",
-    "lisfOfDevelopers": "List of developers:",
+    "alias": {
+        "description": "Add or remove alias for command. To see aliases for command type just command.",
+        "listTitle": "'{{command}}' aliases:",
+        "addedTitle": "Alias added!",
+        "addedDescription": "'{{alias}}' is bound to '{{command}}'",
+        "removedTitle": "Alias removed",
+        "removedDescription": "'{{alias}}' is unbound from '{{command}}'"
+    },
 
-    "languageDescription": "Change bot's language.",
-    "languageChanged": "Language changed!",
-    "languageChangedDescription": "New language for this server is: \"{{language}}\"",
+    "debug": {
+        "description": "Add/remove user as a developer to receive debug notifications.",
+        "addedTitle": "Developer added!",
+        "addedDescription": "{{user}} will receive debug notifications.",
+        "removedTitle": "Developer removed!",
+        "removedDescription": "{{user}} won't receive debug notifications.",
+        "listTitle": "List of developers:",
+        "listDescriptionEmpty": "Developers are not set."
+    },
 
-    "manDescription": "Shows manual for commands (without arg shows full list).",
-    "commandsList": "Commands list:",
-    "usage": "Usage",
-    "examples": "Examples",
+    "language": {
+        "description": "Change bot's language.",
+        "changedTitle": "Language changed!",
+        "changedDescription": "I will speak English now."
+    },
 
-    "prefixDescription": "Changes prefix to new value (\"reset\" restores default value)",
-    "prefixChanged": "Prefix changed!",
-    "prefixChangedDescription": "Summon me now by \"{{prefix}}\"",
+    "man": {
+        "description": "Shows manual for commands (without arg shows full list).",
+        "listTitle": "Commands list:",
+        "usage": "Usage",
+        "examples": "Examples"
+    },
 
-    "wtfDescription": "Shows information about bot",
-    "wtfMessageTitle": "Greetings mortals!",
-    "wtfMessageDescription": "I'm The Executor and I'm here to rule!",
-    "server": "Server",
-    "prefix": "Prefix",
-    "commandsOverview": "Commands overview:"
+    "prefix": {
+        "description": "Change prefix for bot's commands. 'reset' restores default value",
+        "changedTitle": "Prefix changed!",
+        "changedDescription": "Now I'll answer you if you start you message with '{{prefix}}'"
+    },
+
+    "wtf": {
+        "description": "Shows general information",
+        "messageTitle": "Greetings mortals!",
+        "messageDescription": "I'm The Executor and I'm here to rule!",
+        "server": "Server",
+        "prefix": "Prefix",
+        "language": "Language",
+        "commands": "Commands list:"
+    }
+
 }

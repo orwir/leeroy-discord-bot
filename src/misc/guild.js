@@ -12,6 +12,8 @@ module.exports = {
 
             guilds[guild.id] = {
 
+                language: 'en',
+
                 t: i18n.getFixedT('en'),
 
                 prefix: config.prefix,

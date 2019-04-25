@@ -42,17 +42,17 @@ module.exports = {
 
     groups: {
         fun: {
-            name: 'groupFun',
+            name: 'group.fun',
             icon: ':ok_hand:',
             order: 0
         },
         roles: {
-            name: 'groupAccess',
+            name: 'group.access',
             icon: ':busts_in_silhouette:',
             order: 1
         },
         utility: {
-            name: 'groupUtility',
+            name: 'group.utility',
             icon: ':gear:',
             order: 2
         }

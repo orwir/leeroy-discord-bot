@@ -49,7 +49,7 @@ describe('debug', () => {
     it('should show "developers not set" if user is not passed and developers list is empty', () => {
         debug(msg)
 
-        expect(guilds['id'].t.calledWith('developersNotSet')).to.be.ok
+        expect(guilds['id'].t.calledWith('debug.listDescriptionEmpty')).to.be.ok
     })
 
 })

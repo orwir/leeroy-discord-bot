@@ -12,7 +12,7 @@ commands.alias = {
 
     group: groups.utility,
 
-    description: 'aliasDescription',
+    description: 'alias.Description',
 
     usage: 'alias [command] [alias]\nalias [command]',
 
@@ -32,7 +32,7 @@ commands.alias = {
             send({
                 channel: msg.channel,
                 embed: {
-                    title: t('aliasesForCommandTitle', { command: command }),
+                    title: t('alias.listTitle', { command: command }),
                     description: Object.keys(aliases).filter(e => aliases[e].name === command).join('\n'),
                     color: colors.highlightDefault
                 }
@@ -49,8 +49,8 @@ commands.alias = {
             send({
                 channel: msg.channel,
                 embed: {
-                    title: t(aliases[alias] ? 'aliasAdded' : 'aliasRemoved'),
-                    description: t(aliases[alias] ? 'aliasBound' : 'aliasUnbound', { alias: alias, command: command })
+                    title: t(aliases[alias] ? 'alias.addedTitle' : 'alias.removedTitle'),
+                    description: t(aliases[alias] ? 'alias.addedDescription' : 'alias.removedDescription', { alias: alias, command: command })
                 }
             })
         }
