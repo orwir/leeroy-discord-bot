@@ -1,4 +1,5 @@
 const colors = require('../res/colors.json')
+const config = require('./config')
 const i18n = require('i18next')
 
 String.prototype.isBlank = function() {
@@ -7,20 +8,11 @@ String.prototype.isBlank = function() {
 
 i18n.init({
 
-    lng: 'en',
-
     fallbackLng: 'en',
 
     preload: true,
 
-    resources: {
-        en: {
-            translation: require('../res/locales/en.json')
-        },
-        ru: {
-            translation: require('../res/locales/ru.json')
-        }
-    }
+    resources: config.languages
 
 })
 
@@ -28,7 +20,7 @@ module.exports = {
 
     // properties
     
-    config: require('./config'),
+    config: config,
 
     i18n: i18n,
 

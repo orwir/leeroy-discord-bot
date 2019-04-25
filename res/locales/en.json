@@ -37,8 +37,12 @@
 
     "language": {
         "description": "Change bot's language.",
+        "listTitle": "Supported languages:",
         "changedTitle": "Language changed!",
-        "changedDescription": "I will speak English now."
+        "changedDescription": "I speak English now.",
+        "errorTitle": "Language not changed!",
+        "errorLanguageSame": "Language is already the same.",
+        "errorLanguageNotSupported": "`{{language}}` is not supported."
     },
 
     "man": {

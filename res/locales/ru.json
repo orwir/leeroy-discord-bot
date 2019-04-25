@@ -37,8 +37,12 @@
 
     "language": {
         "description": "Изменить язык бота.",
+        "listTitle": "Поддерживаемые языки:",
         "changedTitle": "Язык изменен!",
-        "changedDescription": "Смертный, теперь я говорю по-русски."
+        "changedDescription": "Смертный, теперь я говорю по-русски.",
+        "errorTitle": "Язык не изменен!",
+        "errorLanguageSame": "Этот язык уже используется.",
+        "errorLanguageNotSupported": "`{{language}}` не поддерживается."
     },
 
     "man": {
