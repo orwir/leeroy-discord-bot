@@ -26,6 +26,8 @@ describe('debug', () => {
 
     beforeEach(() => {
         guild.developers = []
+        guild.t.resetHistory()
+        send.resetHistory()
     })
 
     it('should add developer to list', () => {
@@ -33,26 +35,31 @@ describe('debug', () => {
 
         expect(guild.developers.length).to.be.equals(1)
         expect(guild.developers[0]).to.be.equals('user')
+        expect(send.calledOnce).to.be.ok
     })
 
     it('should remove developer from list', () => {
         debug(msg, 'user')
         debug(msg, 'user')
+
         expect(guild.developers.length).to.be.equals(0)
+        expect(send.calledTwice).to.be.ok
     })
 
-    it('shoud show list of developers if user is not passed and developers added', () => {
+    it('shoud show list of developers if user is not passed and developers list not empty', () => {
         debug(msg, 'user1')
         debug(msg, 'user2')
         debug(msg)
 
+        expect(send.calledThrice).to.be.ok
         const description = send.lastCall.args[0].embed.description
         expect(description).to.be.equals('user1\nuser2')
     })
 
-    it('should show "developers not set" if user is not passed and developers list is empty', () => {
+    it('should show "developers not set" if user is not passed and developers list empty', () => {
         debug(msg)
 
+        expect(send.calledOnce).to.be.ok
         expect(guild.t.calledWith('debug.listDescriptionEmpty')).to.be.ok
     })
 

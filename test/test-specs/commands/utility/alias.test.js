@@ -28,6 +28,9 @@ describe('alias', () => {
 
     beforeEach(() => {
         guilds['id'].aliases = {}
+        guild.t.resetHistory()
+        send.resetHistory()
+        man.resetHistory()
     })
 
     it('should call "man" if command not passed', () => {
@@ -42,6 +45,7 @@ describe('alias', () => {
         
         expect(guild.aliases['one']).to.be.ok
         expect(guild.aliases['two']).to.be.ok
+        expect(send.calledTwice).to.be.ok
     })
 
     it('should remove alias from command', () => {
@@ -49,6 +53,7 @@ describe('alias', () => {
         alias(msg, 'alias', 'one')
         
         expect(guild.aliases['one']).to.be.undefined
+        expect(send.calledTwice).to.be.ok
     })
 
     it('should show list of aliases if only command passed', async () => {
@@ -56,6 +61,7 @@ describe('alias', () => {
         alias(msg, 'alias', 'two')
         alias(msg, 'alias')
 
+        expect(send.calledThrice).to.be.ok
         const description = send.lastCall.args[0].embed.description
         expect(description).to.be.equals('one\ntwo')
     })

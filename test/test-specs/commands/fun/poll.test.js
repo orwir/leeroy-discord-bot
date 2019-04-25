@@ -17,6 +17,11 @@ tested.__set__('man', man)
 
 describe('poll', () => {
 
+    beforeEach(() => {
+        man.resetHistory()
+        send.resetHistory()
+    })
+
     it('should call "man" if question is not passed', () => {
         poll({}, '')
         

@@ -13,7 +13,7 @@ const t = sinon.fake()
 const guilds = {
     'id': {
         t: t,
-        aliases: { 'man-test-alias': man }
+        aliases: { 'man-test-alias': commands.man }
     }
 }
 const send = sinon.fake()
@@ -24,13 +24,9 @@ tested.__set__('send', send)
 
 describe('man', () => {
 
-    it('should show commands list if command is not specified', () => {
-        man(msg)
-
-        const args = send.lastCall.args[0]
-        expect(args.embed).to.be.ok
-        expect(args.embed.fields).to.be.ok
-        expect(args.embed.fields.length).to.be.greaterThan(0)
+    beforeEach(() => {
+        t.resetHistory()
+        send.resetHistory()
     })
 
     it('should show manual for command if command exists', () => {
@@ -43,6 +39,16 @@ describe('man', () => {
         man(msg, 'man-test-alias')
 
         expect(t.calledWith(commands.man.description)).to.be.ok
+    })
+
+    it('should show commands list if command is not specified', () => {
+        man(msg)
+
+        expect(send.calledOnce).to.be.ok
+        const args = send.lastCall.args[0]
+        expect(args.embed).to.be.ok
+        expect(args.embed.fields).to.be.ok
+        expect(args.embed.fields.length).to.be.greaterThan(0)
     })
 
     it('should show error message if command not found', () => {

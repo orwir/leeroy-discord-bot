@@ -7,10 +7,6 @@ const tested = require('../../../src/common').commands
 
 describe('Commands Test Suite', () => {
 
-    beforeEach(() => {
-        sinon.restore()
-    })
-
     describe('Commands integrity', () => {
 
         it('should contains required fields', () => {
