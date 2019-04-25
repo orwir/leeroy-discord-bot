@@ -3,29 +3,33 @@ const rewire = common.rewire
 const sinon = common.sinon
 const expect = common.expect
 
+// tested
+const tested = rewire('../../src/commands/utility/language')
+
+const commands = tested.__get__('commands')
+const languages = tested.__get__('languages')
+const i18n = tested.__get__('i18n')
+const language = commands.language.action
+const msg = { guild: {id: 'id' } }
+const guilds = {
+    'id': {
+        language: 'en',
+        t: sinon.fake(),
+        aliases: {}
+    }
+}
+const guild = guilds['id']
+const send = sinon.fake()
+
+tested.__set__('guilds', guilds)
+tested.__set__('send', send)
+
+
 describe('language', () => {
 
-    // tested
-    const tested = rewire('../../src/commands/utility/language')
-    const commands = tested.__get__('commands')
-    const languages = tested.__get__('languages')
-    const language = commands.language.action
-    const msg = { guild: {id: 'id' } }
-    const guilds = {
-        'id': {
-            language: 'en',
-            t: sinon.fake(),
-            aliases: {}
-        }
-    }
-    tested.__set__('guilds', guilds)
-    const send = sinon.fake()
-    tested.__set__('send', send)
-    const i18n = tested.__get__('i18n')
-
     beforeEach(() => {
-        guilds['id'].t = sinon.fake()
-        guilds['id'].language = 'en'
+        guild.t = sinon.fake()
+        guild.language = 'en'
     })
 
     it('should show supported languages list', () => {
@@ -38,20 +42,20 @@ describe('language', () => {
     it('should change language if language is supported', () => {
         language(msg, 'ru')
 
-        expect(guilds['id'].language).to.be.equals('ru')
-        expect(guilds['id'].t.language).to.be.equals(i18n.getFixedT('ru').language)
+        expect(guild.language).to.be.equals('ru')
+        expect(guild.t.language).to.be.equals(i18n.getFixedT('ru').language)
     })
 
     it('should show an error if language is already the same', () => {
         language(msg, 'en')
-        expect(guilds['id'].t.calledWith('language.errorTitle')).to.be.ok
-        expect(guilds['id'].t.calledWith('language.errorLanguageSame')).to.be.ok
+        expect(guild.t.calledWith('language.errorTitle')).to.be.ok
+        expect(guild.t.calledWith('language.errorLanguageSame')).to.be.ok
     })
 
     it('should show an error if language is not supported', () => {
         language(msg, 'bla-bla')
-        expect(guilds['id'].t.calledWith('language.errorTitle')).to.be.ok
-        expect(guilds['id'].t.calledWith('language.errorLanguageNotSupported', { language: 'bla-bla' })).to.be.ok
+        expect(guild.t.calledWith('language.errorTitle')).to.be.ok
+        expect(guild.t.calledWith('language.errorLanguageNotSupported', { language: 'bla-bla' })).to.be.ok
     })
 
 })

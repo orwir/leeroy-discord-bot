@@ -54,6 +54,10 @@ module.exports = {
 
     // functions
 
+    man: (msg, command) => {
+        commands.man.action(msg, command)
+    },
+
     send: async (args) => {
         return new Promise((resolve, reject) => {
             let promise

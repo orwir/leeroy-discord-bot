@@ -6,6 +6,7 @@ const config = common.config
 const guilds = common.guilds
 const colors = common.colors
 const send = common.send
+const man = common.man
 
 commands.prefix = {
 
@@ -36,7 +37,7 @@ commands.prefix = {
                 }
             })
         } else {
-            commands.man.action(msg, 'prefix')
+            man(msg, 'prefix')
         }
     }
 

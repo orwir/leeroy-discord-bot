@@ -3,6 +3,7 @@ const common = require('../../common')
 const commands = common.commands
 const groups = common.groups
 const send = common.send
+const man = common.man
 
 commands.poll = {
 
@@ -29,7 +30,7 @@ commands.poll = {
                     result.react('👎')
                 })
         } else {
-            commands.man.action(msg, 'poll')
+            man(msg, 'poll')
         }
     }
 

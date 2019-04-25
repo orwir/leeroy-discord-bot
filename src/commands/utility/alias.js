@@ -5,6 +5,7 @@ const guilds = common.guilds
 const groups = common.groups
 const colors = common.colors
 const send = common.send
+const man = common.man
 
 commands.alias = {
 
@@ -25,7 +26,7 @@ commands.alias = {
 
         // invalid command call
         if (!command || !commands[command]) {
-            commands.man.action(msg, 'alias')
+            man(msg, 'alias')
             
         // shows list of aliases
         } else if (!alias) {

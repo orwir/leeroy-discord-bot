@@ -3,50 +3,52 @@ const rewire = common.rewire
 const sinon = common.sinon
 const expect = common.expect
 
-describe('alias', () => {
+// tested
+const tested = rewire('../../src/commands/utility/alias')
 
-    // tested
-    const tested = rewire('../../src/commands/utility/alias')
-    const commands = tested.__get__('commands')
-    const alias = commands.alias.action
-    const msg = { guild: {id: 'id' } }
-    const guilds = {
-        'id': {
-            t: sinon.fake(),
-            aliases: {}
-        }
+const commands = tested.__get__('commands')
+const alias = commands.alias.action
+const msg = { guild: {id: 'id' } }
+const guilds = {
+    'id': {
+        t: sinon.fake(),
+        aliases: {}
     }
-    tested.__set__('guilds', guilds)
-    const send = sinon.fake()
-    tested.__set__('send', send)
+}
+const guild = guilds['id']
+const send = sinon.fake()
+const man = sinon.fake()
+
+tested.__set__('guilds', guilds)
+tested.__set__('send', send)
+tested.__set__('man', man)
+
+
+describe('alias', () => {
 
     beforeEach(() => {
         guilds['id'].aliases = {}
     })
 
     it('should call "man" if command not passed', () => {
-        const man = {
-            action: sinon.fake()
-        }
-        commands.man = man
         alias(msg, null, 'alias')
         
-        expect(man.action.calledWithExactly(msg, 'alias')).to.be.ok
+        expect(man.calledWithExactly(msg, 'alias')).to.be.ok
     })
 
     it('should add alias to command', () => {
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'two')
         
-        expect(guilds['id'].aliases['one']).to.be.ok
-        expect(guilds['id'].aliases['two']).to.be.ok
+        expect(guild.aliases['one']).to.be.ok
+        expect(guild.aliases['two']).to.be.ok
     })
 
     it('should remove alias from command', () => {
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'one')
         
-        expect(guilds['id'].aliases['one']).to.be.undefined
+        expect(guild.aliases['one']).to.be.undefined
     })
 
     it('should show list of aliases if only command passed', async () => {
