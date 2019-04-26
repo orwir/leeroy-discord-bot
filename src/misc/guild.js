@@ -22,7 +22,9 @@ module.exports = {
                     help: commands.wtf
                 },
 
-                developers: []
+                developers: [],
+
+                permissions: {}
 
             }
         }

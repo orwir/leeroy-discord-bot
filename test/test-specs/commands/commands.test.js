@@ -24,6 +24,8 @@ describe('Commands Test Suite', () => {
 
     })
 
+    require('./access')
+
     require('./fun')
 
     require('./utility')

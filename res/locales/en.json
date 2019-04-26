@@ -66,6 +66,10 @@
         "prefix": "Prefix",
         "language": "Language",
         "commands": "Commands list:"
+    },
+
+    "allow": {
+        "description": "Allows calling command in specified channel only for user/group."
     }
 
 }

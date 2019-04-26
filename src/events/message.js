@@ -53,6 +53,9 @@ module.exports = (msg) => {
         })
         return
     }
+    if (!commands.allow.test(guild, msg.channel, msg.author, command)) {
+        return
+    }
     if (onlyStable && !command.stable) {
         return
     }

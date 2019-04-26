@@ -38,7 +38,7 @@ module.exports = {
             icon: ':ok_hand:',
             order: 0
         },
-        roles: {
+        access: {
             name: 'group.access',
             icon: ':busts_in_silhouette:',
             order: 1
