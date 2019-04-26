@@ -83,7 +83,7 @@ module.exports = (msg) => {
         // TODO: send to logs
         
         let message = config.dev ?
-            guildConfig.t('internalErrorMessage', { author: msg.author, developers: developers.join('\n') }) :
+            t('internalErrorMessage', { author: msg.author, developers: developers.join('\n') }) :
             null
 
         send({

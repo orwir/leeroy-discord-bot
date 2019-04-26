@@ -1,5 +1,4 @@
 const common = require('../common')
-const sinon = common.sinon
 const expect = common.expect
 
 // tested
