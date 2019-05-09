@@ -1,6 +1,7 @@
 const colors = require('../res/colors.json')
 const config = require('./config')
 const i18n = require('i18next')
+const storage = require('node-persist')
 
 String.prototype.isBlank = function() {
     return !this || !this.trim()
@@ -43,6 +44,7 @@ i18n.init({
     resources: config.languages
 
 })
+storage.init()
 
 module.exports = {
 

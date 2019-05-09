@@ -18,10 +18,12 @@ const guilds = {
 const guild = guilds['id']
 const send = sinon.fake()
 const man = sinon.fake()
+const save = sinon.fake()
 
 tested.__set__('guilds', guilds)
 tested.__set__('send', send)
 tested.__set__('man', man)
+tested.__set__('save', save)
 
 
 describe('alias', () => {
@@ -31,6 +33,7 @@ describe('alias', () => {
         guild.t.resetHistory()
         send.resetHistory()
         man.resetHistory()
+        save.resetHistory()
     })
 
     it('call "man" if command not passed', () => {
@@ -46,6 +49,7 @@ describe('alias', () => {
         expect(guild.aliases['one']).to.ok
         expect(guild.aliases['two']).to.ok
         expect(send.calledTwice).to.ok
+        expect(save.calledTwice).to.ok
     })
 
     it('remove alias from command', () => {
@@ -53,7 +57,8 @@ describe('alias', () => {
         alias(msg, 'alias', 'one')
         
         expect(guild.aliases['one']).to.undefined
-        expect(send.calledTwice).to.be.ok
+        expect(send.calledTwice).to.ok
+        expect(save.calledTwice).to.ok
     })
 
     it('show list of aliases if only command passed', async () => {

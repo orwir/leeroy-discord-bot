@@ -10,19 +10,17 @@ const save = persistence.save
 
 module.exports = {
 
-    configure: (guild) => {
+    configure: async (guild) => {
         if (!guilds[guild.id]) {
 
-            guilds[guild.id] = obtain(guild.id, {
+            let guildConfig = await obtain(guild.id, {
 
                 language: 'en',
-
-                t: i18n.getFixedT('en'),
 
                 prefix: config.prefix,
 
                 aliases: {
-                    help: commands.wtf
+                    help: commands.wtf.name
                 },
 
                 developers: [],
@@ -30,11 +28,12 @@ module.exports = {
                 restrictions: {}
 
             })
+            guilds[guild.id] = guildConfig
+            
+            guildConfig.t = i18n.getFixedT(guildConfig.language)
         }
     },
 
-    save: (id) => {
-        save(id, guilds[id])
-    }
+    save: (id) => save(id, guilds[id])
 
 }

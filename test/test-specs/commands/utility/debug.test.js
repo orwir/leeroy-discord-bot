@@ -17,9 +17,11 @@ const guilds = {
 }
 const guild = guilds['id']
 const send = sinon.fake()
+const save = sinon.fake()
 
 tested.__set__('guilds', guilds)
 tested.__set__('send', send)
+tested.__set__('save', save)
 
 
 describe('debug', () => {
@@ -28,22 +30,25 @@ describe('debug', () => {
         guild.developers = []
         guild.t.resetHistory()
         send.resetHistory()
+        save.resetHistory()
     })
 
     it('add developer to list', () => {
         debug(msg, 'user')
 
-        expect(guild.developers.length).to.be.equals(1)
-        expect(guild.developers[0]).to.be.equals('user')
-        expect(send.calledOnce).to.be.ok
+        expect(guild.developers.length).to.equals(1)
+        expect(guild.developers[0]).to.equals('user')
+        expect(send.calledOnce).to.ok
+        expect(save.calledOnce).to.ok
     })
 
     it('remove developer from list', () => {
         debug(msg, 'user')
         debug(msg, 'user')
 
-        expect(guild.developers.length).to.be.equals(0)
-        expect(send.calledTwice).to.be.ok
+        expect(guild.developers.length).to.equals(0)
+        expect(send.calledTwice).to.ok
+        expect(save.calledTwice).to.ok
     })
 
     it('show list of developers if user is not passed and developers list not empty', () => {

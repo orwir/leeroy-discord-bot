@@ -18,10 +18,12 @@ const guilds = {
 const guild = guilds['id']
 const send = sinon.fake()
 const man = sinon.fake()
+const save = sinon.fake()
 
 tested.__set__('guilds', guilds)
 tested.__set__('send', send)
 tested.__set__('man', man)
+tested.__set__('save', save)
 
 describe('prefix', () => {
 
@@ -29,19 +31,21 @@ describe('prefix', () => {
         send.resetHistory()
         man.resetHistory()
         guild.t.resetHistory()
+        save.resetHistory()
     })
 
     it('change prefix', () => {
         prefix(msg, 'test')
 
-        expect(guild.prefix).to.be.equals('test')
-        expect(send.calledOnce).to.be.ok
+        expect(guild.prefix).to.equals('test')
+        expect(send.calledOnce).to.ok
+        expect(save.calledOnce).to.ok
     })
 
     it('show man if prefix not passed', () => {
         prefix(msg)
 
-        expect(man.calledWithExactly(msg, 'prefix')).to.be.ok
+        expect(man.calledWithExactly(msg, 'prefix')).to.ok
     })
 
 })

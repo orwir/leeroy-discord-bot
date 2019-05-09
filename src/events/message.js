@@ -9,11 +9,11 @@ const developers = common.developers
 const send = common.send
 const restricted = common.restricted
 
-module.exports = (msg) => {
+module.exports = async (msg) => {
     if (msg.author.bot || msg.content.isBlank()) {
         return
     }
-    configure(msg.guild)
+    await configure(msg.guild)
     const guild = guilds[msg.guild.id]
     const t = guild.t
     let text = msg.content
@@ -41,7 +41,7 @@ module.exports = (msg) => {
     text = text.slice(name.length + 1)
     command = commands[name]
     if (!command) {
-        command = guild.aliases[name]
+        command = commands[guild.aliases[name]]
     }
     if (!command) {
         send({

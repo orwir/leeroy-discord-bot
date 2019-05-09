@@ -37,7 +37,7 @@ commands.alias = {
                 channel: msg.channel,
                 embed: {
                     title: t('alias.listTitle', { command: command }),
-                    description: Object.keys(aliases).filter(e => aliases[e].name === command).join('\n'),
+                    description: Object.keys(aliases).filter(e => aliases[e] === command).join('\n'),
                     color: colors.highlightDefault
                 }
             })
@@ -57,7 +57,7 @@ commands.alias = {
             if (aliases[alias]) {
                 delete aliases[alias]
             } else {
-                aliases[alias] = commands[command]
+                aliases[alias] = commands[command].name
             }
 
             save(msg.guild.id)

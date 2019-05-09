@@ -1,11 +1,9 @@
+const storage = require('node-persist')
+
 module.exports = {
 
-    save: (id, object) => {
+    save: async (id, object) => storage.updateItem(id, object),
 
-    },
-
-    obtain: (id, defValue) => {
-        return defValue
-    }
+    obtain: async (id, defValue) => storage.getItem(id).then(result => result ? result : defValue)
 
 }

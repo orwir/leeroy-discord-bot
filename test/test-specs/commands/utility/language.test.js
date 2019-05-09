@@ -20,9 +20,11 @@ const guilds = {
 }
 const guild = guilds['id']
 const send = sinon.fake()
+const save = sinon.fake()
 
 tested.__set__('guilds', guilds)
 tested.__set__('send', send)
+tested.__set__('save', save)
 
 
 describe('language', () => {
@@ -32,38 +34,40 @@ describe('language', () => {
         guild.language = 'en'
         guild.t.resetHistory()
         send.resetHistory()
+        save.resetHistory()
     })
 
     it('change language if supported', () => {
         language(msg, 'ru')
 
-        expect(guild.language).to.be.equals('ru')
-        expect(guild.t.language).to.be.equals(i18n.getFixedT('ru').language)
-        expect(send.calledOnce).to.be.ok
+        expect(guild.language).to.equals('ru')
+        expect(guild.t.language).to.equals(i18n.getFixedT('ru').language)
+        expect(send.calledOnce).to.ok
+        expect(save.calledOnce).to.ok
     })
 
     it('show supported languages list', () => {
         language(msg)
         
-        expect(send.calledOnce).to.be.ok
+        expect(send.calledOnce).to.ok
         const description = send.lastCall.args[0].embed.description
-        expect(description).to.be.equals(Object.keys(languages).join(', '))
+        expect(description).to.equals(Object.keys(languages).join(', '))
     })
 
     it('show an error if language is already the same', () => {
         language(msg, 'en')
 
-        expect(send.calledOnce).to.be.ok
-        expect(guild.t.calledWith('language.errorTitle')).to.be.ok
-        expect(guild.t.calledWith('language.errorLanguageSame')).to.be.ok
+        expect(send.calledOnce).to.ok
+        expect(guild.t.calledWith('language.errorTitle')).to.ok
+        expect(guild.t.calledWith('language.errorLanguageSame')).to.ok
     })
 
     it('show an error if language not supported', () => {
         language(msg, 'bla-bla')
 
-        expect(send.calledOnce).to.be.ok
-        expect(guild.t.calledWith('language.errorTitle')).to.be.ok
-        expect(guild.t.calledWith('language.errorLanguageNotSupported', { language: 'bla-bla' })).to.be.ok
+        expect(send.calledOnce).to.ok
+        expect(guild.t.calledWith('language.errorTitle')).to.ok
+        expect(guild.t.calledWith('language.errorLanguageNotSupported', { language: 'bla-bla' })).to.ok
     })
 
 })
