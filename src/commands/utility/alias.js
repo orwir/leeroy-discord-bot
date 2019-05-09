@@ -1,5 +1,6 @@
 const common = require('../../common')
 
+const save = require('../../misc/guild').save
 const commands = common.commands
 const guilds = common.guilds
 const groups = common.groups
@@ -59,6 +60,7 @@ commands.alias = {
                 aliases[alias] = commands[command]
             }
 
+            save(msg.guild.id)
             send({
                 channel: msg.channel,
                 embed: {

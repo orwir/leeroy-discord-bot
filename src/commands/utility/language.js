@@ -1,5 +1,6 @@
 const common = require('../../common')
 
+const save = require('../../misc/guild').save
 const commands = common.commands
 const groups = common.groups
 const guilds = common.guilds
@@ -59,6 +60,7 @@ commands.language = {
                 description: t('language.changedDescription'),
                 color: colors.highlightSuccess
             }
+            save(msg.guild.id)
         }
 
         send({ channel: msg.channel, embed: embed })

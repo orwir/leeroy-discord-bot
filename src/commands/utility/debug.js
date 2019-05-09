@@ -1,5 +1,6 @@
 const common = require('../../common')
 
+const save = require('../../misc/guild').save
 const commands = common.commands
 const groups = common.groups
 const guilds = common.guilds
@@ -43,6 +44,7 @@ commands.debug = {
                 addded = true
             }
 
+            save(msg.guild.id)
             embed = {
                 title: addded ? t('debug.addedTitle') : t('debug.removedTitle'),
                 description: t(addded ? 'debug.addedDescription' : 'debug.removedDescription', { user: user }),

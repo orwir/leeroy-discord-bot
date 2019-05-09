@@ -1,5 +1,6 @@
 const common = require('../../common')
 
+const save = require('../../misc/guild').save
 const commands = common.commands
 const groups = common.groups
 const config = common.config
@@ -28,6 +29,7 @@ commands.prefix = {
             const t = guild.t
 
             guild.prefix = (prefix === 'reset') ? config.prefix : prefix
+            save(msg.guild.id)
             send({
                 channel: msg.channel,
                 embed: {
