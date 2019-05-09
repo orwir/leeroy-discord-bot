@@ -8,11 +8,9 @@ describe('Commands Test Suite', () => {
 
     describe('commands integrity', () => {
 
-        it('should contains required fields', () => {
-            Object.keys(tested)
-                .forEach(name => {
-                    const command = tested[name]
-                    
+        it('contains required fields', () => {
+            Object.values(tested)
+                .forEach(command => {
                     expect(command.name, 'name is not defined').to.be.ok
                     expect(command.group, 'group is not defined').to.be.ok
                     expect(command.description, 'description is not defined').to.be.ok

@@ -31,14 +31,14 @@ describe('prefix', () => {
         guild.t.resetHistory()
     })
 
-    it('should change prefix', () => {
+    it('change prefix', () => {
         prefix(msg, 'test')
 
         expect(guild.prefix).to.be.equals('test')
         expect(send.calledOnce).to.be.ok
     })
 
-    it('should show man if prefix not passed', () => {
+    it('show man if prefix not passed', () => {
         prefix(msg)
 
         expect(man.calledWithExactly(msg, 'prefix')).to.be.ok

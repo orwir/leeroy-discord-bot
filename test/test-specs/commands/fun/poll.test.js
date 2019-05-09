@@ -22,13 +22,13 @@ describe('poll', () => {
         send.resetHistory()
     })
 
-    it('should call "man" if question is not passed', () => {
+    it('call "man" if question is not passed', () => {
         poll({}, '')
         
         expect(man.calledWithExactly({}, 'poll')).to.be.ok
     })
 
-    it('should send message and set reactions', async () => {
+    it('send message and set reactions', async () => {
         poll({}, 'question')
         await send
 

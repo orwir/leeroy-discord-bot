@@ -24,7 +24,7 @@ module.exports = {
 
                 developers: [],
 
-                permissions: {}
+                restrictions: {}
 
             }
         }

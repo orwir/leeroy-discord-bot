@@ -7,6 +7,7 @@ const config = common.config
 const colors = common.colors
 const developers = common.developers
 const send = common.send
+const restricted = common.restricted
 
 module.exports = (msg) => {
     if (msg.author.bot || msg.content.isBlank()) {
@@ -53,7 +54,8 @@ module.exports = (msg) => {
         })
         return
     }
-    if (!commands.allow.test(guild, msg.channel, msg.author, command)) {
+    if (restricted(guild, command, msg.channel, msg.author)) {
+        // TODO: show message
         return
     }
     if (onlyStable && !command.stable) {
@@ -83,7 +85,7 @@ module.exports = (msg) => {
     try {
         command.action(msg, ...args)
     } catch (error) {
-        // TODO: send to logs
+        // TODO: log
         
         let message = config.dev ?
             t('internalErrorMessage', { author: msg.author, developers: developers.join('\n') }) :

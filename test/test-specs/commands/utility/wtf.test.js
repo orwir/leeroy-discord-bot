@@ -22,7 +22,7 @@ tested.__set__('send', send)
 
 describe('wtf', () => {
 
-    it('should show information', () => {
+    it('show information', () => {
         wtf(msg)
 
         expect(send.calledOnce).to.be.ok

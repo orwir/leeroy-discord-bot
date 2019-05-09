@@ -29,19 +29,19 @@ describe('man', () => {
         send.resetHistory()
     })
 
-    it('should show manual for command if command exists', () => {
+    it('show manual for command if command exists', () => {
         man(msg, 'man')
 
         expect(t.calledWith(commands.man.description)).to.be.ok
     })
 
-    it('should show manual for command if alias exists', () => {
+    it('show manual for command if alias exists', () => {
         man(msg, 'man-test-alias')
 
         expect(t.calledWith(commands.man.description)).to.be.ok
     })
 
-    it('should show commands list if command is not specified', () => {
+    it('show commands list if command is not specified', () => {
         man(msg)
 
         expect(send.calledOnce).to.be.ok
@@ -51,7 +51,7 @@ describe('man', () => {
         expect(args.embed.fields.length).to.be.greaterThan(0)
     })
 
-    it('should show error message if command not found', () => {
+    it('show error message if command not found', () => {
         man(msg, 'unknown-command')
 
         expect(t.calledWith('commandNotFound')).to.be.ok

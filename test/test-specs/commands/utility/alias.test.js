@@ -33,13 +33,13 @@ describe('alias', () => {
         man.resetHistory()
     })
 
-    it('should call "man" if command not passed', () => {
+    it('call "man" if command not passed', () => {
         alias(msg, null, 'alias')
         
         expect(man.calledWithExactly(msg, 'alias')).to.be.ok
     })
 
-    it('should add alias to command', () => {
+    it('add alias to command', () => {
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'two')
         
@@ -48,7 +48,7 @@ describe('alias', () => {
         expect(send.calledTwice).to.be.ok
     })
 
-    it('should remove alias from command', () => {
+    it('remove alias from command', () => {
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'one')
         
@@ -56,7 +56,7 @@ describe('alias', () => {
         expect(send.calledTwice).to.be.ok
     })
 
-    it('should show list of aliases if only command passed', async () => {
+    it('show list of aliases if only command passed', async () => {
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'two')
         alias(msg, 'alias')

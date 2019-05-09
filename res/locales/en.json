@@ -69,7 +69,11 @@
     },
 
     "allow": {
-        "description": "Allows calling command in specified channel only for user/group."
+        "description": "Allows calling command in specified channel only for user/group.",
+        "showAllTitle": "Restrictions:",
+        "noRestrictions": "No restrictions found.",
+        "changedTitle": "Restrictions",
+        "changedDescription": "Restrictions successfully changed."
     }
 
 }

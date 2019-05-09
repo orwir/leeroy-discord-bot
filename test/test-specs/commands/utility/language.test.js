@@ -34,7 +34,7 @@ describe('language', () => {
         send.resetHistory()
     })
 
-    it('should change language if supported', () => {
+    it('change language if supported', () => {
         language(msg, 'ru')
 
         expect(guild.language).to.be.equals('ru')
@@ -42,7 +42,7 @@ describe('language', () => {
         expect(send.calledOnce).to.be.ok
     })
 
-    it('should show supported languages list', () => {
+    it('show supported languages list', () => {
         language(msg)
         
         expect(send.calledOnce).to.be.ok
@@ -50,7 +50,7 @@ describe('language', () => {
         expect(description).to.be.equals(Object.keys(languages).join(', '))
     })
 
-    it('should show an error if language is already the same', () => {
+    it('show an error if language is already the same', () => {
         language(msg, 'en')
 
         expect(send.calledOnce).to.be.ok
@@ -58,7 +58,7 @@ describe('language', () => {
         expect(guild.t.calledWith('language.errorLanguageSame')).to.be.ok
     })
 
-    it('should show an error if language not supported', () => {
+    it('show an error if language not supported', () => {
         language(msg, 'bla-bla')
 
         expect(send.calledOnce).to.be.ok

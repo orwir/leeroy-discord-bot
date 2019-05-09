@@ -30,7 +30,7 @@ describe('debug', () => {
         send.resetHistory()
     })
 
-    it('should add developer to list', () => {
+    it('add developer to list', () => {
         debug(msg, 'user')
 
         expect(guild.developers.length).to.be.equals(1)
@@ -38,7 +38,7 @@ describe('debug', () => {
         expect(send.calledOnce).to.be.ok
     })
 
-    it('should remove developer from list', () => {
+    it('remove developer from list', () => {
         debug(msg, 'user')
         debug(msg, 'user')
 
@@ -46,7 +46,7 @@ describe('debug', () => {
         expect(send.calledTwice).to.be.ok
     })
 
-    it('shoud show list of developers if user is not passed and developers list not empty', () => {
+    it('show list of developers if user is not passed and developers list not empty', () => {
         debug(msg, 'user1')
         debug(msg, 'user2')
         debug(msg)
@@ -56,7 +56,7 @@ describe('debug', () => {
         expect(description).to.be.equals('user1\nuser2')
     })
 
-    it('should show "developers not set" if user is not passed and developers list empty', () => {
+    it('show "developers not set" if user is not passed and developers list empty', () => {
         debug(msg)
 
         expect(send.calledOnce).to.be.ok

@@ -1,1 +1,1 @@
-require('./allow.test')
+//require('./allow.test')

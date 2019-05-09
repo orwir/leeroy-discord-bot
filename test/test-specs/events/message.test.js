@@ -31,6 +31,7 @@ tested.__set__('config', config)
 tested.__set__('commands', commands)
 tested.__set__('configure', sinon.fake())
 tested.__set__('developers', [])
+tested.__set__('permitted', sinon.fake.returns(true))
 
 
 describe('message', () => {
@@ -46,7 +47,7 @@ describe('message', () => {
         commands.test.arguments = null
     })
 
-    it('should call command', () => {
+    it('call command', () => {
         const msg = {
             author: { bot: false },
             content: 'e!test',
@@ -57,7 +58,7 @@ describe('message', () => {
         expect(commands.test.action.calledOnce).to.be.ok
     })
 
-    it('should call command with old prefix if command is stable', () => {
+    it('call command with old prefix if command is stable', () => {
         const msg = {
             author: { bot: false },
             content: 'e!test',
@@ -70,7 +71,7 @@ describe('message', () => {
         expect(commands.test.action.calledOnce).to.be.ok
     })
 
-    it('should call command by alias', () => {
+    it('call command by alias', () => {
         const msg = {
             author: { bot: false },
             content: 'e!alias',
@@ -81,7 +82,7 @@ describe('message', () => {
         expect(commands.test.action.calledOnce).to.be.ok
     })
 
-    it('should call command with arguments', () => {
+    it('call command with arguments', () => {
         const msg = {
             author: { bot: false },
             content: 'e!test arg1 arg2 arg3',
@@ -92,7 +93,7 @@ describe('message', () => {
         expect(commands.test.action.calledOnceWithExactly(msg, 'arg1', 'arg2', 'arg3')).to.be.ok
     })
 
-    it('should call command with long argument', () => {
+    it('call command with long argument', () => {
         const msg = {
             author: { bot: false },
             content: 'e!test long argument with spaces',
@@ -104,7 +105,7 @@ describe('message', () => {
         expect(commands.test.action.calledOnceWithExactly(msg, 'long argument with spaces')).to.be.ok
     })
 
-    it('should not call command if author is bot', () => {
+    it('do not call command if author is bot', () => {
         const msg = {
             author: { bot: true }
         }
@@ -113,7 +114,7 @@ describe('message', () => {
         expect(commands.test.action.called).to.be.not.ok
     })
 
-    it('should not call command if content is empty', () => {
+    it('do not call command if content is empty', () => {
         const msg = {
             author: { bot: false },
             content: ''
@@ -123,7 +124,7 @@ describe('message', () => {
         expect(commands.test.action.called).to.be.not.ok
     })
 
-    it('should not call command without prefix', () => {
+    it('do not call command without prefix', () => {
         const msg = {
             author: { bot: false },
             content: 'random message',
@@ -134,7 +135,7 @@ describe('message', () => {
         expect(commands.test.action.called).to.be.not.ok
     })
 
-    it('should not call not stable command with old prefix', () => {
+    it('do not call not stable command with old prefix', () => {
         const msg = {
             author: { bot: false },
             content: 'e!test',
@@ -146,7 +147,7 @@ describe('message', () => {
         expect(commands.test.action.called).to.be.not.ok
     })
 
-    it('should show message if command not found', () => {
+    it('show message if command not found', () => {
         const msg = {
             author: { bot: false },
             content: 'e!blabla',
@@ -158,7 +159,7 @@ describe('message', () => {
         expect(guild.t.calledWith('commandNotFoundDescription')).to.be.ok
     })
 
-    it('should not call dev command if env is not dev', () => {
+    it('do not call dev command if env is not dev', () => {
         const msg = {
             author: { bot: false },
             content: 'e!test',
@@ -170,7 +171,7 @@ describe('message', () => {
         expect(commands.test.action.called).to.be.not.ok
     })
 
-    it('should show detailed message about error if env is dev', () => {
+    it('show detailed message about error if env is dev', () => {
         const msg = {
             author: { bot: false },
             content: 'e!test',
@@ -185,7 +186,7 @@ describe('message', () => {
         expect(guild.t.calledWith('internalErrorMessage')).to.be.ok
     })
 
-    it('should show short message about error if env is prod', () => {
+    it('show short message about error if env is prod', () => {
         const msg = {
             author: { bot: false },
             content: 'e!test',
