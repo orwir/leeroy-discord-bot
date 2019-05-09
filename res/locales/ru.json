@@ -21,8 +21,10 @@
         "listTitle": "Псевдонимы для '{{command}}':",
         "addedTitle": "Псевдоним добавлен!",
         "addedDescription": "'{{alias}}' связан с '{{command}}'",
-        "removedTitle": "Псевдоним удален",
-        "removedDescription": "'{{alias}}' отвязан от '{{command}}'"
+        "removedTitle": "Псевдоним удален!",
+        "removedDescription": "'{{alias}}' отвязан от '{{command}}'",
+        "error": "Ошибка",
+        "wordIsReserved": "{{word}} зарезервировано. Вы не можете создать такой псевдоним!"
     },
 
     "debug": {

@@ -21,8 +21,10 @@
         "listTitle": "'{{command}}' aliases:",
         "addedTitle": "Alias added!",
         "addedDescription": "'{{alias}}' is bound to '{{command}}'",
-        "removedTitle": "Alias removed",
-        "removedDescription": "'{{alias}}' is unbound from '{{command}}'"
+        "removedTitle": "Alias removed!",
+        "removedDescription": "'{{alias}}' is unbound from '{{command}}'",
+        "error": "Error",
+        "wordIsReserved": "{{word}} is reserved. You are not able to create alias!"
     },
 
     "debug": {

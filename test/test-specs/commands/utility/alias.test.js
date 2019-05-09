@@ -36,23 +36,23 @@ describe('alias', () => {
     it('call "man" if command not passed', () => {
         alias(msg, null, 'alias')
         
-        expect(man.calledWithExactly(msg, 'alias')).to.be.ok
+        expect(man.calledWithExactly(msg, 'alias')).to.ok
     })
 
     it('add alias to command', () => {
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'two')
         
-        expect(guild.aliases['one']).to.be.ok
-        expect(guild.aliases['two']).to.be.ok
-        expect(send.calledTwice).to.be.ok
+        expect(guild.aliases['one']).to.ok
+        expect(guild.aliases['two']).to.ok
+        expect(send.calledTwice).to.ok
     })
 
     it('remove alias from command', () => {
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'one')
         
-        expect(guild.aliases['one']).to.be.undefined
+        expect(guild.aliases['one']).to.undefined
         expect(send.calledTwice).to.be.ok
     })
 
@@ -61,9 +61,16 @@ describe('alias', () => {
         alias(msg, 'alias', 'two')
         alias(msg, 'alias')
 
-        expect(send.calledThrice).to.be.ok
+        expect(send.calledThrice).to.ok
         const description = send.lastCall.args[0].embed.description
-        expect(description).to.be.equals('one\ntwo')
+        expect(description).to.equals('one\ntwo')
+    })
+
+    it('prevent creating alias if word is reserved', () => {
+        alias(msg, 'alias', 'help')
+
+        expect(send.calledOnce).to.ok
+        expect(guild.t.calledWith('alias.error')).to.ok
     })
 
 })

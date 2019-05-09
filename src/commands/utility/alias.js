@@ -23,6 +23,8 @@ commands.alias = {
         const guild = guilds[msg.guild.id]
         const aliases = guild.aliases
         const t = guild.t
+        const reserved = Object.keys(commands)
+        reserved.push('help')
 
         // invalid command call
         if (!command || !commands[command]) {
@@ -36,6 +38,16 @@ commands.alias = {
                     title: t('alias.listTitle', { command: command }),
                     description: Object.keys(aliases).filter(e => aliases[e].name === command).join('\n'),
                     color: colors.highlightDefault
+                }
+            })
+
+        } else if (reserved.includes(alias)) {
+            send({
+                channel: msg.channel,
+                embed: {
+                    title: t('alias.error'),
+                    description: t('alias.wordIsReserved', {word: alias}),
+                    color: colors.highlightError
                 }
             })
 
