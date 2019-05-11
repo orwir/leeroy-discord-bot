@@ -2,7 +2,7 @@ module.exports = {
 
     token: process.env.executor_auth_token,
 
-    prefix: 'e!',
+    prefix: process.env.executor_prefix || 'e!',
 
     dev: process.env.executor_dev,
 
