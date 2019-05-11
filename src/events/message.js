@@ -54,7 +54,7 @@ module.exports = async (msg) => {
         })
         return
     }
-    if (restricted(guild, command, msg.channel, msg.author)) {
+    if (restricted(guild, command, msg.channel, msg.guild.member(msg.author))) {
         // TODO: show message
         return
     }
@@ -68,10 +68,11 @@ module.exports = async (msg) => {
     // resolve arguments
     let args = []
     if (command.arguments) {
-        for (i = 1; i <= command.arguments; i++) {
+        for (i = 1; i <= command.arguments && text.length > 0; i++) {
             let arg
             if (i < command.arguments) {
-                arg = text.slice(0, text.indexOf(' '))
+                let index = text.indexOf(' ')
+                arg = text.slice(0, index > 0 ? index : text.length)
                 text = text.slice(arg.length + 1)
             } else {
                 arg = text
@@ -88,7 +89,7 @@ module.exports = async (msg) => {
         // TODO: log
         
         let message = config.dev ?
-            t('internalErrorMessage', { author: msg.author, developers: developers.join('\n') }) :
+            t('internalErrorMessage', { author: msg.author, developers: developers ? developers.join('\n') : '' }) :
             null
 
         send({

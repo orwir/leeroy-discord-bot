@@ -76,6 +76,13 @@
         "noRestrictions": "No restrictions found.",
         "changedTitle": "Restrictions",
         "changedDescription": "Restrictions successfully changed."
+    },
+
+    "role": {
+        "description": "Allows to get/remove role by reacting on message.",
+        "reaction": "👌",
+        "addRemoveReaction": "Get/Remove",
+        "role": "Role"
     }
 
 }

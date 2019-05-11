@@ -88,8 +88,8 @@ module.exports = {
         commands.man.action(msg, command)
     },
 
-    restricted: (guild, command, channel, author) => {
-        return false // commands.allow.test(guild, command, channel, author)
+    restricted: (guild, command, channel, member) => {
+        return !member.hasPermission('ADMINISTRATOR') // commands.allow.test(guild, command, channel, author)
     },
 
     send: async (args) => {
