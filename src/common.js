@@ -2,6 +2,7 @@ const colors = require('../res/colors.json')
 const config = require('./config')
 const i18n = require('i18next')
 const storage = require('node-persist')
+const commands = {}
 
 String.prototype.isBlank = function() {
     return !this || !this.trim()
@@ -80,7 +81,7 @@ module.exports = {
         }
     },
 
-    commands: {},
+    commands: commands,
 
     // functions
 
