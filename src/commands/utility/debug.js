@@ -15,45 +15,42 @@ commands.debug = {
 
     description: 'debug.description',
 
-    usage: 'debug [user]',
+    usage: 'debug [1/0]',
 
-    examples: 'debug @user#1234\ndebug',
+    examples: 'debug 1\ndebug',
 
-    dev: true,
+    action: (msg, debug) => {
+        const guild = guilds[msg.guild.id]
 
-    action: (msg, user) => {
-        const t = guilds[msg.guild.id].t
-        const developers = guilds[msg.guild.id].developers
-
-        let embed
-        // show list of developers
-        if (!user) {
-            embed = {
-                title: t('debug.listTitle'),
-                description: developers.length > 0 ? developers.join('\n') : t('debug.listDescriptionEmpty'),
-                color: colors.highlightDefault
-            }
-        } else {
-            let addded = false
-            // remove developer from list
-            if (developers.includes(user)) {
-                developers.splice(developers.indexOf(user, 1))
-            // add developer to list
-            } else {
-                developers.push(user)
-                addded = true
-            }
-
+        debug = parseInt(debug)
+        if (debug === 1 || debug === 0) {
+            guild.debug = debug
             save(msg.guild.id)
-            embed = {
-                title: addded ? t('debug.addedTitle') : t('debug.removedTitle'),
-                description: t(addded ? 'debug.addedDescription' : 'debug.removedDescription', { user: user }),
-                color: colors.highlightSuccess
-            }
         }
+
         send({
             channel: msg.channel,
-            embed: embed
+            embed: {
+                title: guild.t('debug.status'),
+                description: guild.t(guild.debug ? 'debug.enabled' : 'debug.disabled'),
+                color: colors.highlightSuccess
+            }
+        })
+    },
+
+    log: (msg, error) => {
+        const guild = guilds[msg.guild.id]
+        const developers = guild.developers && guild.developers.length ? guild.developers.join('\n') : ''
+        // TODO: log
+
+        send({
+            channel: msg.channel,
+            text: guild.debug ? guild.t('debug.call_developers', { author: msg.author, developers: developers }) : '',
+            embed: {
+                title: guild.t('debug.internal_error'),
+                description: guild.debug ? error.stack : guild.t('debug.internal_error_placeholder'),
+                color: colors.highlightError
+            }
         })
     }
 

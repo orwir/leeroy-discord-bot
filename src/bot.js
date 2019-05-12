@@ -20,6 +20,7 @@ bot.on('raw', event => {
     const add = 'MESSAGE_REACTION_ADD'
     const remove = 'MESSAGE_REACTION_REMOVE'
     const reactions = [add, remove]
+    
     if (reactions.includes(event.t)) {
         events.reaction(bot, event.d, add === event.t)
     }

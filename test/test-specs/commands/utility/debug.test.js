@@ -8,11 +8,14 @@ const tested = rewire('../../src/commands/utility/debug')
 
 const commands = tested.__get__('commands')
 const debug = commands.debug.action
-const msg = { guild: {id: 'id' } }
+const log = commands.debug.log
+const msg = { guild: {id: 'id', author: 'author' } }
+const error = { stack: 'error' }
 const guilds = {
     'id': {
         t: sinon.fake(),
-        aliases: {}
+        debug: 1,
+        developers: []
     }
 }
 const guild = guilds['id']
@@ -23,49 +26,83 @@ tested.__set__('guilds', guilds)
 tested.__set__('send', send)
 tested.__set__('save', save)
 
-
 describe('debug', () => {
 
     beforeEach(() => {
+        guild.debug = 1
         guild.developers = []
         guild.t.resetHistory()
         send.resetHistory()
         save.resetHistory()
     })
 
-    it('add developer to list', () => {
-        debug(msg, 'user')
+    describe('#action()', ()  => {
+        
+        it('enable debug', () => {
+            guild.debug = 0
+            debug(msg, 1)
 
-        expect(guild.developers.length).to.equals(1)
-        expect(guild.developers[0]).to.equals('user')
-        expect(send.calledOnce).to.ok
-        expect(save.calledOnce).to.ok
+            expect(guild.debug).to.equals(1)
+        })
+
+        it('disable debug', () => {
+            guild.debug = 1
+            debug(msg, 0)
+
+            expect(guild.debug).to.equals(0)
+        })
+
+        it('show current status if argument not passed', () => {
+            debug(msg)
+
+            expect(guild.debug).to.equals(1)
+            expect(guild.t.calledWith('debug.status'))
+        })
+
+        it('show current status if argument is not [0, 1]', () => {
+            debug(msg, 42)
+
+            expect(guild.debug).to.equals(1)
+            expect(guild.t.calledWith('debug.status'))
+        })
+
     })
 
-    it('remove developer from list', () => {
-        debug(msg, 'user')
-        debug(msg, 'user')
+    describe('#log()', () => {
 
-        expect(guild.developers.length).to.equals(0)
-        expect(send.calledTwice).to.ok
-        expect(save.calledTwice).to.ok
-    })
+        it('show developers in the log message', () => {
+            guild.developers = ['user1', 'user2']
 
-    it('show list of developers if user is not passed and developers list not empty', () => {
-        debug(msg, 'user1')
-        debug(msg, 'user2')
-        debug(msg)
+            log(msg, error)
+            const args = guild.t.getCalls()[0].args
+            expect(args[0]).to.eql('debug.call_developers')
+            expect(args[1]).to.eql({ author: msg.author, developers: 'user1\nuser2' })
+        })
 
-        expect(send.calledThrice).to.be.ok
-        const description = send.lastCall.args[0].embed.description
-        expect(description).to.be.equals('user1\nuser2')
-    })
+        it('do not show developers if no one is set', () => {
+            log(msg, error)
 
-    it('show "developers not set" if user is not passed and developers list empty', () => {
-        debug(msg)
+            const args = guild.t.getCalls()[0].args
+            expect(args[0]).to.eql('debug.call_developers')
+            expect(args[1]).to.eql({ author: msg.author, developers: '' })
+        })
 
-        expect(send.calledOnce).to.be.ok
-        expect(guild.t.calledWith('debug.listDescriptionEmpty')).to.be.ok
+        it('show detailed message if debug is enabled', () => {
+            log(msg, error)
+
+            const args = send.lastCall.args[0]
+            expect(args.embed.description).to.equals(error.stack)
+        })
+
+        it('show short message if debug is disabled', ()  => {
+            guild.debug = 0
+            log(msg, error)
+
+            const args = send.lastCall.args[0]
+            expect(args.text).to.empty
+            expect(args.embed.description).to.not.equals(error.stack)
+        })
+
     })
 
 })

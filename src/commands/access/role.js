@@ -25,17 +25,6 @@ commands.role = {
         const t = guilds[msg.guild.id].t
 
         if (role) {
-            let fields = [
-                
-            ]
-            if (description) {
-                fields.push({
-                    name: t('role.fieldDescription'),
-                    value: description,
-                    inline: true
-                })
-            }
-
             send({
                 channel: msg.channel,
                 text: description,
@@ -48,7 +37,7 @@ commands.role = {
                             inline: true
                         },
                         {
-                            name: t('role.addRemoveReaction'),
+                            name: t('role.howto'),
                             value: t('role.reaction'),
                             inline: true
                         }

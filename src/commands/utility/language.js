@@ -29,7 +29,7 @@ commands.language = {
         // show supported languages list
         if (!language) {
             embed = {
-                title: t('language.listTitle'),
+                title: t('language.list'),
                 description: Object.keys(languages).join(', '),
                 color: colors.highlightDefault
             }
@@ -37,16 +37,16 @@ commands.language = {
         // language is not supported
         } else if (!languages[language]) {
             embed = {
-                title: t('language.errorTitle'),
-                description: t('language.errorLanguageNotSupported', { language: language }),
+                title: t('language.error'),
+                description: t('language.language_not_supported', { language: language }),
                 color: colors.highlightError
             }
 
         // language is the same
         } else if (language === guild.language) {
             embed = {
-                title: t('language.errorTitle'),
-                description: t('language.errorLanguageSame'),
+                title: t('language.error'),
+                description: t('language.language_is_same'),
                 color: colors.highlightError
             }
         
@@ -56,8 +56,8 @@ commands.language = {
             guild.t = t
             guild.language = language
             embed = {
-                title: t('language.changedTitle'),
-                description: t('language.changedDescription'),
+                title: t('language.changed_title'),
+                description: t('language.changed_description'),
                 color: colors.highlightSuccess
             }
             save(msg.guild.id)

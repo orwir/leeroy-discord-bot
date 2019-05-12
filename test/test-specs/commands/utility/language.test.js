@@ -58,16 +58,16 @@ describe('language', () => {
         language(msg, 'en')
 
         expect(send.calledOnce).to.ok
-        expect(guild.t.calledWith('language.errorTitle')).to.ok
-        expect(guild.t.calledWith('language.errorLanguageSame')).to.ok
+        expect(guild.t.calledWith('language.error')).to.ok
+        expect(guild.t.calledWith('language.language_is_same')).to.ok
     })
 
     it('show an error if language not supported', () => {
         language(msg, 'bla-bla')
 
         expect(send.calledOnce).to.ok
-        expect(guild.t.calledWith('language.errorTitle')).to.ok
-        expect(guild.t.calledWith('language.errorLanguageNotSupported', { language: 'bla-bla' })).to.ok
+        expect(guild.t.calledWith('language.error')).to.ok
+        expect(guild.t.calledWith('language.language_not_supported', { language: 'bla-bla' })).to.ok
     })
 
 })

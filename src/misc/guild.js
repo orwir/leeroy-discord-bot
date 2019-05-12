@@ -15,9 +15,13 @@ module.exports = {
 
             let guildConfig = await obtain(guild.id, {
 
+                id:  guild.id,
+
                 language: 'en',
 
                 prefix: config.prefix,
+
+                debug: 1,
 
                 aliases: {
                     help: commands.wtf.name

@@ -89,7 +89,11 @@ module.exports = {
     },
 
     restricted: (guild, command, channel, member) => {
-        return !member.hasPermission('ADMINISTRATOR') // commands.allow.test(guild, command, channel, author)
+        return !member.hasPermission('ADMINISTRATOR')
+    },
+
+    log: (msg, error) => {
+        commands.debug.log(msg, error)
     },
 
     send: async (args) => {

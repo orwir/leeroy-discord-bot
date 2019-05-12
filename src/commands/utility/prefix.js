@@ -33,8 +33,8 @@ commands.prefix = {
             send({
                 channel: msg.channel,
                 embed: {
-                    title: t('prefix.changedTitle'),
-                    description: t('prefix.changedDescription', { prefix: prefix }),
+                    title: t('prefix.changed_title'),
+                    description: t('prefix.changed_description', { prefix: prefix }),
                     color: colors.highlightSuccess
                 }
             })

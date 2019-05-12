@@ -28,8 +28,8 @@ commands.wtf = {
         send({
             channel: msg.channel,
             embed: {
-                title: t('wtf.messageTitle'),
-                description: t('wtf.messageDescription'),
+                title: t('wtf.message_title'),
+                description: t('wtf.message_description'),
                 color: colors.highlightDefault,
                 fields: [
                     {

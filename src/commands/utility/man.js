@@ -21,20 +21,20 @@ commands.man = {
     arguments: 1,
 
     action: (msg, name) => {
-        const t = guilds[msg.guild.id].t
-        const aliases = guilds[msg.guild.id].aliases
+        const guild = guilds[msg.guild.id]
         let embed
 
         // shows full commands list
         if (!name) {
             embed = {
-                title: t('man.listTitle'),
+                title: guild.t('man.list'),
                 color: colors.highlightDefault,
                 fields: []
             }
             let group = null
             Object.keys(commands)
                 .map(e => commands[e])
+                .filter(e => !e.debug || guild.debug)
                 .sort((a, b) => {
                    if (a.group.order == b.group.order) {
                         return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0
@@ -46,7 +46,7 @@ commands.man = {
                     if (group !== cmd.group) {
                         group = cmd.group
                         embed.fields.push({
-                            name: `${cmd.group.icon} ${t(cmd.group.name)}`,
+                            name: `${cmd.group.icon} ${guild.t(cmd.group.name)}`,
                             inline: true,
                             value: ''
                         })
@@ -59,10 +59,10 @@ commands.man = {
                 })
 
         // command not found
-        } else if (!(commands[name] || aliases[name])) {
+        } else if (!(commands[name] || guild.aliases[name])) {
             embed = {
-                title: t('commandNotFound'),
-                description: t('commandNotFoundDescription'),
+                title: guild.t('global.command_not_found_title'),
+                description: guild.t('global.command_not_found_description'),
                 color: colors.highlightError
             }
 
@@ -70,20 +70,20 @@ commands.man = {
         } else {
             let command = commands[name]
             if (!command) {
-                command = aliases[name]
+                command = commands[guild.aliases[name]]
             }
             embed = {
                 title: command.name,
-                description: t(command.description),
+                description: guild.t(command.description),
                 color: colors.highlightDefault,
                 fields: [
                     {
-                        name: t('man.usage'),
+                        name: guild.t('man.usage'),
                         value: command.usage,
                         inline: true
                     },
                     {
-                        name: t('man.examples'),
+                        name: guild.t('man.examples'),
                         value: command.examples,
                         inline: true
                     }

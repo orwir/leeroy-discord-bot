@@ -1,4 +1,5 @@
 require('./alias.test')
+require('./developer.test')
 require('./debug.test')
 require('./language.test')
 require('./man.test')

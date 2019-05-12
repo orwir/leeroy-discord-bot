@@ -1,13 +1,13 @@
 const common = require('../common')
-const configure = require('../misc/guild').configure
 
+const configure = require('../misc/guild').configure
 const commands = common.commands
 const guilds = common.guilds
 const config = common.config
 const colors = common.colors
-const developers = common.developers
 const send = common.send
 const restricted = common.restricted
+const log = common.log
 
 module.exports = async (msg) => {
     if (msg.author.bot || msg.content.isBlank()) {
@@ -15,7 +15,6 @@ module.exports = async (msg) => {
     }
     await configure(msg.guild)
     const guild = guilds[msg.guild.id]
-    const t = guild.t
     let text = msg.content
 
     // verify prefix
@@ -47,21 +46,20 @@ module.exports = async (msg) => {
         send({
             channel: msg.channel,
             embed: {
-                title: t('commandNotFound', { name: name }),
-                description: t('commandNotFoundDescription'),
+                title: guild.t('global.command_not_found_title', { name: name }),
+                description: guild.t('global.command_not_found_description'),
                 color: colors.highlightError
             }
         })
         return
     }
     if (restricted(guild, command, msg.channel, msg.guild.member(msg.author))) {
-        // TODO: show message
         return
     }
     if (onlyStable && !command.stable) {
         return
     }
-    if (command.dev && !config.dev) {
+    if (command.debug && !guild.debug) {
         return
     }
 
@@ -86,21 +84,7 @@ module.exports = async (msg) => {
     try {
         command.action(msg, ...args)
     } catch (error) {
-        // TODO: log
-        
-        let message = config.dev ?
-            t('internalErrorMessage', { author: msg.author, developers: developers ? developers.join('\n') : '' }) :
-            null
-
-        send({
-            channel: msg.channel,
-            text: message,
-            embed: {
-                title: t('internalError'),
-                description: config.dev ? error.stack : t('internalErrorDescription'),
-                color: colors.highlightError
-            }
-        })
+        log(msg, error)
     }
 
 }

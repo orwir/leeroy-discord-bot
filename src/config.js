@@ -4,8 +4,6 @@ module.exports = {
 
     prefix: process.env.executor_prefix || 'e!',
 
-    dev: process.env.executor_dev,
-
     languages: {
         en: {
             translation: require('../res/locales/en.json')

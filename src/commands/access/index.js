@@ -1,2 +1,1 @@
-//require('./allow')
 require('./role')
