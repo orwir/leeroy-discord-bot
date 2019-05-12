@@ -82,7 +82,9 @@
         "description": "Allows to get/remove role by reacting on message.",
         "reaction": "👌",
         "howto": "Get/Remove",
-        "role": "Role"
+        "role": "Role",
+        "not_found_title": "'{{- role}}' not found!",
+        "not_found_description": "And what do you want to do? 🤨"
     }
 
 }

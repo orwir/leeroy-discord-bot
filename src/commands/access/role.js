@@ -25,28 +25,40 @@ commands.role = {
         const t = guilds[msg.guild.id].t
 
         if (role) {
-            send({
-                channel: msg.channel,
-                text: description,
-                embed: {
-                    color: colors.highlightDefault,
-                    fields: [
-                        {
-                            name: t('role.role'),
-                            value: '' + role,
-                            inline: true
-                        },
-                        {
-                            name: t('role.howto'),
-                            value: t('role.reaction'),
-                            inline: true
-                        }
-                    ]
-                }
-            })
-            .then(result => {
-                result.react(t('role.reaction'))
-            })
+            let tmp = msg.guild.roles.get(role.slice(3, -1))
+            if (tmp) {
+                send({
+                    channel: msg.channel,
+                    text: description,
+                    embed: {
+                        color: colors.highlightDefault,
+                        fields: [
+                            {
+                                name: t('role.role'),
+                                value: '' + role,
+                                inline: true
+                            },
+                            {
+                                name: t('role.howto'),
+                                value: t('role.reaction'),
+                                inline: true
+                            }
+                        ]
+                    }
+                })
+                .then(result => {
+                    result.react(t('role.reaction'))
+                })
+            } else {
+                send({
+                    channel: msg.channel,
+                    embed: {
+                        title: t('role.not_found_title', { role: role }),
+                        description: t('role.not_found_description'),
+                        color: colors.highlightError
+                    }
+                })
+            }
         } else {
             man(msg, 'role')
         }
