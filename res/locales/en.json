@@ -85,6 +85,12 @@
         "role": "Role",
         "not_found_title": "'{{- role}}' not found!",
         "not_found_description": "And what do you want to do? 🤨"
+    },
+
+    "server": {
+        "description": "Command for server configuration setup.",
+        "updated": "Server configuration updated!",
+        "reset_successful": "Reset was successful."
     }
 
 }

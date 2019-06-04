@@ -1,29 +1,19 @@
 const common = require('../common')
 
-const configure = require('../misc/guild').configure
-const commands = common.commands
-const guilds = common.guilds
-const config = common.config
-const colors = common.colors
-const send = common.send
-const restricted = common.restricted
-const log = common.log
-
 module.exports = async (msg) => {
     if (msg.author.bot || msg.content.isBlank()) {
         return
     }
-    await configure(msg.guild)
-    const guild = guilds[msg.guild.id]
+    const config = await common.configureServer(msg.guild)
     let text = msg.content
 
     // verify prefix
     let prefix
     let onlyStable = false
-    if (text.startsWith(guild.prefix)) {
-        prefix = guild.prefix
-    } else if (text.startsWith(config.prefix)) {
+    if (text.startsWith(config.prefix)) {
         prefix = config.prefix
+    } else if (text.startsWith(common.config.prefix)) {
+        prefix = common.config.prefix
         onlyStable = true
     }
     if (!prefix) {
@@ -34,41 +24,37 @@ module.exports = async (msg) => {
         return
     }
     
-    // verify command
-    let command
+    // verify feature
+    let feature
     let name = text.slice(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
     text = text.slice(name.length + 1)
-    command = commands[name]
-    if (!command) {
-        command = commands[guild.aliases[name]]
+    feature = common.features[name]
+    if (!feature) {
+        feature = common.features[config.aliases[name]]
     }
-    if (!command) {
-        send({
-            channel: msg.channel,
+    if (!feature) {
+        msg.channel.send('', {
             embed: {
-                title: guild.t('global.command_not_found_title', { name: name }),
-                description: guild.t('global.command_not_found_description'),
-                color: colors.highlightError
+                title: config.t('global.command_not_found_title', { name: name }),
+                description: config.t('global.command_not_found_description'),
+                color: common.colors.highlightError
             }
         })
         return
     }
-    if (restricted(guild, command, msg.channel, msg.guild.member(msg.author))) {
+    if (onlyStable && !feature.stable) {
         return
     }
-    if (onlyStable && !command.stable) {
-        return
-    }
-    if (command.debug && !guild.debug) {
+    if (feature.debug && !config.debug) {
         return
     }
 
     // resolve arguments
     let args = []
-    if (command.arguments) {
-        for (i = 1; i <= command.arguments && text.length > 0; i++) {
+    if (feature.arguments) {
+        for (i = 1; i <= feature.arguments && text.length > 0; i++) {
             let arg
-            if (i < command.arguments) {
+            if (i < feature.arguments) {
                 let index = text.indexOf(' ')
                 arg = text.slice(0, index > 0 ? index : text.length)
                 text = text.slice(arg.length + 1)
@@ -82,9 +68,9 @@ module.exports = async (msg) => {
     }
 
     try {
-        command.action(msg, ...args)
+        feature.action(msg, ...args)
     } catch (error) {
-        log(msg, error)
+        common.log(msg, error)
     }
 
 }

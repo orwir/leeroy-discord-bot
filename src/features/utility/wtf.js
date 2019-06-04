@@ -1,16 +1,11 @@
 const common = require('../../common')
-
-const commands = common.commands
-const groups = common.groups
-const guilds = common.guilds
 const colors = common.colors
-const send = common.send
 
-commands.wtf = {
+common.features.wtf = {
 
     name: 'wtf',
 
-    group: groups.utility,
+    group: common.groups.utility,
 
     description: 'wtf.description',
 
@@ -21,12 +16,11 @@ commands.wtf = {
     stable: true,
 
     action: (msg) => {
-        const guild = guilds[msg.guild.id]
-        const t = guild.t
+        const config = common.obtainServerConfig(msg.guild.id)
+        const t = config.t
         const name = msg.guild.name
 
-        send({
-            channel: msg.channel,
+        msg.channel.send('', {
             embed: {
                 title: t('wtf.message_title'),
                 description: t('wtf.message_description'),
@@ -38,17 +32,17 @@ commands.wtf = {
                     },
                     {
                         name: t('wtf.prefix'),
-                        value: guild.prefix,
+                        value: config.prefix,
                         inline: true
                     },
                     {
                         name: t('wtf.language'),
-                        value: guild.language,
+                        value: config.language,
                         inline: true
                     },
                     {
                         name: t('wtf.commands'),
-                        value: commands.man.name
+                        value: common.features.man.name
                     }
                 ]
             }

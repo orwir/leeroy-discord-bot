@@ -1,17 +1,11 @@
 const common = require('../../common')
-
-const save = require('../../misc/guild').save
-const commands = common.commands
-const groups = common.groups
-const guilds = common.guilds
 const colors = common.colors
-const send = common.send
 
-commands.developer = {
+common.features.developer = {
 
     name: 'developer',
 
-    group: groups.utility,
+    group: common.groups.utility,
 
     description: 'developer.description',
 
@@ -22,8 +16,9 @@ commands.developer = {
     debug: true,
 
     action: (msg, user) => {
-        const t = guilds[msg.guild.id].t
-        const developers = guilds[msg.guild.id].developers
+        const config = common.obtainServerConfig(msg.guild.id)
+        const developers =config.developers
+        const t = config.t
 
         let embed
         // show list of developers
@@ -34,27 +29,24 @@ commands.developer = {
                 color: colors.highlightDefault
             }
         } else {
-            let addded = false
+            let added = false
             // remove
             if (developers.includes(user)) {
                 developers.splice(developers.indexOf(user, 1))
             // add
             } else {
                 developers.push(user)
-                addded = true
+                added = true
             }
 
-            save(msg.guild.id)
+            common.saveServerConfig(msg.guild.id)
             embed = {
-                title: addded ? t('developer.added') : t('developer.removed'),
-                description: t(addded ? 'developer.developer_added' : 'developer.developer_removed', { user: user }),
+                title: added ? t('developer.added') : t('developer.removed'),
+                description: t(added ? 'developer.developer_added' : 'developer.developer_removed', { user: user }),
                 color: colors.highlightSuccess
             }
         }
-        send({
-            channel: msg.channel,
-            embed: embed
-        })
-    },
+        msg.channel.send('', { embed: embed })
+    }
 
 }

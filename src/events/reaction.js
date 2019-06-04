@@ -1,18 +1,15 @@
 const common = require('../common')
 
-const commands = common.commands
-const log = common.log
-
-module.exports = async (bot, data, isAdd) => {
+module.exports = async (bot, data, reacted) => {
     const author = bot.users.get(data.user_id)
     const channel = bot.channels.get(data.channel_id) || await author.createDM()
     const msg = await channel.fetchMessage(data.message_id)
 
     try {
         if (!author.bot && msg.author.id === bot.user.id) {
-            commands.role.update(msg, author, data.emoji.name, isAdd)
+            common.updateRole(msg, author, data.emoji.name, reacted)
         }
     } catch (error) {
-        log(msg, error)
+        common.log(msg, error)
     }
 }

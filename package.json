@@ -13,8 +13,7 @@
     },
     "dependencies": {
         "discord.js": "11.4.2",
-        "i18next": "15.0.9",
-        "node-persist": "3.0.4"
+        "i18next": "15.0.9"
     },
     "devDependencies": {
         "mocha": "6.1.4",

@@ -1,168 +1,153 @@
-const common = require('../common')
-const sinon = common.sinon
-const expect = common.expect
-const rewire = common.rewire
-
-//tested
-const tested = rewire('../../src/events/message')
-const commands = {
-    'test': {
-        action: sinon.fake()
-    }
-}
-const guilds = {
-    'id': {
-        t: sinon.fake(),
-        aliases: {
-            'alias': 'test'
-        },
-        prefix: 'e!'
-    }
-}
-const guild = guilds['id']
-const msg = {
-    author: { bot: false },
-    guild: { id: 'id', member: sinon.fake() }
-}
-const send = sinon.fake()
-const config = {
-    prefix: 'e!'
-}
-const log = sinon.fake()
-
-tested.__set__('guilds', guilds)
-tested.__set__('send', send)
-tested.__set__('config', config)
-tested.__set__('commands', commands)
-tested.__set__('configure', sinon.fake())
-tested.__set__('developers', [])
-tested.__set__('restricted', sinon.fake.returns(false))
-tested.__set__('log', log)
-
+const shared = require('../shared')
+const sinon = shared.sinon
+const expect = shared.expect
+const rewire = shared.rewire
 
 describe('message', () => {
 
+    const tested = rewire('../../src/events/message')
+    const common = tested.__get__('common')
+    const action = sinon.fake()
+
     beforeEach(() => {
-        msg.content = ''
-        msg.author.bot = false
-        guild.debug = 0
-        guild.t.resetHistory()
-        guild.prefix = config.prefix
-        send.resetHistory()
-        commands.test.action = sinon.fake()
-        commands.test.stable = false
-        commands.test.debug = false
-        commands.test.arguments = null
-        tested.__set__('restricted', sinon.fake.returns(false))
+        shared.mock(common)
+        action.resetHistory()
+        common.features.test = {
+            action: action
+        }
     })
 
     it('call command', async () => {
+        const msg = shared.msg()
         msg.content = 'e!test'
+
         await tested(msg)
 
-        expect(commands.test.action.calledOnce).to.ok
+        expect(action.calledOnce).to.ok
     })
 
     it('call command with old prefix if command is stable', async () => {
+        const msg = shared.msg()
         msg.content = 'e!test'
-        guild.prefix = 'n!'
-        commands.test.stable = true
+        const config = common.obtainServerConfig()
+        config.prefix = 'n!'
+        common.features.test.stable = true
+        
         await tested(msg)
 
-        expect(commands.test.action.calledOnce).to.ok
+        expect(action.calledOnce).to.ok
     })
 
     it('call command by alias', async () => {
-        msg.content =  'e!alias'
+        const msg = shared.msg()
+        msg.content = 'e!alias'
+        const config = common.obtainServerConfig()
+        config.aliases.alias = 'test'
+
         await tested(msg)
 
-        expect(commands.test.action.calledOnce).to.ok
+        expect(action.calledOnce).to.ok
     })
 
     it('call command with arguments', async () => {
+        const msg = shared.msg()
         msg.content = 'e!test arg1 arg2 arg3'
+
         await tested(msg)
 
-        expect(commands.test.action.calledOnceWithExactly(msg, 'arg1', 'arg2', 'arg3')).to.be.ok
+        expect(action.calledOnceWithExactly(msg, 'arg1', 'arg2', 'arg3')).to.ok
     })
 
     it('call command with long argument', async () => {
+        const msg = shared.msg()
         msg.content = 'e!test long argument with spaces'
-        commands.test.arguments = 1
+        common.features.test.arguments = 1
+
         await tested(msg)
 
-        expect(commands.test.action.calledOnceWithExactly(msg, 'long argument with spaces')).to.be.ok
+        expect(action.calledOnceWithExactly(msg, 'long argument with spaces')).to.ok
     })
 
     it('do not call command if author is bot', async () => {
+        const msg = shared.msg()
         msg.author.bot = true
+        
         await tested(msg)
 
-        expect(commands.test.action.called).to.not.ok
+        expect(action.called).to.not.ok
     })
 
     it('do not call command if content is empty', async () => {
+        const msg = shared.msg()
         msg.content = ''
+
         await tested(msg)
 
-        expect(commands.test.action.called).to.not.ok
+        expect(action.called).to.not.ok
     })
 
     it('do not call command without prefix', async () => {
+        const msg = shared.msg()
         msg.content = 'random message'
+
         await tested(msg)
 
-        expect(commands.test.action.called).to.not.ok
+        expect(action.called).to.not.ok
     })
 
     it('do not call not stable command with old prefix', async () => {
+        const msg = shared.msg()
         msg.content = 'e!test'
-        guild.prefix = 'n!'
+        const server = common.obtainServerConfig()
+        server.prefix = 'n!'
+
         await tested(msg)
 
-        expect(commands.test.action.called).to.not.ok
-    })
-
-    it('do not call command if command is restricted for user', async () => {
-        tested.__set__('restricted', sinon.fake.returns(true))
-        msg.content = 'e!test'
-        await tested(msg)
-
-        expect(commands.test.action.called).to.not.ok
+        expect(action.called).to.not.ok
     })
 
     it('show message if command not found', async () => {
+        const msg = shared.msg()
         msg.content = 'e!blabla'
+        const config = common.obtainServerConfig()
+
         await tested(msg)
 
-        expect(guild.t.calledWith('global.command_not_found_title', { name: 'blabla' })).to.ok
-        expect(guild.t.calledWith('global.command_not_found_description')).to.ok
+        expect(config.t.calledWith('global.command_not_found_title', { name: 'blabla' })).to.ok
+        expect(config.t.calledWith('global.command_not_found_description')).to.ok
     })
 
     it('call debug command if debug is enabled',  async () => {
-        guild.debug = 1
+        const msg = shared.msg()
         msg.content = 'e!test'
-        commands.test.debug = true
+        const config = common.obtainServerConfig()
+        config.debug = 1
+        common.features.test.debug = true
+        
         await tested(msg)
 
-        expect(commands.test.action.called).to.ok
+        expect(action.called).to.ok
     })
 
     it('do not call debug command if debug is disabled', async () => {
+        const msg = shared.msg()
         msg.content = 'e!test'
-        commands.test.debug = true
+        common.features.test.debug = true
+        
         await tested(msg)
 
-        expect(commands.test.action.called).to.not.ok
+        expect(action.called).to.not.ok
     })
 
     it('show error message if action throws exception', async () => {
+        const msg = shared.msg()
         msg.content = 'e!test'
-        commands.test.action = sinon.fake.throws(new Error('Test Error'))
+        common.features.test.action = sinon.fake.throws(new Error('Test Error'))
+        
         await tested(msg)
 
-        expect(commands.test.action.called).to.ok
-        expect(log.calledOnce).to.be.ok
+        expect(common.features.test.action.called).to.ok
+        expect(common.log.calledOnce).to.ok
     })
 
 })

@@ -1,9 +1,11 @@
 const discord = require('discord.js')
 const common = require('./common')
 const events = require('./events')
-require('./commands')
+require('./features')
 
 const bot = new discord.Client()
+
+common.init()
 
 bot.on('ready', () => {
     bot.user.setPresence({
@@ -17,12 +19,8 @@ bot.on('ready', () => {
 bot.on('message', events.message)
 
 bot.on('raw', event => {
-    const add = 'MESSAGE_REACTION_ADD'
-    const remove = 'MESSAGE_REACTION_REMOVE'
-    const reactions = [add, remove]
-    
-    if (reactions.includes(event.t)) {
-        events.reaction(bot, event.d, add === event.t)
+    if (['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(event.t)) {
+        events.reaction(bot, event.d, 'MESSAGE_REACTION_ADD' === event.t)
     }
 })
 

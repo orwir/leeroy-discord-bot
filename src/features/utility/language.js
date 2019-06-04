@@ -1,19 +1,11 @@
 const common = require('../../common')
-
-const save = require('../../misc/guild').save
-const commands = common.commands
-const groups = common.groups
-const guilds = common.guilds
-const i18n = common.i18n
-const languages = common.config.languages
 const colors = common.colors
-const send = common.send
 
-commands.language = {
+common.features.language = {
 
     name: 'language',
 
-    group: groups.utility,
+    group: common.groups.utility,
 
     description: 'language.description',
 
@@ -22,20 +14,20 @@ commands.language = {
     examples: 'language ru',
 
     action: (msg, language) => {
-        const guild = guilds[msg.guild.id]
-        let t = guild.t
+        const config = common.obtainServerConfig(msg.guild.id)
+        let t = config.t
         let embed
 
         // show supported languages list
         if (!language) {
             embed = {
                 title: t('language.list'),
-                description: Object.keys(languages).join(', '),
+                description: Object.keys(common.config.languages).join(', '),
                 color: colors.highlightDefault
             }
 
         // language is not supported
-        } else if (!languages[language]) {
+        } else if (!common.config.languages[language]) {
             embed = {
                 title: t('language.error'),
                 description: t('language.language_not_supported', { language: language }),
@@ -43,7 +35,7 @@ commands.language = {
             }
 
         // language is the same
-        } else if (language === guild.language) {
+        } else if (language === config.language) {
             embed = {
                 title: t('language.error'),
                 description: t('language.language_is_same'),
@@ -52,18 +44,18 @@ commands.language = {
         
         // change language
         } else {
-            t = i18n.getFixedT(language)
-            guild.t = t
-            guild.language = language
+            t = common.i18n.getFixedT(language)
+            config.t = t
+            config.language = language
+            common.saveServerConfig(msg.guild.id)
             embed = {
                 title: t('language.changed_title'),
                 description: t('language.changed_description'),
                 color: colors.highlightSuccess
             }
-            save(msg.guild.id)
         }
 
-        send({ channel: msg.channel, embed: embed })
+        msg.channel.send('', { embed: embed })
     }
 
 }

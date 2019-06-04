@@ -1,16 +1,11 @@
 const common = require('../../common')
-
-const commands = common.commands
-const groups = common.groups
-const guilds = common.guilds
 const colors = common.colors
-const send = common.send
 
-commands.man = {
+common.features.man = {
 
     name: 'man',
 
-    group: groups.utility,
+    group: common.groups.utility,
 
     description: 'man.description',
 
@@ -21,20 +16,20 @@ commands.man = {
     arguments: 1,
 
     action: (msg, name) => {
-        const guild = guilds[msg.guild.id]
+        const config = common.obtainServerConfig(msg.guild.id)
+        const t = config.t
         let embed
 
         // shows full commands list
         if (!name) {
             embed = {
-                title: guild.t('man.list'),
+                title: t('man.list'),
                 color: colors.highlightDefault,
                 fields: []
             }
             let group = null
-            Object.keys(commands)
-                .map(e => commands[e])
-                .filter(e => !e.debug || guild.debug)
+            Object.values(common.features)
+                .filter(feature => !feature.debug || config.debug)
                 .sort((a, b) => {
                    if (a.group.order == b.group.order) {
                         return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0
@@ -42,11 +37,11 @@ commands.man = {
                        return a.group.order - b.group.order
                    }
                 })
-                .forEach(cmd => {
-                    if (group !== cmd.group) {
-                        group = cmd.group
+                .forEach(feature => {
+                    if (group !== feature.group) {
+                        group = feature.group
                         embed.fields.push({
-                            name: `${cmd.group.icon} ${guild.t(cmd.group.name)}`,
+                            name: `${feature.group.icon} ${t(feature.group.name)}`,
                             inline: true,
                             value: ''
                         })
@@ -55,46 +50,43 @@ commands.man = {
                     if (last.value.length > 0) {
                         last.value += '\n'
                     }
-                    last.value += cmd.name
+                    last.value += feature.name
                 })
 
-        // command not found
-        } else if (!(commands[name] || guild.aliases[name])) {
+        // feature not found
+        } else if (!(common.features[name] || config.aliases[name])) {
             embed = {
-                title: guild.t('global.command_not_found_title'),
-                description: guild.t('global.command_not_found_description'),
+                title: t('global.command_not_found_title'),
+                description: t('global.command_not_found_description'),
                 color: colors.highlightError
             }
 
-        // shows user manual for command
+        // shows user manual for feature
         } else {
-            let command = commands[name]
-            if (!command) {
-                command = commands[guild.aliases[name]]
+            let feature = common.features[name]
+            if (!feature) {
+                feature = common.features[config.aliases[name]]
             }
             embed = {
-                title: command.name,
-                description: guild.t(command.description),
+                title: feature.name,
+                description: t(feature.description),
                 color: colors.highlightDefault,
                 fields: [
                     {
-                        name: guild.t('man.usage'),
-                        value: command.usage,
+                        name: t('man.usage'),
+                        value: feature.usage,
                         inline: true
                     },
                     {
-                        name: guild.t('man.examples'),
-                        value: command.examples,
+                        name: t('man.examples'),
+                        value: feature.examples,
                         inline: true
                     }
                 ]
             }
         }
         
-        send({
-            channel: msg.channel,
-            embed: embed
-        })
+        msg.channel.send('', { embed: embed })
     }
-    
+
 }
