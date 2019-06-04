@@ -59,7 +59,9 @@ common.features.role = {
         const member = msg.guild.member(author)
         if (emoji !== t('role.reaction')) {
             if (reacted) {
-                msg.reactions.get(emoji).remove(member)
+                msg.reactions
+                    .find(reaction => reaction.emoji.name === emoji)
+                    .remove(member)
             }
             return
         }

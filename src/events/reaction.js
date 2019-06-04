@@ -4,6 +4,7 @@ module.exports = async (bot, data, reacted) => {
     const author = bot.users.get(data.user_id)
     const channel = bot.channels.get(data.channel_id) || await author.createDM()
     const msg = await channel.fetchMessage(data.message_id)
+    await common.configureServer(msg.guild)
 
     try {
         if (!author.bot && msg.author.id === bot.user.id) {
