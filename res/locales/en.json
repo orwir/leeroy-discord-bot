@@ -1,10 +1,8 @@
 {
-    "commandNotFound": "Command '{{name}}' not found!",
-    "commandNotFoundDescription": "How dare you asking me about it?!",
-
-    "internalErrorMessage": "{{- author}} is trying to kill me! Help me please {{developers}}",
-    "internalError": "Internal error!",
-    "internalErrorDescription": "Are you trying to destabilize me?",
+    "global": {
+        "command_not_found_title": "Command '{{name}}' not found!",
+        "command_not_found_description": "How dare you asking me about it?!"
+    },
 
     "group": {
         "fun": "Fun",
@@ -18,71 +16,81 @@
 
     "alias": {
         "description": "Add or remove alias for command. To see aliases for command type just command.",
-        "listTitle": "'{{command}}' aliases:",
-        "addedTitle": "Alias added!",
-        "addedDescription": "'{{alias}}' is bound to '{{command}}'",
-        "removedTitle": "Alias removed!",
-        "removedDescription": "'{{alias}}' is unbound from '{{command}}'",
+        "list": "'{{command}}' aliases:",
+        "added_title": "Alias added!",
+        "added_description": "'{{alias}}' is bound to '{{command}}'",
+        "removed_title": "Alias removed!",
+        "removed_description": "'{{alias}}' is unbound from '{{command}}'",
         "error": "Error",
-        "wordIsReserved": "{{word}} is reserved. You are not able to create alias!"
+        "word_is_reserved": "'{{word}}' is reserved. You are not able to create alias!"
     },
 
     "debug": {
+        "description": "Set debug flag to provide more/less information about internal work.",
+        "status": "Debug status:",
+        "enabled": "Enabled",
+        "disabled": "Disabled",
+        "call_developers": "{{- author}} is trying to kill me! Help me please {{developers}}",
+        "internal_error": "Internal error!",
+        "internal_error_placeholder": "Are you trying to harm me?"
+    },
+
+    "developer": {
         "description": "Add/remove user as a developer to receive debug notifications.",
-        "addedTitle": "Developer added!",
-        "addedDescription": "{{user}} will receive debug notifications.",
-        "removedTitle": "Developer removed!",
-        "removedDescription": "{{user}} won't receive debug notifications.",
-        "listTitle": "List of developers:",
-        "listDescriptionEmpty": "Developers are not set."
+        "added": "Developer added!",
+        "removed": "Developer removed!",
+        "list": "List of developers:",
+        "empty": "Developers not added.",
+        "developer_added": "{{user}} will receive debug notifications.",
+        "developer_removed": "{{user}} won't receive debug notifcations anymore."
     },
 
     "language": {
         "description": "Change bot's language.",
-        "listTitle": "Supported languages:",
-        "changedTitle": "Language changed!",
-        "changedDescription": "I speak English now.",
-        "errorTitle": "Language not changed!",
-        "errorLanguageSame": "Language is already the same.",
-        "errorLanguageNotSupported": "`{{language}}` is not supported."
+        "list": "Supported languages:",
+        "changed_title": "Language changed!",
+        "changed_description": "I speak English now.",
+        "error": "Language not changed!",
+        "language_is_same": "Language is already the same.",
+        "language_not_supported": "'{{language}}' is not supported."
     },
 
     "man": {
         "description": "Shows manual for commands (without arg shows full list).",
-        "listTitle": "Commands list:",
+        "list": "Commands list:",
         "usage": "Usage",
         "examples": "Examples"
     },
 
     "prefix": {
         "description": "Change prefix for bot's commands. 'reset' restores default value",
-        "changedTitle": "Prefix changed!",
-        "changedDescription": "Now I'll answer you if you start you message with '{{prefix}}'"
+        "changed_title": "Prefix changed!",
+        "changed_description": "Now I'll answer you if you start you message with '{{prefix}}'"
     },
 
     "wtf": {
         "description": "Shows general information",
-        "messageTitle": "Greetings mortals!",
-        "messageDescription": "I'm The Executor and I'm here to rule!",
+        "message_title": "Greetings mortals!",
+        "message_description": "I'm The Executor and I'm here to rule!",
         "server": "Server",
         "prefix": "Prefix",
         "language": "Language",
         "commands": "Commands list:"
     },
 
-    "allow": {
-        "description": "Allows calling command in specified channel only for user/group.",
-        "showAllTitle": "Restrictions:",
-        "noRestrictions": "No restrictions found.",
-        "changedTitle": "Restrictions",
-        "changedDescription": "Restrictions successfully changed."
-    },
-
     "role": {
         "description": "Allows to get/remove role by reacting on message.",
         "reaction": "👌",
-        "addRemoveReaction": "Get/Remove",
-        "role": "Role"
+        "howto": "Get/Remove",
+        "role": "Role",
+        "not_found_title": "'{{- role}}' not found!",
+        "not_found_description": "And what do you want to do? 🤨"
+    },
+
+    "server": {
+        "description": "Command for server configuration setup.",
+        "updated": "Server configuration updated!",
+        "reset_successful": "Reset was successful."
     }
 
 }

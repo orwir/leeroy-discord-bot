@@ -1,2 +1,0 @@
-//require('./allow')
-require('./role')

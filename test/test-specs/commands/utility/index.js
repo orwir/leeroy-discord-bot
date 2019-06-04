@@ -1,6 +1,0 @@
-require('./alias.test')
-require('./debug.test')
-require('./language.test')
-require('./man.test')
-require('./prefix.test')
-require('./wtf.test')
