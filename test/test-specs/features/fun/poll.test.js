@@ -32,7 +32,7 @@ describe('poll', () => {
         poll(msg, 'question')
         await msg.channel.send
 
-        expect(msg.channel.send.calledWithExactly('@here question')).to.ok
+        expect(msg.channel.send.calledWith('@here question')).to.ok
         expect(react.calledWith('👍')).to.ok
         await react
         expect(react.calledWith('👎')).to.ok

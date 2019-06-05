@@ -1,7 +1,8 @@
 {
     "global": {
         "command_not_found_title": "Command '{{name}}' not found!",
-        "command_not_found_description": "How dare you asking me about it?!"
+        "command_not_found_description": "How dare you asking me about it?!",
+        "tag": "Tag"
     },
 
     "group": {
@@ -11,7 +12,9 @@
     },
 
     "poll": {
-        "description": "Create 'yes/no' poll. React with 👍 for yes, and 👎 for no."
+        "description": "Create 'yes/no' poll. React with 👍 for yes, and 👎 for no.",
+        "reactions": "Reactions",
+        "yesno": "Yes - 👍 / No - 👎"
     },
 
     "alias": {
@@ -80,7 +83,6 @@
 
     "role": {
         "description": "Allows to get/remove role by reacting on message.",
-        "reaction": "👌",
         "howto": "Get/Remove",
         "role": "Role",
         "not_found_title": "'{{- role}}' not found!",

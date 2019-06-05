@@ -21,7 +21,8 @@ describe('Common Test Suite', () => {
         const tested = {
             node1: {
                 node2: [4, 5, 6]
-            }
+            },
+            node5: [1]
         }
 
         it('return "array" from path "node1.node2"', () => {
@@ -42,6 +43,10 @@ describe('Common Test Suite', () => {
 
         it('return "42" from path "node6.node7" and default value 42', () => {
             expect(tested.path('node6.node7', 42)).to.equals(42)
+        })
+
+        it('return "1" from path "node5[0]', () => {
+            expect(tested.path('node5[0]')).to.equals(1)
         })
 
     })

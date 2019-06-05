@@ -15,6 +15,10 @@ common.features.role = {
 
     arguments: 2,
 
+    reaction: true,
+
+    emojis: ['👌'],
+
     action: (msg, role, description) => {
         const t = common.obtainServerConfig(msg.guild.id).t
 
@@ -27,19 +31,24 @@ common.features.role = {
                     color: colors.highlightDefault,
                     fields: [
                         {
+                            name: t('global.tag'),
+                            value: 'role',
+                            inline: true
+                        },
+                        {
                             name: t('role.role'),
                             value: '' + role,
                             inline: true
                         },
                         {
                             name: t('role.howto'),
-                            value: t('role.reaction'),
+                            value: '👌',
                             inline: true
                         }
                     ]
                 }
             })
-            .then(result => { result.react(t('role.reaction')) })
+            .then(result => { result.react('👌') })
 
         } else {
             msg.channel.send('', {
@@ -52,19 +61,8 @@ common.features.role = {
         }
     },
 
-    update: (msg, author, emoji, reacted) => {
-        const t = common.obtainServerConfig(msg.guild.id).t
-        const snowflake = msg.embeds[0].fields[0].value
-
-        const member = msg.guild.member(author)
-        if (emoji !== t('role.reaction')) {
-            if (reacted) {
-                msg.reactions
-                    .find(reaction => reaction.emoji.name === emoji)
-                    .remove(member)
-            }
-            return
-        }
+    react: (msg, emoji, member, reacted) => {
+        const snowflake = msg.embeds[0].fields[1].value
         const role = msg.guild.roles.get(snowflake.slice(3, -1))
         if (role && member) {
             if (reacted) {

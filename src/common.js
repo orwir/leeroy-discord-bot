@@ -58,13 +58,16 @@ module.exports =  {
 
     obtainServerConfig: (id) => features.server.obtain(id),
 
-    
     saveServerConfig: (id) => features.server.save(id),
 
     man: (msg, command) => features.man.action(msg, command),
 
     log: (msg, error) => features.debug.log(msg, error),
 
-    updateRole: (msg, author, emoji, reacted) => features.role.update(msg, author, emoji, reacted)
+    removeReaction: (msg, emoji, member) => {
+        msg.reactions
+            .find(reaction => reaction.emoji.name === emoji)
+            .remove(member)
+    }
 
 }
