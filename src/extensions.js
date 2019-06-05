@@ -5,7 +5,7 @@ String.prototype.isBlank = function() {
 Object.prototype.path = function(path, defValue) {
     let value = this
     for (let segment of path.split('.')) {
-        let index
+        let index = -1
         if (segment.charAt(segment.length - 1) === ']') {
             index = parseInt(segment.charAt(segment.length - 2))
             segment = segment.slice(0, -3)
@@ -20,7 +20,7 @@ Object.prototype.path = function(path, defValue) {
         } else {
             value = value[segment]
         }
-        if (index && Array.isArray(value)) {
+        if (index >= 0) {
             value = value[index]
         }
         if (!value) {
