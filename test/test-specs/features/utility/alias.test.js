@@ -6,13 +6,13 @@ describe('alias', () => {
 
     // tested
     const tested = rewire('../../src/features/utility/alias')
-    const common = tested.__get__('common')
-    const feature = common.features.alias
+    const global = tested.__get__('global')
+    const feature = global.features.alias
     const alias = feature.action
 
     beforeEach(() => {
-        shared.mock(common)
-        common.features.alias = feature
+        shared.mock(global)
+        global.features.alias = feature
     })
 
     it('call "man" if command not passed', () => {
@@ -20,17 +20,17 @@ describe('alias', () => {
         
         alias(msg, null, 'alias')
         
-        expect(common.man.calledWithExactly(msg, 'alias')).to.ok
+        expect(global.man.calledWithExactly(msg, 'alias')).to.ok
     })
 
     it('add alias to command', () => {
         const msg = shared.msg()
-        const server = common.obtainServerConfig()
+        const server = global.obtainServerConfig()
 
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'two')
         
-        expect(common.saveServerConfig.calledTwice).to.ok
+        expect(global.saveServerConfig.calledTwice).to.ok
         expect(msg.channel.send.calledTwice).to.ok
         expect(server.aliases['one']).to.ok
         expect(server.aliases['two']).to.ok
@@ -38,14 +38,14 @@ describe('alias', () => {
 
     it('remove alias from command', () => {
         const msg = shared.msg()
-        const server = common.obtainServerConfig()
+        const server = global.obtainServerConfig()
 
         alias(msg, 'alias', 'one')
         alias(msg, 'alias', 'one')
         
         expect(server.aliases['one']).to.undefined
         expect(msg.channel.send.calledTwice).to.ok
-        expect(common.saveServerConfig.calledTwice).to.ok
+        expect(global.saveServerConfig.calledTwice).to.ok
     })
 
     it('show list of aliases if only command passed', async () => {
@@ -62,7 +62,7 @@ describe('alias', () => {
 
     it('prevent creating alias if word is reserved', () => {
         const msg = shared.msg()
-        const server = common.obtainServerConfig()
+        const server = global.obtainServerConfig()
 
         alias(msg, 'alias', 'help')
 

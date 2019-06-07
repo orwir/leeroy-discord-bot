@@ -1,10 +1,10 @@
-const common = require('../common')
+const global = require('../global')
 
 module.exports = async (msg) => {
     if (msg.author.bot || msg.content.isBlank()) {
         return
     }
-    const config = await common.configureServer(msg.guild)
+    const config = await global.configureServer(msg.guild)
     let text = msg.content
 
     // verify prefix
@@ -12,8 +12,8 @@ module.exports = async (msg) => {
     let onlyStable = false
     if (text.startsWith(config.prefix)) {
         prefix = config.prefix
-    } else if (text.startsWith(common.config.prefix)) {
-        prefix = common.config.prefix
+    } else if (text.startsWith(global.config.prefix)) {
+        prefix = global.config.prefix
         onlyStable = true
     }
     if (!prefix) {
@@ -28,16 +28,16 @@ module.exports = async (msg) => {
     let feature
     let name = text.slice(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
     text = text.slice(name.length + 1)
-    feature = common.features[name]
+    feature = global.features[name]
     if (!feature) {
-        feature = common.features[config.aliases[name]]
+        feature = global.features[config.aliases[name]]
     }
     if (!feature) {
         msg.channel.send('', {
             embed: {
                 title: config.t('global.command_not_found_title', { name: name }),
                 description: config.t('global.command_not_found_description'),
-                color: common.colors.highlightError
+                color: global.colors.highlightError
             }
         })
         return
@@ -70,7 +70,7 @@ module.exports = async (msg) => {
     try {
         feature.action(msg, ...args)
     } catch (error) {
-        common.log(msg, error)
+        global.log(msg, error)
     }
 
 }

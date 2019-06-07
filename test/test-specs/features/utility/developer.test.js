@@ -6,35 +6,35 @@ describe('developer', () => {
 
     // tested
     const tested = rewire('../../src/features/utility/developer')
-    const common = tested.__get__('common')
-    const developer = common.features.developer.action
+    const global = tested.__get__('global')
+    const developer = global.features.developer.action
 
     beforeEach(() => {
-        shared.mock(common)
+        shared.mock(global)
     })
 
     it('add developer to list', () => {
         const msg = shared.msg()
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         developer(msg, 'user')
 
         expect(config.developers.length).to.equals(1)
         expect(config.developers[0]).to.equals('user')
         expect(msg.channel.send.calledOnce).to.ok
-        expect(common.saveServerConfig.calledOnce).to.ok
+        expect(global.saveServerConfig.calledOnce).to.ok
     })
 
     it('remove developer from list', () => {
         const msg = shared.msg()
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         developer(msg, 'user')
         developer(msg, 'user')
 
         expect(config.developers.length).to.equals(0)
         expect(msg.channel.send.calledTwice).to.ok
-        expect(common.saveServerConfig.calledTwice).to.ok
+        expect(global.saveServerConfig.calledTwice).to.ok
     })
 
     it('show list of developers if user is not passed and developers list not empty', () => {
@@ -51,7 +51,7 @@ describe('developer', () => {
 
     it('show "empty" if user is not passed and developers list empty', () => {
         const msg = shared.msg()
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         developer(msg)
 

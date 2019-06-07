@@ -1,11 +1,11 @@
-const common = require('../../common')
-const colors = common.colors
+const global = require('../../global')
+const colors = global.colors
 
-common.features.language = {
+global.features.language = {
 
     name: 'language',
 
-    group: common.groups.utility,
+    group: global.groups.utility,
 
     description: 'language.description',
 
@@ -14,7 +14,7 @@ common.features.language = {
     examples: 'language ru',
 
     action: (msg, language) => {
-        const config = common.obtainServerConfig(msg.guild.id)
+        const config = global.obtainServerConfig(msg.guild.id)
         let t = config.t
         let embed
 
@@ -22,12 +22,12 @@ common.features.language = {
         if (!language) {
             embed = {
                 title: t('language.list'),
-                description: Object.keys(common.config.languages).join(', '),
+                description: Object.keys(global.config.languages).join(', '),
                 color: colors.highlightDefault
             }
 
         // language is not supported
-        } else if (!common.config.languages[language]) {
+        } else if (!global.config.languages[language]) {
             embed = {
                 title: t('language.error'),
                 description: t('language.language_not_supported', { language: language }),
@@ -44,10 +44,10 @@ common.features.language = {
         
         // change language
         } else {
-            t = common.i18n.getFixedT(language)
+            t = global.i18n.getFixedT(language)
             config.t = t
             config.language = language
-            common.saveServerConfig(msg.guild.id)
+            global.saveServerConfig(msg.guild.id)
             embed = {
                 title: t('language.changed_title'),
                 description: t('language.changed_description'),

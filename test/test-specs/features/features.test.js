@@ -2,7 +2,7 @@ const shared = require('../shared')
 const expect = shared.expect
 
 // tested
-const tested = require('../../../src/common').features
+const tested = require('../../../src/global').features
 require('../../../src/features')
 
 describe('Features Test Suite', () => {

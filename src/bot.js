@@ -1,11 +1,11 @@
 const discord = require('discord.js')
-const common = require('./common')
+const global = require('./global')
 const events = require('./events')
 require('./features')
 
 const bot = new discord.Client()
 
-common.init()
+global.init()
 
 bot.on('ready', () => {
     bot.user.setPresence({
@@ -24,4 +24,4 @@ bot.on('raw', event => {
     }
 })
 
-bot.login(common.config.token)
+bot.login(global.config.token)

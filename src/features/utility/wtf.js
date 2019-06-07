@@ -1,11 +1,11 @@
-const common = require('../../common')
-const colors = common.colors
+const global = require('../../global')
+const colors = global.colors
 
-common.features.wtf = {
+global.features.wtf = {
 
     name: 'wtf',
 
-    group: common.groups.utility,
+    group: global.groups.utility,
 
     description: 'wtf.description',
 
@@ -16,9 +16,8 @@ common.features.wtf = {
     stable: true,
 
     action: (msg) => {
-        const config = common.obtainServerConfig(msg.guild.id)
+        const config = global.obtainServerConfig(msg.guild.id)
         const t = config.t
-        const name = msg.guild.name
 
         msg.channel.send('', {
             embed: {
@@ -27,22 +26,20 @@ common.features.wtf = {
                 color: colors.highlightDefault,
                 fields: [
                     {
-                        name: t('wtf.server'),
-                        value: name
-                    },
-                    {
-                        name: t('wtf.prefix'),
-                        value: config.prefix,
-                        inline: true
-                    },
-                    {
-                        name: t('wtf.language'),
-                        value: config.language,
-                        inline: true
+                        name: t('wtf.version'),
+                        value: global.config.vesrion
                     },
                     {
                         name: t('wtf.commands'),
-                        value: common.features.man.name
+                        value: global.features.man.name
+                    },
+                    {
+                        name: t('wtf.language'),
+                        value: config.language
+                    },
+                    {
+                        name: t('wtf.prefix'),
+                        value: config.prefix
                     }
                 ]
             }

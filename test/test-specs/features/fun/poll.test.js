@@ -7,11 +7,11 @@ describe('poll', () => {
 
     // tested
     const tested = rewire('../../src/features/fun/poll')
-    const common = tested.__get__('common')
-    const poll = common.features.poll.action
+    const global = tested.__get__('global')
+    const poll = global.features.poll.action
 
     beforeEach(() => {
-        shared.mock(common)
+        shared.mock(global)
     })
 
     it('call "man" if question is not passed', () => {
@@ -19,7 +19,7 @@ describe('poll', () => {
         
         poll(msg, '')
         
-        expect(common.man.calledWithExactly(msg, 'poll')).to.ok
+        expect(global.man.calledWithExactly(msg, 'poll')).to.ok
     })
 
     it('send message and set reactions', async () => {

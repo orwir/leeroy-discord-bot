@@ -1,11 +1,11 @@
-const common = require('../../common')
-const colors = common.colors
+const global = require('../../global')
+const colors = global.colors
 
-common.features.developer = {
+global.features.developer = {
 
     name: 'developer',
 
-    group: common.groups.utility,
+    group: global.groups.utility,
 
     description: 'developer.description',
 
@@ -16,7 +16,7 @@ common.features.developer = {
     debug: true,
 
     action: (msg, user) => {
-        const config = common.obtainServerConfig(msg.guild.id)
+        const config = global.obtainServerConfig(msg.guild.id)
         const developers =config.developers
         const t = config.t
 
@@ -39,7 +39,7 @@ common.features.developer = {
                 added = true
             }
 
-            common.saveServerConfig(msg.guild.id)
+            global.saveServerConfig(msg.guild.id)
             embed = {
                 title: added ? t('developer.added') : t('developer.removed'),
                 description: t(added ? 'developer.developer_added' : 'developer.developer_removed', { user: user }),

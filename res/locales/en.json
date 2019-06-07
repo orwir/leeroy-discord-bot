@@ -75,10 +75,10 @@
         "description": "Shows general information",
         "message_title": "Greetings mortals!",
         "message_description": "I'm The Executor and I'm here to rule!",
-        "server": "Server",
         "prefix": "Prefix",
         "language": "Language",
-        "commands": "Commands list:"
+        "commands": "Commands list",
+        "version": "Version"
     },
 
     "role": {

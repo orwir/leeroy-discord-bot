@@ -1,11 +1,11 @@
-const common = require('../../common')
-const colors = common.colors
+const global = require('../../global')
+const colors = global.colors
 
-common.features.prefix = {
+global.features.prefix = {
 
     name: 'prefix',
 
-    group: common.groups.utility,
+    group: global.groups.utility,
 
     description: 'prefix.description',
 
@@ -17,11 +17,11 @@ common.features.prefix = {
 
     action: (msg, prefix) => {
         if (prefix) {
-            const config = common.obtainServerConfig(msg.guild.id)
+            const config = global.obtainServerConfig(msg.guild.id)
             const t = config.t
 
-            config.prefix = (prefix === 'reset') ? common.config.prefix : prefix
-            common.saveServerConfig(msg.guild.id)
+            config.prefix = (prefix === 'reset') ? global.config.prefix : prefix
+            global.saveServerConfig(msg.guild.id)
             msg.channel.send('', {
                 embed: {
                     title: t('prefix.changed_title'),
@@ -30,7 +30,7 @@ common.features.prefix = {
                 }
             })
         } else {
-            common.man(msg, 'prefix')
+            global.man(msg, 'prefix')
         }
     }
 

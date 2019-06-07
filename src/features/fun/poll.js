@@ -1,10 +1,10 @@
-const common = require('../../common')
+const global = require('../../global')
 
-common.features.poll = {
+global.features.poll = {
 
     name: 'poll',
 
-    group: common.groups.fun,
+    group: global.groups.fun,
 
     description: 'poll.description',
 
@@ -20,12 +20,12 @@ common.features.poll = {
 
     action: (msg, question) => {
         if (question) {
-            const t = common.obtainServerConfig(msg.guild.id).t
+            const t = global.obtainServerConfig(msg.guild.id).t
 
             msg.channel
                 .send(`@here ${question}`, {
                     embed: {
-                        color: common.colors.highlightDefault,
+                        color: global.colors.highlightDefault,
                         fields: [
                             {
                                 name: t('global.tag'),
@@ -42,7 +42,7 @@ common.features.poll = {
                 })
                 .then(message => message.react('👍').then(() => message.react('👎')))
         } else {
-            common.man(msg, 'poll')
+            global.man(msg, 'poll')
         }
     },
 

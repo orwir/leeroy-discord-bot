@@ -6,13 +6,13 @@ const rewire = shared.rewire
 describe('message', () => {
 
     const tested = rewire('../../src/events/message')
-    const common = tested.__get__('common')
+    const global = tested.__get__('global')
     const action = sinon.fake()
 
     beforeEach(() => {
-        shared.mock(common)
+        shared.mock(global)
         action.resetHistory()
-        common.features.test = {
+        global.features.test = {
             action: action
         }
     })
@@ -29,9 +29,9 @@ describe('message', () => {
     it('call command with old prefix if command is stable', async () => {
         const msg = shared.msg()
         msg.content = 'e!test'
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
         config.prefix = 'n!'
-        common.features.test.stable = true
+        global.features.test.stable = true
         
         await tested(msg)
 
@@ -41,7 +41,7 @@ describe('message', () => {
     it('call command by alias', async () => {
         const msg = shared.msg()
         msg.content = 'e!alias'
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
         config.aliases.alias = 'test'
 
         await tested(msg)
@@ -61,7 +61,7 @@ describe('message', () => {
     it('call command with long argument', async () => {
         const msg = shared.msg()
         msg.content = 'e!test long argument with spaces'
-        common.features.test.arguments = 1
+        global.features.test.arguments = 1
 
         await tested(msg)
 
@@ -98,7 +98,7 @@ describe('message', () => {
     it('do not call not stable command with old prefix', async () => {
         const msg = shared.msg()
         msg.content = 'e!test'
-        const server = common.obtainServerConfig()
+        const server = global.obtainServerConfig()
         server.prefix = 'n!'
 
         await tested(msg)
@@ -109,7 +109,7 @@ describe('message', () => {
     it('show message if command not found', async () => {
         const msg = shared.msg()
         msg.content = 'e!blabla'
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         await tested(msg)
 
@@ -120,9 +120,9 @@ describe('message', () => {
     it('call debug command if debug is enabled',  async () => {
         const msg = shared.msg()
         msg.content = 'e!test'
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
         config.debug = 1
-        common.features.test.debug = true
+        global.features.test.debug = true
         
         await tested(msg)
 
@@ -132,7 +132,7 @@ describe('message', () => {
     it('do not call debug command if debug is disabled', async () => {
         const msg = shared.msg()
         msg.content = 'e!test'
-        common.features.test.debug = true
+        global.features.test.debug = true
         
         await tested(msg)
 
@@ -142,12 +142,12 @@ describe('message', () => {
     it('show error message if action throws exception', async () => {
         const msg = shared.msg()
         msg.content = 'e!test'
-        common.features.test.action = sinon.fake.throws(new Error('Test Error'))
+        global.features.test.action = sinon.fake.throws(new Error('Test Error'))
         
         await tested(msg)
 
-        expect(common.features.test.action.called).to.ok
-        expect(common.log.calledOnce).to.ok
+        expect(global.features.test.action.called).to.ok
+        expect(global.log.calledOnce).to.ok
     })
 
 })

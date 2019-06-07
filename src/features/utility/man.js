@@ -1,11 +1,11 @@
-const common = require('../../common')
-const colors = common.colors
+const global = require('../../global')
+const colors = global.colors
 
-common.features.man = {
+global.features.man = {
 
     name: 'man',
 
-    group: common.groups.utility,
+    group: global.groups.utility,
 
     description: 'man.description',
 
@@ -16,7 +16,7 @@ common.features.man = {
     arguments: 1,
 
     action: (msg, name) => {
-        const config = common.obtainServerConfig(msg.guild.id)
+        const config = global.obtainServerConfig(msg.guild.id)
         const t = config.t
         let embed
 
@@ -28,7 +28,7 @@ common.features.man = {
                 fields: []
             }
             let group = null
-            Object.values(common.features)
+            Object.values(global.features)
                 .filter(feature => !feature.debug || config.debug)
                 .sort((a, b) => {
                    if (a.group.order == b.group.order) {
@@ -54,7 +54,7 @@ common.features.man = {
                 })
 
         // feature not found
-        } else if (!(common.features[name] || config.aliases[name])) {
+        } else if (!(global.features[name] || config.aliases[name])) {
             embed = {
                 title: t('global.command_not_found_title'),
                 description: t('global.command_not_found_description'),
@@ -63,9 +63,9 @@ common.features.man = {
 
         // shows user manual for feature
         } else {
-            let feature = common.features[name]
+            let feature = global.features[name]
             if (!feature) {
-                feature = common.features[config.aliases[name]]
+                feature = global.features[config.aliases[name]]
             }
             embed = {
                 title: feature.name,

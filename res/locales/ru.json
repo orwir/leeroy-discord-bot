@@ -75,10 +75,10 @@
         "description": "Общая информация",
         "message_title": "Приветствую, смертные!",
         "message_description": "Я Вершитель и я здесь, чтобы управлять!",
-        "server": "Сервер",
         "prefix": "Префикс",
         "language": "Язык",
-        "commands": "Список команд:"
+        "commands": "Список команд",
+        "version": "Версия"
     },
 
     "role": {

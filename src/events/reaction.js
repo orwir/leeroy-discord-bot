@@ -1,4 +1,4 @@
-const common = require('../common')
+const global = require('../global')
 
 module.exports = async (bot, data, reacted) => {
     const user = bot.users.get(data.user_id)
@@ -10,14 +10,14 @@ module.exports = async (bot, data, reacted) => {
 
     try {
         if (!user.bot && msg.author.id === bot.user.id && tag) {
-            await common.configureServer(msg.guild)
+            await global.configureServer(msg.guild)
 
-            Object.values(common.features)
+            Object.values(global.features)
                 .filter(feature => feature.reaction)
                 .forEach(feature => {
                     if (feature.name === tag) {
                         if (reacted && !feature.emojis.includes(emoji)) {
-                            common.removeReaction(msg, emoji, member)
+                            global.removeReaction(msg, emoji, member)
                         } else {
                             feature.react(msg, emoji, member, reacted)
                         }
@@ -25,6 +25,6 @@ module.exports = async (bot, data, reacted) => {
                 })
         }
     } catch (error) {
-        common.log(msg, error)
+        global.log(msg, error)
     }
 }

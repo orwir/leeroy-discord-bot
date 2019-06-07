@@ -1,9 +1,8 @@
 const shared = require('./shared')
-const sinon = shared.sinon
 const expect = shared.expect
 
 // tested
-const tested = require('../../src/common')
+const tested = require('../../src/global')
 
 describe('Common Test Suite', () => {
 

@@ -11,6 +11,8 @@ module.exports = {
         ru: {
             translation: require('../res/locales/ru.json')
         }
-    }
+    },
+
+    vesrion: require('fs').readFileSync('./VERSION', 'utf8')
 
 }

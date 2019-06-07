@@ -6,24 +6,24 @@ describe('language', () => {
 
     // tested
     const tested = rewire('../../src/features/utility/language')
-    const common = tested.__get__('common')
-    const language = common.features.language.action
-    common.init()
+    const global = tested.__get__('global')
+    const language = global.features.language.action
+    global.init()
 
     beforeEach(() => {
-        shared.mock(common)
+        shared.mock(global)
     })
 
     it('change language if supported', () => {
         const msg = shared.msg()
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         language(msg, 'ru')
 
         expect(config.language).to.equals('ru')
-        expect(config.t.language).to.equals(common.i18n.getFixedT('ru').language)
+        expect(config.t.language).to.equals(global.i18n.getFixedT('ru').language)
         expect(msg.channel.send.calledOnce).to.ok
-        expect(common.saveServerConfig.calledOnce).to.ok
+        expect(global.saveServerConfig.calledOnce).to.ok
     })
 
     it('show supported languages list', () => {
@@ -33,12 +33,12 @@ describe('language', () => {
         
         expect(msg.channel.send.calledOnce).to.ok
         const description = msg.channel.send.lastCall.args[1].embed.description
-        expect(description).to.equals(Object.keys(common.config.languages).join(', '))
+        expect(description).to.equals(Object.keys(global.config.languages).join(', '))
     })
 
     it('show an error if language is already the same', () => {
         const msg = shared.msg()
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         language(msg, 'en')
 
@@ -49,7 +49,7 @@ describe('language', () => {
 
     it('show an error if language not supported', () => {
         const msg = shared.msg()
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         language(msg, 'bla-bla')
 

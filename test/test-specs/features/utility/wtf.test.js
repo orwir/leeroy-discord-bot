@@ -6,16 +6,16 @@ describe('wtf', () => {
 
     // tested
     const tested = rewire('../../src/features/utility/wtf')
-    const common = tested.__get__('common')
-    const wtf = common.features.wtf.action
+    const global = tested.__get__('global')
+    const wtf = global.features.wtf.action
 
     beforeEach(() => {
-        shared.mock(common)
+        shared.mock(global)
     })
 
     it('show information', () => {
         const msg = shared.msg()
-        common.features.man = {
+        global.features.man = {
             name: 'man'
         }
         

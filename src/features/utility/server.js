@@ -1,11 +1,11 @@
-const common = require('../../common')
+const global = require('../../global')
 const servers = {}
 
-common.features.server = {
+global.features.server = {
 
     name: 'server',
 
-    group: common.groups.utility,
+    group: global.groups.utility,
 
     description: 'server.description',
 
@@ -21,24 +21,24 @@ common.features.server = {
         if (servers[guild.id]) {
             return servers[guild.id]
         }
-        let config = await common.storage.obtain(guild.id, {
+        let config = await global.storage.obtain(guild.id, {
             id: guild.id,
             language: 'en',
-            prefix: common.config.prefix,
+            prefix: global.config.prefix,
             debug: 0,
             aliases: {
-                help: common.features.wtf.name
+                help: global.features.wtf.name
             },
             developers: []
         })
         servers[guild.id] = config
-        config.t = common.i18n.getFixedT(config.language)
+        config.t = global.i18n.getFixedT(config.language)
 
         return config
     },
 
-    save: async (id) => common.storage.save(id, servers[id]),
+    save: async (id) => global.storage.save(id, servers[id]),
 
-    delete: async (id) => common.storage.delete(id)
+    delete: async (id) => global.storage.delete(id)
 
 }

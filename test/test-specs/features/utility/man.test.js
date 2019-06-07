@@ -7,17 +7,17 @@ describe('man', () => {
 
     // tested
     const tested = rewire('../../src/features/utility/man')
-    const common = tested.__get__('common')
-    const feature = common.features.man
+    const global = tested.__get__('global')
+    const feature = global.features.man
     const man = feature.action
 
     beforeEach(() => {
-        shared.mock(common)
-        common.features.man = feature
+        shared.mock(global)
+        global.features.man = feature
     })
 
     it('show manual for command if command exists', () => {
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         man(shared.msg(), 'man')
 
@@ -25,7 +25,7 @@ describe('man', () => {
     })
 
     it('show manual for command if alias exists', () => {
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
         config.aliases['man-test-alias'] = 'man'
 
         man(shared.msg(), 'man-test-alias')
@@ -46,7 +46,7 @@ describe('man', () => {
     })
 
     it('show error message if command not found', () => {
-        const config = common.obtainServerConfig()
+        const config = global.obtainServerConfig()
 
         man(shared.msg(), 'unknown-command')
 

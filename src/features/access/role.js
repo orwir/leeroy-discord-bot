@@ -1,11 +1,11 @@
-const common = require('../../common')
-const colors = common.colors
+const global = require('../../global')
+const colors = global.colors
 
-common.features.role = {
+global.features.role = {
 
     name: 'role',
 
-    group: common.groups.access,
+    group: global.groups.access,
 
     description: 'role.description',
 
@@ -20,10 +20,10 @@ common.features.role = {
     emojis: ['👌'],
 
     action: (msg, role, description) => {
-        const t = common.obtainServerConfig(msg.guild.id).t
+        const t = global.obtainServerConfig(msg.guild.id).t
 
         if (!role) {
-            common.man(msg, 'role')
+            global.man(msg, 'role')
 
         } else if (msg.guild.roles.get(role.slice(3, -1))) {
             msg.channel.send(description, {

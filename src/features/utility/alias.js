@@ -1,11 +1,11 @@
-const common = require('../../common')
-const colors = common.colors
+const global = require('../../global')
+const colors = global.colors
 
-common.features.alias = {
+global.features.alias = {
 
     name: 'alias',
 
-    group: common.groups.utility,
+    group: global.groups.utility,
 
     description: 'alias.description',
 
@@ -14,13 +14,13 @@ common.features.alias = {
     examples: 'alias prefix summon\nalias prefix',
 
     action: (msg, command, alias) => {
-        const config = common.obtainServerConfig(msg.guild.id)
+        const config = global.obtainServerConfig(msg.guild.id)
         const aliases = config.aliases
         const t = config.t
 
         // invalid command call
-        if (!command || !common.features[command]) {
-            common.man(msg, 'alias')
+        if (!command || !global.features[command]) {
+            global.man(msg, 'alias')
             
         // shows list of aliases
         } else if (!alias) {
@@ -46,10 +46,10 @@ common.features.alias = {
             if (aliases[alias]) {
                 delete aliases[alias]
             } else {
-                aliases[alias] = common.features[command].name
+                aliases[alias] = global.features[command].name
             }
 
-            common.saveServerConfig(msg.guild.id)
+            global.saveServerConfig(msg.guild.id)
             msg.channel.send('', {
                 embed: {
                     title: t(aliases[alias] ? 'alias.added_title' : 'alias.removed_title'),
@@ -64,7 +64,7 @@ common.features.alias = {
 }
 
 function reserved() {
-    const reserved = Object.keys(common.features)
+    const reserved = Object.keys(global.features)
     reserved.push('help')
     return reserved
 }
