@@ -1,1 +1,3 @@
-require('./poll')
+module.exports = [
+    require('./poll')
+]

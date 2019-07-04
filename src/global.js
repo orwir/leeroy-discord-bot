@@ -6,35 +6,8 @@ const features = {}
 
 module.exports =  {
 
-    config: config,
-    
     i18n: i18n,
 
-    colors: {
-        highlightDefault: parseInt(colors.electricViolet),
-        highlightSuccess: parseInt(colors.malachite),
-        highlightError: parseInt(colors.torchRed)
-    },
-
-    groups: {
-        fun: {
-            name: 'group.fun',
-            icon: ':ok_hand:',
-            order: 0
-        },
-        access: {
-            name: 'group.access',
-            icon: ':busts_in_silhouette:',
-            order: 1
-        },
-        utility: {
-            name: 'group.utility',
-            icon: ':gear:',
-            order: 2
-        }
-    },
-
-    features: features,
 
     storage: {
 

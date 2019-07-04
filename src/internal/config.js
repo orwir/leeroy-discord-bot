@@ -1,5 +1,6 @@
-module.exports = {
+const fs= require('fs')
 
+module.exports = {
     token: process.env.executor_auth_token,
 
     prefix: process.env.executor_prefix || 'e!',
@@ -13,6 +14,5 @@ module.exports = {
         }
     },
 
-    vesrion: require('fs').readFileSync('./VERSION', 'utf8')
-
+    vesrion: fs.readFileSync('./VERSION', 'utf8')
 }

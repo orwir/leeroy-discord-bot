@@ -1,1 +1,3 @@
-require('./role')
+module.exports = [
+    require('./role')
+]

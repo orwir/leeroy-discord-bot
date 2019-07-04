@@ -1,44 +1,35 @@
-const global = require('../../global')
+require('../../internal/extensions')
+const config = require('../../internal/config')
+const groups = require('../../internal/groups')
+const storage = require('../../internal/storage')
 const servers = {}
 
-global.features.server = {
-
+module.exports = {
     name: 'server',
-
-    group: global.groups.utility,
-
+    group: groups.utility,
     description: 'server.description',
-
     usage: '<no public commands>',
-
     examples: '<no public commands>',
 
-    action: (msg, option) => {},
+    action: async (msg) => {},
 
-    obtain: (id) => servers[id],
-
-    configure: async (guild) => {
+    obtain: async (guild) => {
         if (servers[guild.id]) {
             return servers[guild.id]
         }
-        let config = await global.storage.obtain(guild.id, {
+        return servers[guild.id] = await storage.obtain(guild.id, {
             id: guild.id,
             language: 'en',
-            prefix: global.config.prefix,
+            prefix: config.prefix,
             debug: 0,
             aliases: {
-                help: global.features.wtf.name
+                help: 'wtf'
             },
             developers: []
         })
-        servers[guild.id] = config
-        config.t = global.i18n.getFixedT(config.language)
-
-        return config
     },
 
-    save: async (id) => global.storage.save(id, servers[id]),
+    save: async (id) => storage.save(id, servers[id]),
 
-    delete: async (id) => global.storage.delete(id)
-
+    delete: async (id) => storage.delete(id)
 }

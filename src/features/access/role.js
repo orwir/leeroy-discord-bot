@@ -1,29 +1,25 @@
-const global = require('../../global')
-const colors = global.colors
+const colors = require('../../internal/colors')
+const groups = require('../../internal/groups')
+const server = require('../utility/server')
+const language = requre('../utility/language')
+const man = require('../utility/man')
 
-global.features.role = {
-
+module.exports = {
     name: 'role',
-
-    group: global.groups.access,
-
+    group: groups.access,
     description: 'role.description',
-
     usage: 'role [@role] [description]',
-
     examples: 'role @game1 Gives access to game1 voice and text channels',
-
     arguments: 2,
-
     reaction: true,
-
     emojis: ['👌'],
 
-    action: (msg, role, description) => {
-        const t = global.obtainServerConfig(msg.guild.id).t
+    action: async (msg, role, description) => {
+        const settings = await server.obtain(msg.guild)
+        const t = language.get(settings.language)
 
         if (!role) {
-            global.man(msg, 'role')
+            man.action(msg, 'role')
 
         } else if (msg.guild.roles.get(role.slice(3, -1))) {
             msg.channel.send(description, {
@@ -61,9 +57,9 @@ global.features.role = {
         }
     },
 
-    react: (msg, emoji, member, reacted) => {
-        const snowflake = msg.embeds[0].fields[1].value
-        const role = msg.guild.roles.get(snowflake.slice(3, -1))
+    onReaction: (msg, emoji, member, reacted) => {
+        const roleSnowflake = msg.embeds[0].fields[1].value
+        const role = msg.guild.roles.get(roleSnowflake.slice(3, -1))
         if (role && member) {
             if (reacted) {
                 member.addRole(role)
