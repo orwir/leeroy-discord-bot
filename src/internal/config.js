@@ -7,10 +7,10 @@ module.exports = {
 
     languages: {
         en: {
-            translation: require('../res/locales/en.json')
+            translation: require('../../res/locales/en.json')
         },
         ru: {
-            translation: require('../res/locales/ru.json')
+            translation: require('../../res/locales/ru.json')
         }
     },
 

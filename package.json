@@ -12,8 +12,10 @@
         "url": "https://github.com/orwir/executor"
     },
     "dependencies": {
-        "discord.js": "11.4.2",
-        "i18next": "15.0.9"
+        "bufferutil": "^4.0.1",
+        "discord.js": "^11.5.1",
+        "i18next": "15.0.9",
+        "libsodium-wrappers": "^0.7.4"
     },
     "devDependencies": {
         "mocha": "6.1.4",
@@ -23,6 +25,6 @@
         "rewire": "4.0.1"
     },
     "engines": {
-      "node": "12.x"
+        "node": "12.x"
     }
 }

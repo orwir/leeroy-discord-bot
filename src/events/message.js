@@ -1,19 +1,24 @@
-const global = require('../global')
+const config = require('../internal/config')
+const colors = require('../internal/colors')
+const server = require('../features/utility/server')
+const language = require('../features/utility/language')
+const features = require('../features').obtain()
 
 module.exports = async (msg) => {
     if (msg.author.bot || msg.content.isBlank()) {
         return
     }
-    const config = await global.configureServer(msg.guild)
+    const settings = await server.obtain(msg.guild)
+    const t = await language.obtain(settings.language)
     let text = msg.content
 
     // verify prefix
     let prefix
     let onlyStable = false
-    if (text.startsWith(config.prefix)) {
+    if (text.startsWith(settings.prefix)) {
+        prefix = settings.prefix
+    } else if (text.startsWith(config.prefix)) {
         prefix = config.prefix
-    } else if (text.startsWith(global.config.prefix)) {
-        prefix = global.config.prefix
         onlyStable = true
     }
     if (!prefix) {
@@ -28,16 +33,17 @@ module.exports = async (msg) => {
     let feature
     let name = text.slice(0, (text.indexOf(' ') > 0) ? text.indexOf(' ') : text.length)
     text = text.slice(name.length + 1)
-    feature = global.features[name]
+    feature = features[name]
     if (!feature) {
-        feature = global.features[config.aliases[name]]
+        //TODO: alias
+        //feature = features[settings.aliases[name]]
     }
     if (!feature) {
         msg.channel.send('', {
             embed: {
-                title: config.t('global.command_not_found_title', { name: name }),
-                description: config.t('global.command_not_found_description'),
-                color: global.colors.highlightError
+                title: t('global.command_not_found_title', { name: name }),
+                description: t('global.command_not_found_description'),
+                color: colors.highlightError
             }
         })
         return
@@ -45,7 +51,7 @@ module.exports = async (msg) => {
     if (onlyStable && !feature.stable) {
         return
     }
-    if (feature.debug && !config.debug) {
+    if (feature.debug && !settings.debug) {
         return
     }
 
@@ -68,9 +74,10 @@ module.exports = async (msg) => {
     }
 
     try {
-        feature.action(msg, ...args)
+        await feature.action(msg, ...args)
     } catch (error) {
-        global.log(msg, error)
+        //TODO: log
+        //global.log(msg, error)
     }
 
 }

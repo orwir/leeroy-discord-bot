@@ -15,7 +15,7 @@ module.exports = {
 
     action: async (msg, language) => {
         const settings = await server.obtain(msg.guild)
-        let t = languages[settings.language]
+        let t = await obtain(settings.language)
 
         let embed
         // show supported languages list
@@ -45,7 +45,7 @@ module.exports = {
         // change language
         } else {
             settings.language = language
-            server.save(settings)
+            server.save(msg.guild.id)
             t = languages[language]
             embed = {
                 title: t('language.changed_title'),
@@ -57,17 +57,20 @@ module.exports = {
         msg.channel.send('', { embed: embed })
     },
 
-    init: async () => i18n
-        .init({
+    obtain: obtain
+}
+
+async function obtain(lang) {
+    return languages[lang]
+        || i18n.init({
             fallbackLng: 'en',
             preload: true,
             resources: config.languages
         })
         .then(t => {
-            Object.keys(config.languages).forEach(lang => {
-                languages[lang] = i18n.getFixedT(lang)
+            Object.keys(config.languages).forEach(l => {
+                languages[l] = i18n.getFixedT(l)
             })
-        }),
-
-    get: (lang) => languages[lang]
+        })
+        .then(() => languages[lang])
 }

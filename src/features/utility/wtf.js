@@ -1,23 +1,22 @@
-const global = require('../../global')
-const colors = global.colors
+require('../../internal/extensions')
+const groups = require('../../internal/groups')
+const colors = require('../../internal/colors')
+const config = require('../../internal/config')
+const server = require('./server')
+const language = require('./language')
+const man = require('./man')
 
-global.features.wtf = {
-
+module.exports = {
     name: 'wtf',
-
-    group: global.groups.utility,
-
+    group: groups.utility,
     description: 'wtf.description',
-
     usage: 'wtf',
-
     examples: 'wtf',
-
     stable: true,
 
-    action: (msg) => {
-        const config = global.obtainServerConfig(msg.guild.id)
-        const t = config.t
+    action: async (msg) => {
+        const settings = await server.obtain(msg.guild)
+        const t = await language.obtain(settings.language)
 
         msg.channel.send('', {
             embed: {
@@ -27,19 +26,19 @@ global.features.wtf = {
                 fields: [
                     {
                         name: t('wtf.version'),
-                        value: global.config.vesrion
+                        value: config.vesrion
                     },
                     {
                         name: t('wtf.commands'),
-                        value: global.features.man.name
+                        value: man.name
                     },
                     {
                         name: t('wtf.language'),
-                        value: config.language
+                        value: settings.language
                     },
                     {
                         name: t('wtf.prefix'),
-                        value: config.prefix
+                        value: settings.prefix
                     }
                 ]
             }
