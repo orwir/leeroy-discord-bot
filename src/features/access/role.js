@@ -2,7 +2,7 @@ const colors = require('../../internal/colors')
 const groups = require('../../internal/groups')
 const server = require('../utility/server')
 const language = requre('../utility/language')
-const man = require('../utility/man')
+const man = require('../utility/man').action
 
 module.exports = {
     name: 'role',
@@ -19,7 +19,7 @@ module.exports = {
         const t = language.get(settings.language)
 
         if (!role) {
-            man.action(msg, 'role')
+            man(msg, 'role')
 
         } else if (msg.guild.roles.get(role.slice(3, -1))) {
             msg.channel.send(description, {

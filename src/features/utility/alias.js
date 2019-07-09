@@ -1,26 +1,26 @@
-const global = require('../../global')
-const colors = global.colors
+const groups = require('../../internal/groups')
+const colors = require('../../internal/colors')
+const server = require('./server')
+const language = require('./language')
+const man = require('./man').action
+const features = require('../../features')
 
-global.features.alias = {
-
+module.exports = {
     name: 'alias',
-
-    group: global.groups.utility,
-
+    group: groups.utility,
     description: 'alias.description',
-
     usage: 'alias [command] [alias]\nalias [command]',
-
     examples: 'alias prefix summon\nalias prefix',
 
-    action: (msg, command, alias) => {
-        const config = global.obtainServerConfig(msg.guild.id)
-        const aliases = config.aliases
-        const t = config.t
+    action: async (msg, command, alias) => {
+        const settings = await server.obtain(msg.guild)
+        const t = await language.obtain(settings.language)
+        const featuresList = features.get()
+        const aliases = settings.aliases
 
         // invalid command call
-        if (!command || !global.features[command]) {
-            global.man(msg, 'alias')
+        if (!command || !featuresList[command]) {
+            man(msg, 'alias')
             
         // shows list of aliases
         } else if (!alias) {
@@ -32,7 +32,7 @@ global.features.alias = {
                 }
             })
 
-        } else if (reserved().includes(alias)) {
+        } else if (reserved(alias)) {
             msg.channel.send('', {
                 embed: {
                     title: t('alias.error'),
@@ -46,10 +46,10 @@ global.features.alias = {
             if (aliases[alias]) {
                 delete aliases[alias]
             } else {
-                aliases[alias] = global.features[command].name
+                aliases[alias] = featuresList[command].name
             }
 
-            global.saveServerConfig(msg.guild.id)
+            server.save(msg.guild.id)
             msg.channel.send('', {
                 embed: {
                     title: t(aliases[alias] ? 'alias.added_title' : 'alias.removed_title'),
@@ -57,14 +57,12 @@ global.features.alias = {
                 }
             })
         }
-    },
-
-    reserved: reserved
+    }
 
 }
 
-function reserved() {
-    const reserved = Object.keys(global.features)
+function reserved(word) {
+    const reserved = features.get()
     reserved.push('help')
-    return reserved
+    return reserved.includes(word)
 }

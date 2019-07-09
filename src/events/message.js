@@ -2,7 +2,8 @@ const config = require('../internal/config')
 const colors = require('../internal/colors')
 const server = require('../features/utility/server')
 const language = require('../features/utility/language')
-const features = require('../features').obtain()
+const debug = require('../features/utility/debug')
+const features = require('../features').get()
 
 module.exports = async (msg) => {
     if (msg.author.bot || msg.content.isBlank()) {
@@ -35,8 +36,7 @@ module.exports = async (msg) => {
     text = text.slice(name.length + 1)
     feature = features[name]
     if (!feature) {
-        //TODO: alias
-        //feature = features[settings.aliases[name]]
+        feature = features[settings.aliases[name]]
     }
     if (!feature) {
         msg.channel.send('', {
@@ -76,8 +76,7 @@ module.exports = async (msg) => {
     try {
         await feature.action(msg, ...args)
     } catch (error) {
-        //TODO: log
-        //global.log(msg, error)
+        debug.log(error)
     }
 
 }

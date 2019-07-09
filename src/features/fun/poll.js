@@ -1,31 +1,27 @@
-const global = require('../../global')
+const groups = require('../../internal/groups')
+const colors = require('../../internal/colors')
+const server = require('../utility/server')
+const language = require('../utility/language')
+const man = require('../utility/man').action
 
-global.features.poll = {
-
+module.exports = {
     name: 'poll',
-
-    group: global.groups.fun,
-
+    group: groups.fun,
     description: 'poll.description',
-
     usage: 'poll [question]',
-
     examples: 'poll Am I the best bot?',
-
     arguments: 1,
-
     reaction: true,
-
     emojis: ['👍', '👎'],
 
-    action: (msg, question) => {
+    action: async (msg, question) => {
         if (question) {
-            const t = global.obtainServerConfig(msg.guild.id).t
+            const settings = await server.obtain(msg.guild)
+            const t = await language.obtain(settings.language)
 
-            msg.channel
-                .send(`@here ${question}`, {
+            msg.channel.send(`@here ${question}`, {
                     embed: {
-                        color: global.colors.highlightDefault,
+                        color: colors.highlightDefault,
                         fields: [
                             {
                                 name: t('global.tag'),
@@ -40,12 +36,10 @@ global.features.poll = {
                         ]
                     }
                 })
-                .then(message => message.react('👍').then(() => message.react('👎')))
+                .then(message => message.react('👍').then(() => message))
+                .then(message => message.react('👎'))
         } else {
-            global.man(msg, 'poll')
+            man(msg, 'poll')
         }
-    },
-
-    react: (msg, emoji, member, reacted) => {}
-
+    }
 }

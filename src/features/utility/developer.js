@@ -2,17 +2,11 @@ const global = require('../../global')
 const colors = global.colors
 
 global.features.developer = {
-
     name: 'developer',
-
-    group: global.groups.utility,
-
+    group: groups.utility,
     description: 'developer.description',
-
     usage: 'developer [user]',
-
     examples: 'developer @user#1234\developer',
-
     debug: true,
 
     action: (msg, user) => {

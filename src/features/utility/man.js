@@ -16,7 +16,7 @@ module.exports = {
     action: async (msg, name) => {
         const settings = await server.obtain(msg.guild)
         const t = await language.obtain(settings.language)
-        const list = features.obtain()
+        const featuresList = featuresList.get()
         let embed
 
         // shows full commands list
@@ -27,7 +27,7 @@ module.exports = {
                 fields: []
             }
             let group = null
-            Object.values(list)
+            Object.values(featuresList)
                 .filter(feature => !feature.debug || settings.debug)
                 .sort((a, b) => {
                    if (a.group.order == b.group.order) {
@@ -53,7 +53,7 @@ module.exports = {
                 })
 
         // feature not found
-        } else if (!list[name]) { //TODO: || aliases[name]
+        } else if (!featuresList[name] || settings.aliases[name]) {
             embed = {
                 title: t('global.command_not_found_title'),
                 description: t('global.command_not_found_description'),
@@ -62,10 +62,9 @@ module.exports = {
 
         // shows user manual for feature
         } else {
-            let feature = list[name]
+            let feature = featuresList[name]
             if (!feature) {
-                // TODO:
-                // feature = global.features[config.aliases[name]]
+                feature = features[settings.aliases[name]]
             }
             embed = {
                 title: feature.name,

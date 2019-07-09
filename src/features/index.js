@@ -1,7 +1,7 @@
-module.exports.obtain = () =>
+module.exports.get = () =>
     [
-        // ...require('./access'),
-        // ...require('./fun'),
+        ...require('./access'),
+        ...require('./fun'),
         ...require('./utility')
     ]
     .reduce((features, feature) => {
