@@ -1,7 +1,9 @@
-const global = require('../../global')
-const colors = global.colors
+const groups = require('../../internal/groups')
+const colors = require('../../internal/colors')
+const server = require('./server')
+const language = require('./language')
 
-global.features.developer = {
+module.exports = {
     name: 'developer',
     group: groups.utility,
     description: 'developer.description',
@@ -9,10 +11,10 @@ global.features.developer = {
     examples: 'developer @user#1234\developer',
     debug: true,
 
-    action: (msg, user) => {
-        const config = global.obtainServerConfig(msg.guild.id)
-        const developers =config.developers
-        const t = config.t
+    action: async (msg, user) => {
+        const settings = await server.obtain(msg.guild)
+        const t = await language.obtain(settings.language)
+        const developers = settings.developers
 
         let embed
         // show list of developers
@@ -33,7 +35,7 @@ global.features.developer = {
                 added = true
             }
 
-            global.saveServerConfig(msg.guild.id)
+            server.save(msg.guild.id)
             embed = {
                 title: added ? t('developer.added') : t('developer.removed'),
                 description: t(added ? 'developer.developer_added' : 'developer.developer_removed', { user: user }),
