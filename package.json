@@ -3,8 +3,9 @@
     "version": "1.0.0",
     "description": "Follow the rules or be burned",
     "author": "orwir",
+    "type": "module",
     "scripts": {
-        "start": "node src/bot",
+        "start": "node --experimental-modules src/bot.mjs",
         "test": "mocha"
     },
     "repository": {

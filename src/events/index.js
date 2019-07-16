@@ -1,4 +1,4 @@
 module.exports = {
-    message: require('./message')
-    //reaction: require('./reaction')
+    message: require('./message'),
+    reaction: require('./reaction')
 }
