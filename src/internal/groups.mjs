@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     fun: {
         name: 'group.fun',
         icon: ':ok_hand:',
