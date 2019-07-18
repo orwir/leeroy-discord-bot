@@ -1,5 +1,5 @@
 import chai from 'chai'
-import '../../src/internal/extensions.mjs'
+import '../../src/internal/extensions'
 
 const expect = chai.expect
 

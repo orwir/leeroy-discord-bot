@@ -1,1 +1,0 @@
-//require('./allow.test')

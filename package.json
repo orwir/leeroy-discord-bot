@@ -5,28 +5,32 @@
     "author": "orwir",
     "type": "module",
     "scripts": {
-        "start": "node --experimental-modules src/bot.mjs",
-        "test": "mjs-mocha"
+        "start": "babel-node src/bot",
+        "test": "mocha --require @babel/register --require @babel/polyfill"
     },
     "repository": {
         "type": "git",
         "url": "https://github.com/orwir/executor"
     },
     "dependencies": {
-        "bufferutil": "4.0.1",
-        "discord.js": "11.5.1",
-        "i18next": "15.0.9",
-        "libsodium-wrappers": "0.7.4"
+        "bufferutil": "^4.0.1",
+        "discord.js": "^11.5.1",
+        "i18next": "^17.0.6",
+        "libsodium-wrappers": "^0.7.5"
     },
     "devDependencies": {
-        "chai": "4.2.0",
-        "chai-as-promised": "7.1.1",
-        "mjs-mocha": "3.0.0",
-        "mocha": "6.1.4",
-        "rewire": "4.0.1",
-        "sinon": "7.3.2"
+        "@babel/core": "^7.5.5",
+        "@babel/node": "^7.5.5",
+        "@babel/polyfill": "^7.4.4",
+        "@babel/preset-env": "^7.5.5",
+        "@babel/register": "^7.5.5",
+        "chai": "^4.2.0",
+        "chai-as-promised": "^7.1.1",
+        "mocha": "^6.1.4",
+        "rewire": "^4.0.1",
+        "sinon": "^7.3.2"
     },
     "engines": {
-        "node": "12.x"
+        "node": "12.6"
     }
 }

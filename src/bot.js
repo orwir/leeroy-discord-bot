@@ -1,14 +1,14 @@
-import { token } from './internal/config.mjs'
+import { TOKEN, PREFIX } from './internal/config'
 import discord from 'discord.js'
-import message from './events/message.mjs'
-import reaction, { REACTION_TYPES, REACTION_ADD } from './events/reaction.mjs'
+import message from './events/message'
+import reaction, { REACTION_TYPES, REACTION_ADD } from './events/reaction'
 
 const bot = new discord.Client()
 
 bot.on('ready', () => {
     bot.user.setPresence({
         game: {
-            name: 'e!wtf',
+            name: `${PREFIX}wtf`,
             type: 'PLAYING'
         }
     })
@@ -22,4 +22,4 @@ bot.on('raw', event => {
     }
 })
 
-bot.login(token)
+bot.login(TOKEN)

@@ -1,5 +1,5 @@
 import chai from 'chai'
-import tested from '../../src/internal/groups.mjs'
+import tested from '../../src/internal/groups'
 
 const expect = chai.expect
 
