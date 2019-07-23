@@ -10,6 +10,10 @@ export const VERSION = readFileSync('./VERSION', 'utf8')
 
 export const Server = {
 
+    config: async (guild) => {
+
+    },
+
     language: async (guild) => {
         
     },
