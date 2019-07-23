@@ -6,17 +6,23 @@ import server from './server'
 
 const languages = {}
 
+async function initLocalization() {
+    return await i18n.init({
+        fallbackLng: 'en',
+        preload: true,
+        resources: LANGUAGES
+    })
+    .then(t => {
+        Object.keys(LANGUAGES)
+            .forEach(language => {
+                languages[language] = i18n.getFixedT(language)
+            })
+    })
+}
+
 async function obtain(language) {
     return languages[language]
-        || await i18n.init({
-            fallbackLng: 'en',
-            preload: true,
-            resources: LANGUAGES
-        })
-        .then(t => Object.keys(LANGUAGES).forEach(lang => {
-            languages[lang] = i18n.getFixedT(lang)
-        }))
-        .then(() => languages[language])
+        || await initLocalization().then(() => languages[language])
 }
 
 function showSupportedLanguages(msg, t) {
@@ -81,24 +87,3 @@ export default {
         }
     }
 }
-
-
-/*
-        // change language
-        } else {
-            settings.language = language
-            server.save(msg.guild.id)
-            t = languages[language]
-            embed = {
-                title: t('language.changed_title'),
-                description: t('language.changed_description'),
-                color: colors.highlightSuccess
-            }
-        }
-
-        msg.channel.send('', { embed: embed })
-    },
-
-    obtain: obtain
-}
-*/
