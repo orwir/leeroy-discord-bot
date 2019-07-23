@@ -9,8 +9,8 @@ export default {
         icon: ':busts_in_silhouette:',
         order: 1
     },
-    utility: {
-        name: 'group.utility',
+    settings: {
+        name: 'group.settings',
         icon: ':gear:',
         order: 2
     }

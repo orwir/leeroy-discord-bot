@@ -8,7 +8,7 @@ const bot = new discord.Client()
 bot.on('ready', () => {
     bot.user.setPresence({
         game: {
-            name: `${PREFIX}wtf`,
+            name: `${PREFIX}help`,
             type: 'PLAYING'
         }
     })

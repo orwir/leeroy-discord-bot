@@ -54,27 +54,17 @@ export default async function (msg) {
                     let index = rawargs.indexOf(' ')
                     arg = rawargs.slice(0, index > 0 ? index : rawargs.length)
                     rawargs = rawargs.slice(arg.length + 1)
+                } else {
+                    arg = rawargs
                 }
+                request.args.push(arg)
             }
+        } else {
+            request.args.push(...rawargs.split(' '))
         }
-        //     // resolve arguments
-        //     let args = []
-        //     if (feature.arguments) {
-        //         for (i = 1; i <= feature.arguments && text.length > 0; i++) {
-        //             let arg
-        //             if (i < feature.arguments) {
-        //                 let index = text.indexOf(' ')
-        //                 arg = text.slice(0, index > 0 ? index : text.length)
-        //                 text = text.slice(arg.length + 1)
-        //             } else {
-        //                 arg = text
-        //             }
-        //             args.push(arg)
-        //         }
-        //     } else {
-        //         args = text.split(' ')
-        //     }
     }
+
+    console.log(request)
 }
 
 
