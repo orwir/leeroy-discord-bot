@@ -1,98 +1,40 @@
 {
     "global": {
-        "command_not_found_title": "Command '{{name}}' not found!",
-        "command_not_found_description": "How dare you asking me about it?!",
-        "tag": "Tag"
+        "error": "Error!",
+        "success": "Success!",
+        "unknown_command": "Command \"{{command}}\" is unrecognized!"
     },
 
     "group": {
         "fun": "Fun",
         "access": "Access",
-        "utility": "Utility"
+        "settings": "Settings"
     },
 
-    "poll": {
-        "description": "Create 'yes/no' poll. React with 👍 for yes, and 👎 for no.",
-        "reactions": "Reactions",
-        "yesno": "Yes - 👍 / No - 👎"
-    },
-
-    "alias": {
-        "description": "Add or remove alias for command. To see aliases for command type just command.",
-        "list": "'{{command}}' aliases:",
-        "added_title": "Alias added!",
-        "added_description": "'{{alias}}' is bound to '{{command}}'",
-        "removed_title": "Alias removed!",
-        "removed_description": "'{{alias}}' is unbound from '{{command}}'",
-        "error": "Error",
-        "word_is_reserved": "'{{word}}' is reserved. You are not able to create alias!"
-    },
-
-    "debug": {
-        "description": "Set debug flag to provide more/less information about internal work.",
-        "status": "Debug status:",
-        "enabled": "Enabled",
-        "disabled": "Disabled",
-        "call_developers": "{{- author}} is trying to kill me! Help me please {{developers}}",
-        "internal_error": "Internal error!",
-        "internal_error_placeholder": "Are you trying to harm me?"
-    },
-
-    "developer": {
-        "description": "Add/remove user as a developer to receive debug notifications.",
-        "added": "Developer added!",
-        "removed": "Developer removed!",
-        "list": "List of developers:",
-        "empty": "Developers not added.",
-        "developer_added": "{{user}} will receive debug notifications.",
-        "developer_removed": "{{user}} won't receive debug notifcations anymore."
+    "server": {
+        "description": "n/a"
     },
 
     "language": {
         "description": "Change bot's language.",
-        "list": "Supported languages:",
-        "changed_title": "Language changed!",
-        "changed_description": "I speak English now.",
-        "error": "Language not changed!",
-        "language_is_same": "Language is already the same.",
-        "language_not_supported": "'{{language}}' is not supported."
+        "supported_languages": "Supported languages",
+        "language_not_supported": "{{language}} is not supported.",
+        "language_the_same": "{{language}} is current language.",
+        "language_changed": "Language successfully changed."
+    },
+
+    "help": {
+        "description": "Show general information",
+        "version": "Version",
+        "commands_list": "Commands list",
+        "language": "Language",
+        "prefix": "Prefix"
     },
 
     "man": {
-        "description": "Shows manual for commands (without arg shows full list).",
-        "list": "Commands list:",
+        "description": "Show usage information for command. Type 'man' to see all commands",
+        "list": "Commands",
         "usage": "Usage",
         "examples": "Examples"
-    },
-
-    "prefix": {
-        "description": "Change prefix for bot's commands. 'reset' restores default value",
-        "changed_title": "Prefix changed!",
-        "changed_description": "Now I'll answer you if you start you message with '{{prefix}}'"
-    },
-
-    "wtf": {
-        "description": "Shows general information",
-        "message_title": "Greetings mortals!",
-        "message_description": "I'm The Executor and I'm here to rule!",
-        "prefix": "Prefix",
-        "language": "Language",
-        "commands": "Commands list",
-        "version": "Version"
-    },
-
-    "role": {
-        "description": "Allows to get/remove role by reacting on message.",
-        "howto": "Get/Remove",
-        "role": "Role",
-        "not_found_title": "'{{- role}}' not found!",
-        "not_found_description": "And what do you want to do? 🤨"
-    },
-
-    "server": {
-        "description": "Command for server configuration setup.",
-        "updated": "Server configuration updated!",
-        "reset_successful": "Reset was successful."
     }
-
 }
