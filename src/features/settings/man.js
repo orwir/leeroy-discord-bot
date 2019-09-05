@@ -37,7 +37,7 @@ async function showFeaturesList(msg, features, t) {
 
     Object.values(features)
         .sort(sorter)
-        .reduce(formatter)
+        .reduce(formatter, {})
 
     return await msg.channel.send('', { embed: embed })
 }
@@ -46,7 +46,7 @@ export default {
     name: 'man',
     group: groups.settings,
     description: 'man.description',
-    usage: 'man man',
+    usage: 'man [command]',
     examples: 'man help\nman',
 
     handle: async (msg, name) => {

@@ -36,5 +36,18 @@
         "list": "Commands",
         "usage": "Usage",
         "examples": "Examples"
+    },
+
+    "poll": {
+        "description": "Create 'yes/no' poll. React with 👍 for yes and 👎 for no.\nAutomatically add 'here' group to the start of the message.",
+        "reactions": "Reactions",
+        "yesno": "Yes - 👍 / No - 👎"
+    },
+
+    "role": {
+        "description": "Allow to set/remove role by reacting on a \"role message\".",
+        "howto": "Set/Remove",
+        "role": "Role",
+        "role_not_found": "Role \"{{- role}}\" not found!"
     }
 }

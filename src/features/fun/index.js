@@ -1,3 +1,5 @@
-module.exports = [
-    require('./poll')
+import poll from './poll'
+
+export default [
+    poll
 ]

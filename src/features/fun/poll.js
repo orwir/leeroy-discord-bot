@@ -1,45 +1,47 @@
-const groups = require('../../internal/groups')
-const colors = require('../../internal/colors')
-const server = require('../utility/server')
-const language = require('../utility/language')
-const man = require('../utility/man').action
+import groups from '../../internal/groups'
+import colors from '../../internal/colors'
+import man from '../settings/man'
+import { Server } from '../../internal/config'
 
-module.exports = {
+export default {
     name: 'poll',
     group: groups.fun,
     description: 'poll.description',
-    usage: 'poll [question]',
+    usage: 'poll [your message]',
     examples: 'poll Am I the best bot?',
     arguments: 1,
     reaction: true,
     emojis: ['👍', '👎'],
 
-    action: async (msg, question) => {
-        if (question) {
-            const settings = await server.obtain(msg.guild)
-            const t = await language.obtain(settings.language)
+    handle: async (msg, question) => {
+        if (!question) {
+            man.handle(msg, 'poll')
 
-            msg.channel.send(`@here ${question}`, {
-                    embed: {
-                        color: colors.highlightDefault,
-                        fields: [
-                            {
-                                name: t('global.tag'),
-                                value: 'poll',
-                                inline: true
-                            },
-                            {
-                                name: t('poll.reactions'),
-                                value: t('poll.yesno'),
-                                inline: true
-                            }
-                        ]
-                    }
-                })
+        } else {
+            const t = await Server.language(msg.guild)
+            const embed = {
+                embed: {
+                    color: colors.highlightDefault,
+                    fields: [
+                        {
+                            name: 'feature',
+                            value: 'poll',
+                            inline: true
+                        },
+                        {
+                            name: t('poll.reactions'),
+                            value: t('poll.yesno'),
+                            inline: true
+                        }
+                    ]
+                }
+            }
+
+            msg.channel.send(`@here ${question}`, embed)
                 .then(message => message.react('👍').then(() => message))
                 .then(message => message.react('👎'))
-        } else {
-            man(msg, 'poll')
         }
-    }
+    },
+
+    react: async (msg, emoji, author, reacted) => {}
 }

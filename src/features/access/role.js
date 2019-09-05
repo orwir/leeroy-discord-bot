@@ -1,33 +1,32 @@
-const colors = require('../../internal/colors')
-const groups = require('../../internal/groups')
-const server = require('../utility/server')
-const language = requre('../utility/language')
-const man = require('../utility/man').action
+import '../../internal/extensions'
+import groups from '../../internal/groups'
+import colors from '../../internal/colors'
+import man from '../settings/man'
+import { Server } from '../../internal/config'
 
-module.exports = {
+export default {
     name: 'role',
     group: groups.access,
     description: 'role.description',
     usage: 'role [@role] [description]',
-    examples: 'role @game1 Gives access to game1 voice and text channels',
+    examples: 'role @somerole Gives access to some voice and text channels',
     arguments: 2,
     reaction: true,
     emojis: ['👌'],
 
-    action: async (msg, role, description) => {
-        const settings = await server.obtain(msg.guild)
-        const t = language.get(settings.language)
+    handle: async (msg, role, description) => {
+        const t = await Server.language(msg.guild)
 
         if (!role) {
-            man(msg, 'role')
+            man.handle(msg, 'role')
 
         } else if (msg.guild.roles.get(role.slice(3, -1))) {
-            msg.channel.send(description, {
+            const embed = {
                 embed: {
                     color: colors.highlightDefault,
                     fields: [
                         {
-                            name: t('global.tag'),
+                            name: 'feature',
                             value: 'role',
                             inline: true
                         },
@@ -43,30 +42,31 @@ module.exports = {
                         }
                     ]
                 }
-            })
-            .then(result => { result.react('👌') })
+            }
+            msg.channel
+                .send(description, embed)
+                .then(message => { message.react('👌') })
 
         } else {
             msg.channel.send('', {
                 embed: {
-                    title: t('role.not_found_title', {role: role }),
-                    description: t('role.not_found_description'),
+                    title: t('global.error'),
+                    description: t('role.role_not_found', { role: role }),
                     color: colors.highlightError
                 }
             })
         }
     },
 
-    onReaction: (msg, emoji, member, reacted) => {
-        const roleSnowflake = msg.embeds[0].fields[1].value
-        const role = msg.guild.roles.get(roleSnowflake.slice(3, -1))
-        if (role && member) {
-            if (reacted) {
-                member.addRole(role)
-            } else {
-                member.removeRole(role)
-            }
-        }
+    react: async (msg, emoji, author, reacted) => {
+       const snowflake = msg.embeds[0].fields[1].value
+       const role = msg.guild.roles.get(snowflake.slice(3, -1))
+       if (role && author) {
+           if (reacted) {
+               author.addRole(role)
+           } else {
+               author.removeRole(role)
+           }
+       }
     }
-
 }
