@@ -2,6 +2,7 @@ import i18n from 'i18next'
 import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import { Server, LANGUAGES } from '../../internal/config'
+import P from '../../internal/permissions'
 
 const languages = {}
 
@@ -60,6 +61,7 @@ export default {
     description: 'language.description',
     usage: 'language [lang]',
     examples: 'language ru',
+    permissions: [P.ADMINISTRATOR],
 
     handle: async (msg, language) => {
         const config = await Server.config(msg.guild)

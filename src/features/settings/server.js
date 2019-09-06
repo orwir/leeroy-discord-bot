@@ -1,6 +1,7 @@
 import groups from '../../internal/groups'
 import storage from '../../internal/storage'
 import { PREFIX } from '../../internal/config'
+import P from '../../internal/permissions'
 
 const servers = {}
 
@@ -27,6 +28,7 @@ export default {
     description: 'server.description',
     usage: 'n/a',
     examples: 'n/a',
+    permissions: [P.ADMINISTRATOR],
 
     handle: async () => {}
 }

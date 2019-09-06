@@ -62,6 +62,8 @@ export default async function (msg) {
         return
     }
     await parseArguments(msg, request)
+    //TODO: check bot has permissions
+    //TODO: check user has permissions
     request.feature
         .handle(msg, ...request.args)
         .catch(error => console.log(error))

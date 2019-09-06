@@ -2,6 +2,7 @@ import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import man from '../settings/man'
 import { Server } from '../../internal/config'
+import P from '../../internal/permissions'
 
 export default {
     name: 'poll',
@@ -12,6 +13,7 @@ export default {
     arguments: 1,
     reaction: true,
     emojis: ['👍', '👎'],
+    permissions: [P.MENTION_EVERYONE],
 
     handle: async (msg, question) => {
         if (!question) {

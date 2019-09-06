@@ -3,6 +3,7 @@ import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import man from '../settings/man'
 import { Server } from '../../internal/config'
+import P from '../../internal/permissions'
 
 export default {
     name: 'role',
@@ -13,6 +14,7 @@ export default {
     arguments: 2,
     reaction: true,
     emojis: ['👌'],
+    permissions: [P.MANAGE_ROLES],
 
     handle: async (msg, role, description) => {
         const t = await Server.language(msg.guild)

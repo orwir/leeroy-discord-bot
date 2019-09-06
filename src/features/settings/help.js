@@ -8,6 +8,7 @@ export default {
     description: 'help.description',
     usage: 'help',
     examples: 'help',
+    permissions: [],
 
     handle: async (msg) => {
         const config = await Server.config(msg.guild)

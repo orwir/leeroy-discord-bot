@@ -48,6 +48,7 @@ export default {
     description: 'man.description',
     usage: 'man [command]',
     examples: 'man help\nman',
+    permissions: [],
 
     handle: async (msg, name) => {
         const features = getFeaturesList()
