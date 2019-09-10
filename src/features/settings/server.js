@@ -29,7 +29,7 @@ export default {
     group: groups.settings,
     description: 'server.description',
     usage: 'n/a',
-    examples: 'n/a',
+    examples: 'server.examples',
     permissions: [P.ADMINISTRATOR],
 
     handle: async () => {}

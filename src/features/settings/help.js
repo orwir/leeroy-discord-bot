@@ -7,7 +7,7 @@ export default {
     group: groups.settings,
     description: 'help.description',
     usage: 'help',
-    examples: 'help',
+    examples: 'help.examples',
     permissions: [],
 
     handle: async (msg) => {

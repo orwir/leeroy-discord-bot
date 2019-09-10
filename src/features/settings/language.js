@@ -60,7 +60,7 @@ export default {
     group: groups.settings,
     description: 'language.description',
     usage: 'language [lang]',
-    examples: 'language ru',
+    examples: 'language.examples',
     permissions: [P.ADMINISTRATOR],
 
     handle: async (msg, language) => {

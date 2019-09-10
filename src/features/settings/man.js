@@ -47,7 +47,7 @@ export default {
     group: groups.settings,
     description: 'man.description',
     usage: 'man [command]',
-    examples: 'man help\nman',
+    examples: 'man.examples',
     arguments: 1,
     permissions: [],
 
@@ -81,8 +81,8 @@ export default {
                             inline: true
                         },
                         {
-                            name: t('man.examples'),
-                            value: feature.examples,
+                            name: t('man.examples_list'),
+                            value: t(`${feature.name}.examples`),
                             inline: true
                         }
                     ]

@@ -1,10 +1,21 @@
-export function allowed(user, guild, permissions) {
-    const member = guild.member(user)
-    const list = permissions.map(p => p.name)
-    return member.hasPermission(list)
+export function able(bot, guild, permission) {
+    // TODO: implement permissions check for bot
+    return true
 }
 
-export default {
+export function allowed(user, guild, permissions) {
+    const member = guild.member(user)
+    return member.hasPermission(permissions.map(p => p.name))
+}
+
+export const REQUIRED = [
+    PERMISSIONS.VIEW_CHANNEL,
+    PERMISSIONS.SEND_MESSAGES,
+    PERMISSIONS.READ_MESSAGE_HISTORY,
+    PERMISSIONS.ADD_REACTIONS
+]
+
+export const PERMISSIONS = {
     CREATE_INSTANT_INVITE: {
         name: 'CREATE_INSTANT_INVITE',
         value: 0x00000001
@@ -126,3 +137,5 @@ export default {
         value: 0x40000000
     }
 }
+
+export default PERMISSIONS
