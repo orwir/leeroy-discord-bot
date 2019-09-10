@@ -1,5 +1,6 @@
 import '../internal/extensions'
 import { Server } from '../internal/config'
+import { allowed } from '../internal/permissions'
 import features from '../features'
 
 async function parsePrefix(msg, builder) {
@@ -63,7 +64,9 @@ export default async function (msg) {
     }
     await parseArguments(msg, request)
     //TODO: check bot has permissions
-    //TODO: check user has permissions
+    if (!allowed(msg.author, msg.guild, request.feature.permissions)) {
+        return
+    }
     request.feature
         .handle(msg, ...request.args)
         .catch(error => console.log(error))

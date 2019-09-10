@@ -1,3 +1,9 @@
+export function allowed(user, guild, permissions) {
+    const member = guild.member(user)
+    const list = permissions.map(p => p.name)
+    return member.hasPermission(list)
+}
+
 export default {
     CREATE_INSTANT_INVITE: {
         name: 'CREATE_INSTANT_INVITE',
