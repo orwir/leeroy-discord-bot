@@ -22,6 +22,4 @@ bot.on('raw', event => {
     }
 })
 
-console.log(TOKEN)
-
 bot.login(TOKEN)
