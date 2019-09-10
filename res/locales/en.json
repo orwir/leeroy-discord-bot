@@ -49,7 +49,8 @@
         "howto": "Set/Remove",
         "role": "Role",
         "role_not_found": "Role \"{{- role}}\" not found!",
-        "role_is_higher_or_equals": "Role is higher or equals to yours."
+        "role_is_higher_or_equals_than_member": "Role is higher or equals than yours",
+        "role_is_higher_or_equals_than_bot": "Role is higher or equals than bot's"
     },
 
     "permissions": {

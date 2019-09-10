@@ -5,8 +5,8 @@ import man from '../settings/man'
 import { Server } from '../../internal/config'
 import P from '../../internal/permissions'
 
-function hasHigherRole(msg, expected) {
-    return msg.guild.member(msg.author).roles
+function hasHigherRole(member, expected) {
+    return member.roles
         .find(role => role.comparePositionTo(expected) > 0)
 }
 
@@ -37,11 +37,20 @@ export default {
                 }
             })
 
-        } else if (!hasHigherRole(msg, role)) {
+        } else if (!hasHigherRole(msg.member, role)) {
             msg.channel.send('', {
                 embed: {
                     title: t('global.error'),
-                    description: t('role.role_is_higher_or_equals'),
+                    description: t('role.role_is_higher_or_equals_than_member'),
+                    color: colors.highlightError
+                }
+            })
+        
+        } else if (!hasHigherRole(msg.guild.member(msg.client.user), role)) {
+            msg.channel.send('', {
+                embed: {
+                    title: t('global.error'),
+                    description: t('role.role_is_higher_or_equals_than_bot'),
                     color: colors.highlightError
                 }
             })
