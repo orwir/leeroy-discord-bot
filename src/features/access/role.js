@@ -5,6 +5,11 @@ import man from '../settings/man'
 import { Server } from '../../internal/config'
 import P from '../../internal/permissions'
 
+function hasHigherRole(msg, expected) {
+    return msg.guild.member(msg.author).roles
+        .find(role => role.comparePositionTo(expected) > 0)
+}
+
 export default {
     name: 'role',
     group: groups.access,
@@ -16,13 +21,32 @@ export default {
     emojis: ['👌'],
     permissions: [P.MANAGE_ROLES],
 
-    handle: async (msg, role, description) => {
+    handle: async (msg, snowflake, description) => {
         const t = await Server.language(msg.guild)
+        const role = msg.guild.roles.get(snowflake.slice(3, -1))
 
-        if (!role) {
+        if (!snowflake) {
             man.handle(msg, 'role')
 
-        } else if (msg.guild.roles.get(role.slice(3, -1))) {
+        } else if (!role) {
+            msg.channel.send('', {
+                embed: {
+                    title: t('global.error'),
+                    description: t('role.role_not_found', { role: snowflake }),
+                    color: colors.highlightError
+                }
+            })
+
+        } else if (!hasHigherRole(msg, role)) {
+            msg.channel.send('', {
+                embed: {
+                    title: t('global.error'),
+                    description: t('role.role_is_higher_or_equals'),
+                    color: colors.highlightError
+                }
+            })
+
+        } else {
             const embed = {
                 embed: {
                     color: colors.highlightDefault,
@@ -34,7 +58,7 @@ export default {
                         },
                         {
                             name: t('role.role'),
-                            value: '' + role,
+                            value: '' + snowflake,
                             inline: true
                         },
                         {
@@ -48,15 +72,6 @@ export default {
             msg.channel
                 .send(description, embed)
                 .then(message => { message.react('👌') })
-
-        } else {
-            msg.channel.send('', {
-                embed: {
-                    title: t('global.error'),
-                    description: t('role.role_not_found', { role: role }),
-                    color: colors.highlightError
-                }
-            })
         }
     },
 
