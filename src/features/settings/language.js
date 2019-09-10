@@ -65,7 +65,7 @@ export default {
 
     handle: async (msg, language) => {
         const config = await Server.config(msg.guild)
-        const t = await obtain(config.language)
+        let t = await obtain(config.language)
 
         if (!language) {
             return await showSupportedLanguages(msg, t)
@@ -79,6 +79,7 @@ export default {
         } else {
             config.language = language
             await Server.save(msg.guild)
+            t = await obtain(config.language)
             return await msg.channel.send('', {
                 embed: {
                     title: t('global.success'),

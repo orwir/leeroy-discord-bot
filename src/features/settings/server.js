@@ -6,12 +6,14 @@ import P from '../../internal/permissions'
 const servers = {}
 
 export async function obtain(guild) {
-    return servers[guild.id]
-        || await storage.obtain(guild.id, {
+    if (!servers[guild.id]) {
+        servers[guild.id] = await storage.obtain(guild.id, {
             id: guild.id,
             language: 'en',
             prefix: PREFIX
         })
+    }
+    return servers[guild.id]
 }
 
 export async function save(guild) {

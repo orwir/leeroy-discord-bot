@@ -48,6 +48,7 @@ export default {
     description: 'man.description',
     usage: 'man [command]',
     examples: 'man help\nman',
+    arguments: 1,
     permissions: [],
 
     handle: async (msg, name) => {
