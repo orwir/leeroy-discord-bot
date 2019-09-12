@@ -31,7 +31,8 @@
         "version": "Версия",
         "commands_list": "Список команд",
         "language": "Язык",
-        "prefix": "Префикс"
+        "prefix": "Префикс",
+        "required_permissions": "Базовые права доступа"
     },
 
     "man": {
@@ -39,7 +40,8 @@
         "examples": "man help\nman",
         "list": "Команды",
         "usage": "Использование",
-        "examples_list": "Примеры"
+        "examples_list": "Примеры",
+        "permissions": "Права доступа"
     },
 
     "poll": {
@@ -60,7 +62,8 @@
     },
 
     "permissions": {
-        "ADMINISTRATOR": "Администратор",
+        "required_permissions": "Необходимые права для бота:",
+        "ADMINISTRATOR": "Администратор (для пользователя)",
         "VIEW_AUDIT_LOG": "Просматривать журнал аудита",
         "MANAGE_GUILD": "Управлять сервером",
         "MANAGE_ROLES": "Управлять ролями",

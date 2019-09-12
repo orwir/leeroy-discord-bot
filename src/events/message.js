@@ -1,6 +1,6 @@
 import '../internal/extensions'
 import { Server } from '../internal/config'
-import { allowed, able } from '../internal/permissions'
+import * as permissions from '../internal/permissions'
 import features from '../features'
 
 async function parsePrefix(msg, builder) {
@@ -63,11 +63,10 @@ export default async function (msg) {
         return
     }
     await parseArguments(msg, request)
-    if (!able(msg.client.user, msg.guild, request.feature.permissions)) {
-        // TODO: show message
+    if (!(await permissions.review(msg.client.user, msg, request.feature.permissions))) {
         return
     }
-    if (!allowed(msg.author, msg.guild, request.feature.permissions)) {
+    if (!permissions.allowed(msg.author, msg, request.feature.permissions)) {
         return
     }
     request.feature

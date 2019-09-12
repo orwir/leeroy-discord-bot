@@ -1,19 +1,38 @@
-export function able(bot, guild, permission) {
-    // TODO: implement permissions check for bot
+import './extensions'
+import colors from './colors'
+import { Server } from './config'
+
+function missing(user, guild, channel, permissions) {
+    const member = guild.member(user)
+    return channel.permissionsFor(member)
+        .missing(permissions.map(p => p.name))
+}
+
+export async function review(bot, msg, permissions) {
+    const core = missing(bot, msg.guild, msg.channel, REQUIRED)
+    if (core.length) {
+        // send message to DM
+        return false
+    } else {
+        const missing = missing(bot, msg.guild, msg.channel, permissions)
+        if (missing.length) {
+            const t = await Server.language(guild)
+            await msg.channel.send('', {
+                embed: {
+                    title: t('permissions.required_permissions'),
+                    description: missing.map(p => t(`permissions.${p}`)).join('\n'),
+                    color: colors.highlightError
+                }
+            })
+            return false
+        }
+    }
     return true
 }
 
-export function allowed(user, guild, permissions) {
-    const member = guild.member(user)
-    return member.hasPermission(permissions.map(p => p.name))
+export function allowed(user, msg, permissions) {
+    return !missing(user, msg.guild, msg.channel, permissions).length
 }
-
-export const REQUIRED = [
-    PERMISSIONS.VIEW_CHANNEL,
-    PERMISSIONS.SEND_MESSAGES,
-    PERMISSIONS.READ_MESSAGE_HISTORY,
-    PERMISSIONS.ADD_REACTIONS
-]
 
 export const PERMISSIONS = {
     CREATE_INSTANT_INVITE: {
@@ -137,5 +156,13 @@ export const PERMISSIONS = {
         value: 0x40000000
     }
 }
+
+export const REQUIRED = [
+    PERMISSIONS.VIEW_CHANNEL,
+    PERMISSIONS.SEND_MESSAGES,
+    PERMISSIONS.EMBED_LINKS,
+    PERMISSIONS.READ_MESSAGE_HISTORY,
+    PERMISSIONS.ADD_REACTIONS
+]
 
 export default PERMISSIONS

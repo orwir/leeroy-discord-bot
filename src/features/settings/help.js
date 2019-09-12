@@ -1,6 +1,7 @@
 import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import { Server, VERSION } from '../../internal/config'
+import { REQUIRED as REQUIRED_PERMISSIONS } from '../../internal/permissions'
 
 export default {
     name: 'help',
@@ -33,6 +34,10 @@ export default {
                     {
                         name: t('help.prefix'),
                         value: config.prefix
+                    },
+                    {
+                        name: t('help.required_permissions'),
+                        value: REQUIRED_PERMISSIONS.map(p => t(`permissions.${p.name}`)).join('\n')
                     }
                 ]
             }

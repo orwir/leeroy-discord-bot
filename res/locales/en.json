@@ -31,7 +31,8 @@
         "version": "Version",
         "commands_list": "Commands list",
         "language": "Language",
-        "prefix": "Prefix"
+        "prefix": "Prefix",
+        "required_permissions": "Basic Permissions"
     },
 
     "man": {
@@ -39,7 +40,8 @@
         "examples": "man help\nman",
         "list": "Commands",
         "usage": "Usage",
-        "examples_list": "Examples"
+        "examples_list": "Examples",
+        "permissions": "Permissions"
     },
 
     "poll": {
@@ -60,7 +62,8 @@
     },
 
     "permissions": {
-        "ADMINISTRATOR": "Administrator",
+        "required_permissions": "Required bot's permissions:",
+        "ADMINISTRATOR": "Administrator (for user)",
         "VIEW_AUDIT_LOG": "View Audit Log",
         "MANAGE_GUILD": "Manage Server",
         "MANAGE_ROLES": "Manage Roles",
@@ -81,7 +84,7 @@
         "READ_MESSAGE_HISTORY": "Read Message History",
         "MENTION_EVERYONE": "Mention Everyone",
         "USE_EXTERNAL_EMOJIS": "Use External Emojis",
-        "ADD_REACTIONS": "Add reactions",
+        "ADD_REACTIONS": "Add Reactions",
         "CONNECT": "Connect",
         "SPEAK": "Speak",
         "MUTE_MEMBERS": "Mute Members",
