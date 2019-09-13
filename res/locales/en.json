@@ -32,7 +32,7 @@
         "commands_list": "Commands list",
         "language": "Language",
         "prefix": "Prefix",
-        "required_permissions": "Basic Permissions"
+        "core_permissions": "Core Permissions"
     },
 
     "man": {
@@ -62,6 +62,7 @@
     },
 
     "permissions": {
+        "core_permissions": "In channel [#{{channel}}] on server [{{server}}] bot don't have core permissions",
         "required_permissions": "Required bot's permissions:",
         "ADMINISTRATOR": "Administrator (for user)",
         "VIEW_AUDIT_LOG": "View Audit Log",

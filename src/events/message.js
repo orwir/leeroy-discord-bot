@@ -1,75 +1,77 @@
 import '../internal/extensions'
 import { Server } from '../internal/config'
-import * as permissions from '../internal/permissions'
 import features from '../features'
+import { verifyBotPermissions, verifyUserPermissions, MISSING_PERMISSIONS } from '../internal/permissions'
 
-async function parsePrefix(msg, builder) {
+const NOT_COMMAND = "NOT_COMMAND"
+const IGNORE = [NOT_COMMAND, MISSING_PERMISSIONS]
+
+async function parsePrefix(msg, request) {
     const prefix = await Server.prefix(msg.guild)
     if (msg.content.startsWith(prefix)) {
-        builder.prefix = prefix
-        return true
+        request.prefix = prefix
+        return request
     }
-    return false
+    throw NOT_COMMAND
 }
 
-async function parseFeature(msg, builder) {
+async function parseFeature(msg, request) {
     const raw = msg.content
-    const start = builder.prefix.length
+    const start = request.prefix.length
     const end = raw.indexOf(' ', start) > 0 ? raw.indexOf(' ', start) : raw.length
     if (start + end > 0) {
         const name = raw.slice(start, end)
-        builder.feature = features[name]
-        return builder.feature != null
+        request.feature = features[name]
+        return request
     }
-    return false
+    throw NOT_COMMAND
 }
 
-async function parseArguments(msg, builder) {
-    let rawargs = msg.content.slice(`${builder.prefix}${builder.feature.name} `.length)
+async function parseArguments(msg, request) {
+    let rawargs = msg.content.slice(`${request.prefix}${request.feature.name} `.length)
     if (rawargs.isBlank()) {
-        return
-    }
-    if (!builder.feature.arguments) {
-        builder.args.push(...rawargs.trim().split(' '))
+        // do nothing
+
+    } else if (!request.feature.arguments) {
+        request.args.push(...rawargs.trim().split(' '))
 
     } else {
-        for (let i = 1; i <= builder.feature.arguments && rawargs.length > 0; i++) {
+        for (let i = 1; i <= request.feature.arguments && rawargs.length > 0; i++) {
             let arg
-            if (i < builder.feature.arguments) {
+            if (i < request.feature.arguments) {
                 let index = rawargs.indexOf(' ')
                 arg = rawargs.slice(0, index > 0 ? index : rawargs.length)
                 rawargs = rawargs.slice(arg.length + 1)
             } else {
                 arg = rawargs
             }
-            builder.args.push(arg)
+            request.args.push(arg)
         }
     }
+    return request
+}
+
+async function handleError(error) {
+    if (IGNORE.includes(error)) {
+        return
+    }
+    console.log(error)
 }
 
 export default async function (msg) {
     if (msg.author.bot || msg.content.isBlank()) {
         return
     }
-    const request = {
-        prefix: undefined,
-        feature: undefined,
-        args: []
-    }
-    if (!(await parsePrefix(msg, request))) {
-        return
-    }
-    if (!(await parseFeature(msg, request))) {
-        return
-    }
-    await parseArguments(msg, request)
-    if (!(await permissions.review(msg.client.user, msg, request.feature.permissions))) {
-        return
-    }
-    if (!permissions.allowed(msg.author, msg, request.feature.permissions)) {
-        return
-    }
-    request.feature
-        .handle(msg, ...request.args)
-        .catch(error => console.log(error))
+    Promise.resolve({
+            prefix: undefined,
+            feature: undefined,
+            args: []
+        })
+        .then(request => parsePrefix(msg, request))
+        .then(request => parseFeature(msg, request))
+        .then(request => parseArguments(msg, request))
+        .then(request => verifyBotPermissions(msg, request))
+        .then(request => verifyUserPermissions(msg, request))
+        .then(request => request.feature.handle(msg, ...request.args))
+        .catch(handleError)
 }

@@ -36,7 +36,7 @@ export default {
                         value: config.prefix
                     },
                     {
-                        name: t('help.required_permissions'),
+                        name: t('help.core_permissions'),
                         value: REQUIRED_PERMISSIONS.map(p => t(`permissions.${p.name}`)).join('\n')
                     }
                 ]

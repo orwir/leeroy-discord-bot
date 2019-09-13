@@ -3,35 +3,51 @@ import colors from './colors'
 import { Server } from './config'
 
 function missing(user, guild, channel, permissions) {
-    const member = guild.member(user)
-    return channel.permissionsFor(member)
+    return channel
+        .permissionsFor(guild.member(user))
         .missing(permissions.map(p => p.name))
 }
 
-export async function review(bot, msg, permissions) {
-    const core = missing(bot, msg.guild, msg.channel, REQUIRED)
-    if (core.length) {
-        // send message to DM
-        return false
-    } else {
-        const missing = missing(bot, msg.guild, msg.channel, permissions)
-        if (missing.length) {
-            const t = await Server.language(guild)
-            await msg.channel.send('', {
-                embed: {
-                    title: t('permissions.required_permissions'),
-                    description: missing.map(p => t(`permissions.${p}`)).join('\n'),
-                    color: colors.highlightError
-                }
-            })
-            return false
+async function sendMissingPermissions(channel, message, missing, t) {
+    return await channel.send(message, {
+        embed: {
+            title: t('permissions.required_permissions'),
+            description: missing.map(p => t(`permissions.${p}`)).join('\n'),
+            color: colors.highlightError
         }
-    }
-    return true
+    })
 }
 
-export function allowed(user, msg, permissions) {
-    return !missing(user, msg.guild, msg.channel, permissions).length
+export const MISSING_PERMISSIONS = 'MISSING_PERMISSIONS'
+
+export async function verifyBotPermissions(msg, request) {
+    const core = missing(msg.client.user, msg.guild, msg.channel, REQUIRED)
+    if (core.length) {
+        const t = await Server.language(msg.guild)
+        await sendMissingPermissions(
+            await msg.author.createDM(),
+            t('permissions.core_permissions', { channel: msg.channel.name, server: msg.guild.name }),
+            core,
+            t
+        )
+        throw MISSING_PERMISSIONS
+    }
+    const feature = missing(msg.client.user, msg.guild, msg.channel, request.feature.permissions)
+        .filter(p => p !== PERMISSIONS.ADMINISTRATOR.name)
+    if (feature.length) {
+        const t = await Server.language(msg.guild)
+        await sendMissingPermissions(msg.channel, '', feature, t)
+        throw MISSING_PERMISSIONS
+    }
+    return request
+}
+
+export async function verifyUserPermissions(msg, request) {
+    const user = missing(msg.author, msg.guild, msg.channel, request.feature.permissions)
+    if (user.length) {
+        throw MISSING_PERMISSIONS
+    }
+    return request
 }
 
 export const PERMISSIONS = {
