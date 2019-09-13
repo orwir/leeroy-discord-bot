@@ -12,11 +12,13 @@
     },
 
     "server": {
-        "description": "n/a"
+        "description": "n/a",
+        "examples": "n/a"
     },
 
     "language": {
         "description": "Change bot's language.",
+        "examples": "language ru",
         "supported_languages": "Supported languages",
         "language_not_supported": "{{language}} is not supported.",
         "language_the_same": "{{language}} is current language.",
@@ -25,28 +27,34 @@
 
     "help": {
         "description": "Show general information",
+        "examples": "help",
         "version": "Version",
         "commands_list": "Commands list",
         "language": "Language",
-        "prefix": "Prefix"
+        "prefix": "Prefix",
+        "core_permissions": "Core Permissions"
     },
 
     "man": {
         "description": "Show usage information for command. Type 'man' to see all commands",
+        "examples": "man help\nman",
         "list": "Commands",
         "usage": "Usage",
-        "examples": "Examples"
+        "examples_list": "Examples",
+        "permissions": "Permissions"
     },
 
     "poll": {
-        "description": "Create 'yes/no' poll. React with 👍 for yes and 👎 for no.\nAutomatically add 'here' group to the start of the message.",
+        "description": "Create 'yes/no' poll. React with 👍 for yes and 👎 for no.",
+        "examples": "poll Am I the best bot?",
         "reactions": "Reactions",
         "yesno": "Yes - 👍 / No - 👎"
     },
 
     "role": {
         "description": "Allow to set/remove role by reacting on a \"role message\".",
-        "howto": "Set/Remove",
+        "examples": "role @somerole With this role you will be awesome!",
+        "howto": "Reaction",
         "role": "Role",
         "role_not_found": "Role \"{{- role}}\" not found!",
         "role_is_higher_or_equals_than_member": "Role is higher or equals than yours",
@@ -54,35 +62,37 @@
     },
 
     "permissions": {
-        "CREATE_INSTANT_INVITE": "Allows creation of instant invites",
-        "KICK_MEMBERS": "Allows kicking members",
-        "BAN_MEMBERS": "Allows banning members",
-        "ADMINISTRATOR": "Allows all permissions and bypasses channel permission overwrites",
-        "MANAGE_CHANNELS": "Allows management and editing of channels",
-        "MANAGE_GUILD": "Allows management and editing of the guild",
-        "ADD_REACTIONS": "Allows for the addition of reactions to messages",
-        "VIEW_AUDIT_LOG": "Allows for viewing of audit logs",
-        "VIEW_CHANNEL": "Allows guild members to view a channel, which includes reading messages in text channels",
-        "SEND_MESSAGES": "Allows for sending messages in a channel",
-        "SEND_TTS_MESSAGES": "Allows for sending of /tts messages",
-        "MANAGE_MESSAGES": "Allows for deletion of other users messages",
-        "EMBED_LINKS": "Links sent by users with this permission will be auto-embedded",
-        "ATTACH_FILES": "Allows for uploading images and files",
-        "READ_MESSAGE_HISTORY": "Allows for reading of message history",
-        "MENTION_EVERYONE": "Allows for using the @everyone tag to notify all users in a channel, and the @here tag to notify all online users in a channel",
-        "USE_EXTERNAL_EMOJIS": "Allows the usage of custom emojis from other servers",
-        "CONNECT": "Allows for joining of a voice channel",
-        "SPEAK": "Allows for speaking in a voice channel",
-        "MUTE_MEMBERS": "Allows for muting members in a voice channel",
-        "DEAFEN_MEMBERS": "Allows for deafening of members in a voice channel",
-        "MOVE_MEMBERS": "Allows for moving of members between voice channels",
-        "USE_VAD": "Allows for using voice-activity-detection in a voice channel",
-        "PRIORITY_SPEAKER": "Allows for using priority speaker in a voice channel",
-        "STREAM": "Allows the user to go live",
-        "CHANGE_NICKNAME": "Allows for modification of own nickname",
-        "MANAGE_NICKNAMES": "Allows for modification of other users nicknames",
-        "MANAGE_ROLES": "Allows management and editing of roles",
-        "MANAGE_WEBHOOKS": "Allows management and editing of webhooks",
-        "MANAGE_EMOJIS": "Allows management and editing of emojis"
+        "core_permissions": "In channel [#{{channel}}] on server [{{server}}] bot don't have core permissions",
+        "required_permissions": "Required bot's permissions:",
+        "ADMINISTRATOR": "Administrator (for user)",
+        "VIEW_AUDIT_LOG": "View Audit Log",
+        "MANAGE_GUILD": "Manage Server",
+        "MANAGE_ROLES": "Manage Roles",
+        "MANAGE_CHANNELS": "Manage Channels",
+        "KICK_MEMBERS": "Kick Members",
+        "BAN_MEMBERS": "Ban Members",
+        "CREATE_INSTANT_INVITE": "Create Instant Invite",
+        "CHANGE_NICKNAME": "Change Nickname",
+        "MANAGE_NICKNAMES": "Manage Nicknames",
+        "MANAGE_EMOJIS": "Manage Emojis",
+        "MANAGE_WEBHOOKS": "Manage Webhooks",
+        "VIEW_CHANNEL": "Read Text Channels & See Voice Channels",
+        "SEND_MESSAGES": "Send Messages",
+        "SEND_TTS_MESSAGES": "Send TTS Messages",
+        "MANAGE_MESSAGES": "Manage Messages",
+        "EMBED_LINKS": "Embed Links",
+        "ATTACH_FILES": "Attach Files",
+        "READ_MESSAGE_HISTORY": "Read Message History",
+        "MENTION_EVERYONE": "Mention Everyone",
+        "USE_EXTERNAL_EMOJIS": "Use External Emojis",
+        "ADD_REACTIONS": "Add Reactions",
+        "CONNECT": "Connect",
+        "SPEAK": "Speak",
+        "MUTE_MEMBERS": "Mute Members",
+        "DEAFEN_MEMBERS": "Deafen Members",
+        "MOVE_MEMBERS": "Move Members",
+        "USE_VAD": "Use Voice Activity",
+        "PRIORITY_SPEAKER": "Priority Speaker",
+        "STREAM": "Go Live"
     }
 }

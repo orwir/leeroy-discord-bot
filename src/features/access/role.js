@@ -15,7 +15,7 @@ export default {
     group: groups.access,
     description: 'role.description',
     usage: 'role [@role] [description]',
-    examples: 'role @somerole Gives access to some voice and text channels',
+    examples: 'role.examples',
     arguments: 2,
     reaction: true,
     emojis: ['👌'],

@@ -1,10 +1,56 @@
-export function allowed(user, guild, permissions) {
-    const member = guild.member(user)
-    const list = permissions.map(p => p.name)
-    return member.hasPermission(list)
+import './extensions'
+import colors from './colors'
+import { Server } from './config'
+
+function missing(user, guild, channel, permissions) {
+    return channel
+        .permissionsFor(guild.member(user))
+        .missing(permissions.map(p => p.name))
 }
 
-export default {
+async function sendMissingPermissions(channel, message, missing, t) {
+    return await channel.send(message, {
+        embed: {
+            title: t('permissions.required_permissions'),
+            description: missing.map(p => t(`permissions.${p}`)).join('\n'),
+            color: colors.highlightError
+        }
+    })
+}
+
+export const MISSING_PERMISSIONS = 'MISSING_PERMISSIONS'
+
+export async function verifyBotPermissions(msg, request) {
+    const core = missing(msg.client.user, msg.guild, msg.channel, REQUIRED)
+    if (core.length) {
+        const t = await Server.language(msg.guild)
+        await sendMissingPermissions(
+            await msg.author.createDM(),
+            t('permissions.core_permissions', { channel: msg.channel.name, server: msg.guild.name }),
+            core,
+            t
+        )
+        throw MISSING_PERMISSIONS
+    }
+    const feature = missing(msg.client.user, msg.guild, msg.channel, request.feature.permissions)
+        .filter(p => p !== PERMISSIONS.ADMINISTRATOR.name)
+    if (feature.length) {
+        const t = await Server.language(msg.guild)
+        await sendMissingPermissions(msg.channel, '', feature, t)
+        throw MISSING_PERMISSIONS
+    }
+    return request
+}
+
+export async function verifyUserPermissions(msg, request) {
+    const user = missing(msg.author, msg.guild, msg.channel, request.feature.permissions)
+    if (user.length) {
+        throw MISSING_PERMISSIONS
+    }
+    return request
+}
+
+export const PERMISSIONS = {
     CREATE_INSTANT_INVITE: {
         name: 'CREATE_INSTANT_INVITE',
         value: 0x00000001
@@ -126,3 +172,13 @@ export default {
         value: 0x40000000
     }
 }
+
+export const REQUIRED = [
+    PERMISSIONS.VIEW_CHANNEL,
+    PERMISSIONS.SEND_MESSAGES,
+    PERMISSIONS.EMBED_LINKS,
+    PERMISSIONS.READ_MESSAGE_HISTORY,
+    PERMISSIONS.ADD_REACTIONS
+]
+
+export default PERMISSIONS

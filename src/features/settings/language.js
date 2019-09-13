@@ -43,7 +43,7 @@ function showLanguageNotSupported(msg, language, t) {
 function showLanguageTheSame(msg, t) {
     return msg.channel.send('', {
         embed: {
-            title: t('language.error'),
+            title: t('global.error'),
             description: t('language.language_the_same'),
             color: colors.highlightError
         }
@@ -60,7 +60,7 @@ export default {
     group: groups.settings,
     description: 'language.description',
     usage: 'language [lang]',
-    examples: 'language ru',
+    examples: 'language.examples',
     permissions: [P.ADMINISTRATOR],
 
     handle: async (msg, language) => {

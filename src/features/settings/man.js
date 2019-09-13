@@ -47,7 +47,7 @@ export default {
     group: groups.settings,
     description: 'man.description',
     usage: 'man [command]',
-    examples: 'man help\nman',
+    examples: 'man.examples',
     arguments: 1,
     permissions: [],
 
@@ -69,25 +69,29 @@ export default {
 
         } else {
             const feature = features[name]
-            return await msg.channel.send('', {
-                embed: {
-                    title: feature.name,
-                    description: t(feature.description),
-                    color: colors.highlightDefault,
-                    fields: [
-                        {
-                            name: t('man.usage'),
-                            value: feature.usage,
-                            inline: true
-                        },
-                        {
-                            name: t('man.examples'),
-                            value: feature.examples,
-                            inline: true
-                        }
-                    ]
-                }
-            })
+            const embed = {
+                title: feature.name,
+                description: t(feature.description),
+                color: colors.highlightDefault,
+                fields: [
+                    {
+                        name: t('man.usage'),
+                        value: feature.usage
+                    },
+                    {
+                        name: t('man.examples_list'),
+                        value: t(`${feature.name}.examples`)
+                    }
+                ]
+            }
+            if (feature.permissions.length) {
+                embed.fields.push({
+                    name: t('man.permissions'),
+                    value: feature.permissions.map(p => t(`permissions.${p.name}`)).join('\n')
+                })
+            }
+
+            return await msg.channel.send('', { embed: embed })
         }
 
     }

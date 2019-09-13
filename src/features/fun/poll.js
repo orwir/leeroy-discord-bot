@@ -9,7 +9,7 @@ export default {
     group: groups.fun,
     description: 'poll.description',
     usage: 'poll [your message]',
-    examples: 'poll Am I the best bot?',
+    examples: 'poll.examples',
     arguments: 1,
     reaction: true,
     emojis: ['👍', '👎'],
@@ -39,7 +39,7 @@ export default {
                 }
             }
 
-            msg.channel.send(`@here ${question}`, embed)
+            msg.channel.send(question, embed)
                 .then(message => message.react('👍').then(() => message))
                 .then(message => message.react('👎'))
         }
