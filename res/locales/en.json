@@ -44,6 +44,13 @@
         "permissions": "Permissions"
     },
 
+    "prefix": {
+        "description": "Change prefix for commands.\n'reset' to set default prefix.",
+        "examples": "prefix !\nprefix reset",
+        "max_length_exceeded": "Max length for prefix is {{length}}",
+        "new_prefix": "New prefix: {{prefix}}"
+    },
+
     "poll": {
         "description": "Create 'yes/no' poll. React with 👍 for yes and 👎 for no.",
         "examples": "poll Am I the best bot?",

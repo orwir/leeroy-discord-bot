@@ -7,7 +7,7 @@ import P from '../../internal/permissions'
 const languages = {}
 
 async function initLocalization() {
-    return await i18n.init({
+    return i18n.init({
         fallbackLng: 'en',
         preload: true,
         resources: LANGUAGES
@@ -51,8 +51,7 @@ function showLanguageTheSame(msg, t) {
 }
 
 export async function obtain(language) {
-    return languages[language]
-        || await initLocalization().then(() => languages[language])
+    return languages[language] || initLocalization().then(() => languages[language])
 }
 
 export default {
@@ -68,19 +67,19 @@ export default {
         let t = await obtain(config.language)
 
         if (!language) {
-            return await showSupportedLanguages(msg, t)
+            return showSupportedLanguages(msg, t)
 
         } else if (!LANGUAGES[language]) {
-            return await showLanguageNotSupported(msg, language, t)
+            return showLanguageNotSupported(msg, language, t)
 
         } else if (language === config.language) {
-            return await showLanguageTheSame(msg, t)
+            return showLanguageTheSame(msg, t)
 
         } else {
             config.language = language
             await Server.save(msg.guild)
             t = await obtain(config.language)
-            return await msg.channel.send('', {
+            return msg.channel.send('', {
                 embed: {
                     title: t('global.success'),
                     description: t('language.language_changed'),

@@ -26,10 +26,10 @@ export default {
         const role = msg.guild.roles.get(snowflake.slice(3, -1))
 
         if (!snowflake) {
-            man.handle(msg, 'role')
+            return man.handle(msg, 'role')
 
         } else if (!role) {
-            msg.channel.send('', {
+            return msg.channel.send('', {
                 embed: {
                     title: t('global.error'),
                     description: t('role.role_not_found', { role: snowflake }),
@@ -38,7 +38,7 @@ export default {
             })
 
         } else if (!hasHigherRole(msg.member, role)) {
-            msg.channel.send('', {
+            return msg.channel.send('', {
                 embed: {
                     title: t('global.error'),
                     description: t('role.role_is_higher_or_equals_than_member'),
@@ -47,7 +47,7 @@ export default {
             })
         
         } else if (!hasHigherRole(msg.guild.member(msg.client.user), role)) {
-            msg.channel.send('', {
+            return msg.channel.send('', {
                 embed: {
                     title: t('global.error'),
                     description: t('role.role_is_higher_or_equals_than_bot'),
@@ -78,7 +78,7 @@ export default {
                     ]
                 }
             }
-            msg.channel
+            return msg.channel
                 .send(description, embed)
                 .then(message => { message.react('👌') })
         }

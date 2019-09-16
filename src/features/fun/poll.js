@@ -17,7 +17,7 @@ export default {
 
     handle: async (msg, question) => {
         if (!question) {
-            man.handle(msg, 'poll')
+            return man.handle(msg, 'poll')
 
         } else {
             const t = await Server.language(msg.guild)
@@ -39,7 +39,7 @@ export default {
                 }
             }
 
-            msg.channel.send(question, embed)
+            return msg.channel.send(question, embed)
                 .then(message => message.react('👍').then(() => message))
                 .then(message => message.react('👎'))
         }

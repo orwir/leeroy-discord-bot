@@ -12,11 +12,11 @@ export const VERSION = readFileSync('./VERSION', 'utf8')
 
 export const Server = {
 
-    config: async (guild) => await server(guild),
+    config: async (guild) => server(guild),
 
     language: async (guild) => {
         const config = await server(guild)
-        return await language(config.language)
+        return language(config.language)
     },
 
     prefix: async (guild) => {
@@ -24,6 +24,6 @@ export const Server = {
         return config.prefix
     },
 
-    save: async (guild) => await saveServer(guild)
+    save: async (guild) => saveServer(guild)
 
 }

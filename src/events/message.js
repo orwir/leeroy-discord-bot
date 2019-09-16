@@ -11,10 +11,9 @@ async function parsePrefix(msg, request) {
     if (msg.content.startsWith(prefix)) {
         request.prefix = prefix
         return request
-
     } else if (msg.content.startsWith(PREFIX)) {
         request.prefix = PREFIX
-        request.onlyStable = true
+        request.stablePrefix = true
         return request
 
     }
@@ -28,7 +27,7 @@ async function parseFeature(msg, request) {
     if (start + end > 0) {
         const name = raw.slice(start, end)
         request.feature = features[name]
-        if (request.feature && !(request.feature.onlyStable && !request.feature.stable)) {
+        if (request.feature && !(request.stablePrefix && !request.feature.stable)) {
             return request
         }
     }

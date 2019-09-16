@@ -56,10 +56,10 @@ export default {
         const t = await Server.language(msg.guild)
 
         if (!name) {
-            return await showFeaturesList(msg, features, t)
+            return showFeaturesList(msg, features, t)
 
         } else if (!features[name]) {
-            return await msg.channel.send('', {
+            return msg.channel.send('', {
                 embed: {
                     title: t('global.error'),
                     description: t('global.unknown_command', { command: name }),
@@ -91,7 +91,7 @@ export default {
                 })
             }
 
-            return await msg.channel.send('', { embed: embed })
+            return msg.channel.send('', { embed: embed })
         }
 
     }

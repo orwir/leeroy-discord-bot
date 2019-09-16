@@ -16,7 +16,7 @@ export default {
         const config = await Server.config(msg.guild)
         const t = await Server.language(msg.guild)
 
-        return await msg.channel.send('', {
+        return msg.channel.send('', {
             embed: {
                 color: colors.highlightDefault,
                 fields: [

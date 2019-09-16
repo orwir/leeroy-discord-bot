@@ -17,11 +17,11 @@ export async function obtain(guild) {
 }
 
 export async function save(guild) {
-    return await storage.save(guild.id, servers[guild.id])
+    return storage.save(guild.id, servers[guild.id])
 }
 
 export async function remove(guild) {
-    return await storage.remove(guild.id).then(() => delete servers[guild.id])
+    return storage.remove(guild.id).then(() => delete servers[guild.id])
 }
 
 export default {
