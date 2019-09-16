@@ -1,8 +1,8 @@
-import groups from '../../internal/groups'
-import man from './man'
-import { Server } from '../../internal/config'
 import colors from '../../internal/colors'
+import groups from '../../internal/groups'
 import P from '../../internal/permissions'
+import { man } from './man'
+import { Server } from '../../internal/config'
 
 const MAX_LENGTH = 5
 
@@ -15,31 +15,28 @@ export default {
     arguments: 1,
     permissions: [P.ADMINISTRATOR],
 
-    handle: async (msg, prefix) => {
+    execute: async (context, prefix) => {
         if (!prefix) {
-            return man.handle(msg, 'prefix')
+            return man(context, 'prefix')
 
         } else if (prefix.length > MAX_LENGTH) {
-            const t = await Server.language(msg.guild)
-            return msg.channel.send('', {
+            return context.channel.send('', {
                 embed: {
-                    title: t('global.error'),
-                    description: t('prefix.max_length_exceeded', { length: MAX_LENGTH }),
+                    title: context.t('global.error'),
+                    description: context.t('prefix.max_length_exceeded', { length: MAX_LENGTH }),
                     color: colors.highlightError
                 }
             })
 
         } else {
-            const config = await Server.config(msg.guild)
-            const t = await Server.language(msg.guild)
-
+            const config = await Server.config(context.guild)
             config.prefix = prefix
-            await Server.save(msg.guild)
+            await Server.save(context.guild)
 
-            return msg.channel.send('', {
+            return context.channel.send('', {
                 embed: {
-                    title: t('global.success'),
-                    description: t('prefix.new_prefix', { prefix: prefix }),
+                    title: context.t('global.success'),
+                    description: context.t('prefix.new_prefix', { prefix: prefix }),
                     color: colors.highlightSuccess
                 }
             })

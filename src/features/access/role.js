@@ -1,14 +1,10 @@
 import '../../internal/extensions'
 import groups from '../../internal/groups'
 import colors from '../../internal/colors'
-import man from '../settings/man'
-import { Server } from '../../internal/config'
 import P from '../../internal/permissions'
-
-function hasHigherRole(member, expected) {
-    return member.roles
-        .find(role => role.comparePositionTo(expected) > 0)
-}
+import { man } from '../settings/man'
+import { Server } from '../../internal/config'
+import { error } from '../../internal/utils'
 
 export default {
     name: 'role',
@@ -21,72 +17,38 @@ export default {
     emojis: ['👌'],
     permissions: [P.MANAGE_ROLES],
 
-    handle: async (msg, snowflake, description) => {
-        const t = await Server.language(msg.guild)
-        const role = msg.guild.roles.get(snowflake.slice(3, -1))
+    execute: async (context, snowflake, description) => {
+        const role = context.guild.roles.get(snowflake.slice(3, -1))
 
         if (!snowflake) {
-            return man.handle(msg, 'role')
+            return man(context, 'role')
 
         } else if (!role) {
-            return msg.channel.send('', {
-                embed: {
-                    title: t('global.error'),
-                    description: t('role.role_not_found', { role: snowflake }),
-                    color: colors.highlightError
-                }
+            return error({
+                context: context,
+                description: context.t('role.role_not_found', { role: snowflake })
             })
 
-        } else if (!hasHigherRole(msg.member, role)) {
-            return msg.channel.send('', {
-                embed: {
-                    title: t('global.error'),
-                    description: t('role.role_is_higher_or_equals_than_member'),
-                    color: colors.highlightError
-                }
+        } else if (!hasHigherRole(context.member, role)) {
+            return error({
+                context: context,
+                description: context.t('role.role_is_higher_or_equals_than_member')
             })
         
-        } else if (!hasHigherRole(msg.guild.member(msg.client.user), role)) {
-            return msg.channel.send('', {
-                embed: {
-                    title: t('global.error'),
-                    description: t('role.role_is_higher_or_equals_than_bot'),
-                    color: colors.highlightError
-                }
+        } else if (!hasHigherRole(context.guild.member(context.client.user), role)) {
+            return error({
+                context: context,
+                description: t('role.role_is_higher_or_equals_than_bot')
             })
 
         } else {
-            const embed = {
-                embed: {
-                    color: colors.highlightDefault,
-                    fields: [
-                        {
-                            name: 'feature',
-                            value: 'role',
-                            inline: true
-                        },
-                        {
-                            name: t('role.role'),
-                            value: '' + snowflake,
-                            inline: true
-                        },
-                        {
-                            name: t('role.howto'),
-                            value: '👌',
-                            inline: true
-                        }
-                    ]
-                }
-            }
-            return msg.channel
-                .send(description, embed)
-                .then(message => { message.react('👌') })
+            return createRoleMessage(context, snowflake, description, t)
         }
     },
 
-    react: async (msg, emoji, author, reacted) => {
-       const snowflake = msg.embeds[0].fields[1].value
-       const role = msg.guild.roles.get(snowflake.slice(3, -1))
+    react: async (context, emoji, author, reacted) => {
+       const snowflake = context.embeds[0].fields[1].value
+       const role = context.guild.roles.get(snowflake.slice(3, -1))
        if (role && author) {
            if (reacted) {
                author.addRole(role)
@@ -95,4 +57,34 @@ export default {
            }
        }
     }
+}
+
+async function createRoleMessage(context, snowflake, description, t) {
+    return context.channel.send(description, {
+        embed: {
+            color: colors.highlightDefault,
+            fields: [
+                {
+                    name: 'feature',
+                    value: 'role',
+                    inline: true
+                },
+                {
+                    name: t('role.role'),
+                    value: '' + snowflake,
+                    inline: true
+                },
+                {
+                    name: t('role.howto'),
+                    value: '👌',
+                    inline: true
+                }
+            ]
+        }
+    })
+}
+
+function hasHigherRole(member, expected) {
+    return member.roles
+        .find(role => role.comparePositionTo(expected) > 0)
 }

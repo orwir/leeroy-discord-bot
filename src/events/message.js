@@ -1,27 +1,44 @@
 import '../internal/extensions'
 import { Server, PREFIX } from '../internal/config'
 import features from '../features'
-import { verifyBotPermissions, verifyUserPermissions, MISSING_PERMISSIONS } from '../internal/permissions'
+import { verifyBotPermissions, verifyUserPermissions } from '../internal/permissions'
+import { log, ERROR_NOT_COMMAND } from '../internal/utils'
 
-const NOT_COMMAND = "NOT_COMMAND"
-const IGNORE = [NOT_COMMAND, MISSING_PERMISSIONS]
+export default async function (context) {
+    if (context.author.bot || context.content.isBlank()) {
+        return
+    }
+    await Promise.resolve({
+            prefix: undefined,
+            feature: undefined,
+            args: []
+        })
+        .then(request => parsePrefix(context, request))
+        .then(request => parseFeature(context, request))
+        .then(request => parseArguments(context, request))
+        .then(request => updateContext(context, request))
+        .then(request => verifyBotPermissions(context, request))
+        .then(request => verifyUserPermissions(context, request))
+        .then(request => execute(context, request))
+        .then(request => clean(context, request))
+        .catch(log)
+}
 
-async function parsePrefix(msg, request) {
-    const prefix = await Server.prefix(msg.guild)
-    if (msg.content.startsWith(prefix)) {
+async function parsePrefix(context, request) {
+    const prefix = await Server.prefix(context.guild)
+    if (context.content.startsWith(prefix)) {
         request.prefix = prefix
         return request
-    } else if (msg.content.startsWith(PREFIX)) {
+    } else if (context.content.startsWith(PREFIX)) {
         request.prefix = PREFIX
         request.stablePrefix = true
         return request
-
     }
-    throw NOT_COMMAND
+    throw ERROR_NOT_COMMAND
 }
 
-async function parseFeature(msg, request) {
-    const raw = msg.content
+async function parseFeature(context, request) {
+    const raw = context.content
     const start = request.prefix.length
     const end = raw.indexOf(' ', start) > 0 ? raw.indexOf(' ', start) : raw.length
     if (start + end > 0) {
@@ -31,11 +48,11 @@ async function parseFeature(msg, request) {
             return request
         }
     }
-    throw NOT_COMMAND
+    throw ERROR_NOT_COMMAND
 }
 
-async function parseArguments(msg, request) {
-    let rawargs = msg.content.slice(`${request.prefix}${request.feature.name} `.length)
+async function parseArguments(context, request) {
+    let rawargs = context.content.slice(`${request.prefix}${request.feature.name} `.length)
     if (rawargs.isBlank()) {
         // do nothing
 
@@ -58,27 +75,17 @@ async function parseArguments(msg, request) {
     return request
 }
 
-async function handleError(error) {
-    if (IGNORE.includes(error)) {
-        return
-    }
-    console.log(error)
+async function updateContext(context, request) {
+    context.t = await Server.language(context.guild)
+    return request
 }
 
-export default async function (msg) {
-    if (msg.author.bot || msg.content.isBlank()) {
-        return
-    }
-    Promise.resolve({
-            prefix: undefined,
-            feature: undefined,
-            args: []
-        })
-        .then(request => parsePrefix(msg, request))
-        .then(request => parseFeature(msg, request))
-        .then(request => parseArguments(msg, request))
-        .then(request => verifyBotPermissions(msg, request))
-        .then(request => verifyUserPermissions(msg, request))
-        .then(request => request.feature.handle(msg, ...request.args))
-        .catch(handleError)
+async function execute(context, request) {
+    return request.feature
+        .execute(context, ...request.args)
+        .then(() => request)
+}
+
+async function clean(context, request) {
+    // TODO: implement functionality
 }

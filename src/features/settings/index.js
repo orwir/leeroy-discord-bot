@@ -5,7 +5,6 @@ import man from './man'
 import prefix from './prefix'
 
 export default [
-    server,
     language,
     help,
     man,

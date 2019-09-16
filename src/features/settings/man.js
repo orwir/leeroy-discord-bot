@@ -2,10 +2,64 @@ import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import { Server } from '../../internal/config'
 import { features as getFeaturesList } from '../index'
+import { error } from '../../internal/utils'
 
-async function showFeaturesList(msg, features, t) {
+export async function man(context, name) {
+    const features = getFeaturesList()
+
+    if (!name) {
+        return showFeaturesList(context, features)
+
+    } else if (!features[name]) {
+        return error({
+            context: context,
+            description: context.t('global.unknown_command', { command: name })
+        })
+
+    } else {
+        const feature = features[name]
+        const embed = {
+            title: feature.name,
+            description: context.t(feature.description),
+            color: colors.highlightDefault,
+            fields: [
+                {
+                    name: context.t('man.usage'),
+                    value: feature.usage
+                },
+                {
+                    name: context.t('man.examples_list'),
+                    value: context.t(`${feature.name}.examples`)
+                }
+            ]
+        }
+        if (feature.permissions.length) {
+            embed.fields.push({
+                name: context.t('man.permissions'),
+                value: feature.permissions.map(p => context.t(`permissions.${p}`)).join('\n')
+            })
+        }
+
+        return context.channel.send('', { embed: embed })
+    }
+
+}
+
+export default {
+    name: 'man',
+    group: groups.settings,
+    description: 'man.description',
+    usage: 'man [command]',
+    examples: 'man.examples',
+    arguments: 1,
+    permissions: [],
+
+    execute: man
+}
+
+async function showFeaturesList(context, features) {
     const embed = {
-        title: t('man.list'),
+        title: context.t('man.list'),
         color: colors.highlightDefault,
         fields: []
     }
@@ -21,7 +75,7 @@ async function showFeaturesList(msg, features, t) {
             group = {
                 name: feature.group.name,
                 field: {
-                    name: `${feature.group.icon} ${t(feature.group.name)}`,
+                    name: `${feature.group.icon} ${context.t(feature.group.name)}`,
                     inline: true,
                     value: ''
                 }
@@ -39,60 +93,5 @@ async function showFeaturesList(msg, features, t) {
         .sort(sorter)
         .reduce(formatter, {})
 
-    return await msg.channel.send('', { embed: embed })
-}
-
-export default {
-    name: 'man',
-    group: groups.settings,
-    description: 'man.description',
-    usage: 'man [command]',
-    examples: 'man.examples',
-    arguments: 1,
-    permissions: [],
-
-    handle: async (msg, name) => {
-        const features = getFeaturesList()
-        const t = await Server.language(msg.guild)
-
-        if (!name) {
-            return showFeaturesList(msg, features, t)
-
-        } else if (!features[name]) {
-            return msg.channel.send('', {
-                embed: {
-                    title: t('global.error'),
-                    description: t('global.unknown_command', { command: name }),
-                    color: colors.highlightError
-                }
-            })
-
-        } else {
-            const feature = features[name]
-            const embed = {
-                title: feature.name,
-                description: t(feature.description),
-                color: colors.highlightDefault,
-                fields: [
-                    {
-                        name: t('man.usage'),
-                        value: feature.usage
-                    },
-                    {
-                        name: t('man.examples_list'),
-                        value: t(`${feature.name}.examples`)
-                    }
-                ]
-            }
-            if (feature.permissions.length) {
-                embed.fields.push({
-                    name: t('man.permissions'),
-                    value: feature.permissions.map(p => t(`permissions.${p.name}`)).join('\n')
-                })
-            }
-
-            return msg.channel.send('', { embed: embed })
-        }
-
-    }
+    return context.channel.send('', { embed: embed })
 }

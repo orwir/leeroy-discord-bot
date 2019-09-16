@@ -1,8 +1,7 @@
 import groups from '../../internal/groups'
 import colors from '../../internal/colors'
-import man from '../settings/man'
-import { Server } from '../../internal/config'
 import P from '../../internal/permissions'
+import { man } from '../settings/man'
 
 export default {
     name: 'poll',
@@ -11,35 +10,31 @@ export default {
     usage: 'poll [your message]',
     examples: 'poll.examples',
     arguments: 1,
-    reaction: true,
     emojis: ['👍', '👎'],
     permissions: [P.MENTION_EVERYONE],
 
-    handle: async (msg, question) => {
+    execute: async (context, question) => {
         if (!question) {
-            return man.handle(msg, 'poll')
+            return man(context, 'poll')
 
         } else {
-            const t = await Server.language(msg.guild)
             const embed = {
-                embed: {
-                    color: colors.highlightDefault,
-                    fields: [
-                        {
-                            name: 'feature',
-                            value: 'poll',
-                            inline: true
-                        },
-                        {
-                            name: t('poll.reactions'),
-                            value: t('poll.yesno'),
-                            inline: true
-                        }
-                    ]
-                }
+                color: colors.highlightDefault,
+                fields: [
+                    {
+                        name: 'feature',
+                        value: 'poll',
+                        inline: true
+                    },
+                    {
+                        name: context.t('poll.reactions'),
+                        value: context.t('poll.yesno'),
+                        inline: true
+                    }
+                ]
             }
 
-            return msg.channel.send(question, embed)
+            return context.channel.send(question, { embed: embed })
                 .then(message => message.react('👍').then(() => message))
                 .then(message => message.react('👎'))
         }

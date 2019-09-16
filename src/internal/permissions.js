@@ -1,183 +1,37 @@
 import './extensions'
-import colors from './colors'
-import { Server } from './config'
-
-function missing(user, guild, channel, permissions) {
-    return channel
-        .permissionsFor(guild.member(user))
-        .missing(permissions.map(p => p.name))
-}
-
-async function sendMissingPermissions(channel, message, missing, t) {
-    return await channel.send(message, {
-        embed: {
-            title: t('permissions.missing_permissions'),
-            description: missing.map(p => t(`permissions.${p}`)).join('\n'),
-            color: colors.highlightError
-        }
-    })
-}
-
-export const MISSING_PERMISSIONS = 'MISSING_PERMISSIONS'
-
-export async function verifyBotPermissions(msg, request) {
-    const core = missing(msg.client.user, msg.guild, msg.channel, REQUIRED)
-    if (core.length) {
-        const t = await Server.language(msg.guild)
-        await sendMissingPermissions(
-            await msg.author.createDM(),
-            t('permissions.bot_requires_core_permissions', { channel: msg.channel.name, server: msg.guild.name }),
-            core,
-            t
-        )
-        throw MISSING_PERMISSIONS
-    }
-    const feature = missing(msg.client.user, msg.guild, msg.channel, request.feature.permissions)
-        .filter(p => p !== PERMISSIONS.ADMINISTRATOR.name)
-    if (feature.length) {
-        const t = await Server.language(msg.guild)
-        await sendMissingPermissions(msg.channel, t('permissions.bot_requires_permissions'), feature, t)
-        throw MISSING_PERMISSIONS
-    }
-    return request
-}
-
-export async function verifyUserPermissions(msg, request) {
-    const user = missing(msg.author, msg.guild, msg.channel, request.feature.permissions)
-    if (user.length) {
-        const t = await Server.language(msg.guild)
-        await sendMissingPermissions(
-            await msg.author.createDM(),
-            t('permissions.user_requires_permissions', { channel: msg.channel.name, server: msg.guild.name }),
-            core,
-            t
-        )
-        throw MISSING_PERMISSIONS
-    }
-    return request
-}
+import { error, ERROR_MISSING_PERMISSIONS } from './utils'
 
 export const PERMISSIONS = {
-    CREATE_INSTANT_INVITE: {
-        name: 'CREATE_INSTANT_INVITE',
-        value: 0x00000001
-    },
-    KICK_MEMBERS: {
-        name: 'KICK_MEMBERS',
-        value: 0x00000002
-    },
-    BAN_MEMBERS: {
-        name: 'BAN_MEMBERS',
-        value: 0x00000004
-    },
-    ADMINISTRATOR: {
-        name: 'ADMINISTRATOR',
-        value: 0x00000008
-    },
-    MANAGE_CHANNELS: {
-        name: 'MANAGE_CHANNELS',
-        value: 0x00000010
-    },
-    MANAGE_GUILD: {
-        name: 'MANAGE_GUILD',
-        value: 0x00000020
-    },
-    ADD_REACTIONS: {
-        name: 'ADD_REACTIONS',
-        value: 0x00000040
-    },
-    VIEW_AUDIT_LOG: {
-        name: 'VIEW_AUDIT_LOG',
-        value: 0x00000080
-    },
-    VIEW_CHANNEL: {
-        name: 'VIEW_CHANNEL',
-        value: 0x00000400
-    },
-    SEND_MESSAGES: {
-        name: 'SEND_MESSAGES',
-        value: 0x00000800
-    },
-    SEND_TTS_MESSAGES: {
-        name: 'SEND_TTS_MESSAGES',
-        value: 0x00001000
-    },
-    MANAGE_MESSAGES: {
-        name: 'MANAGE_MESSAGES',
-        value: 0x00002000
-    },
-    EMBED_LINKS: {
-        name: 'EMBED_LINKS',
-        value: 0x00004000
-    },
-    ATTACH_FILES: {
-        name: 'ATTACH_FILES',
-        value: 0x00008000
-    },
-    READ_MESSAGE_HISTORY: {
-        name: 'READ_MESSAGE_HISTORY',
-        value: 0x00010000
-    },
-    MENTION_EVERYONE: {
-        name: 'MENTION_EVERYONE',
-        value: 0x00020000
-    },
-    USE_EXTERNAL_EMOJIS: {
-        name: 'USE_EXTERNAL_EMOJIS',
-        value: 0x00040000
-    },
-    CONNECT: {
-        name: 'CONNECT',
-        value: 0x00100000
-    },
-    SPEAK: {
-        name: 'SPEAK',
-        value: 0x00200000
-    },
-    MUTE_MEMBERS: {
-        name: 'MUTE_MEMBERS',
-        value: 0x00400000
-    },
-    DEAFEN_MEMBERS: {
-        name: 'DEAFEN_MEMBERS',
-        value: 0x00800000
-    },
-    MOVE_MEMBERS: {
-        name: 'MOVE_MEMBERS',
-        value: 0x01000000
-    },
-    USE_VAD: {
-        name: 'USE_VAD',
-        value: 0x02000000
-    },
-    PRIORITY_SPEAKER: {
-        name: 'PRIORITY_SPEAKER',
-        value: 0x00000100
-    },
-    STREAM: {
-        name: 'STREAM',
-        value: 0x00000200
-    },
-    CHANGE_NICKNAME: {
-        name: 'CHANGE_NICKNAME',
-        value: 0x04000000
-    },
-    MANAGE_NICKNAMES: {
-        name: 'MANAGE_NICKNAMES',
-        value: 0x08000000
-    },
-    MANAGE_ROLES: {
-        name: 'MANAGE_ROLES',
-        value: 0x10000000
-    },
-    MANAGE_WEBHOOKS: {
-        name: 'MANAGE_WEBHOOKS',
-        value: 0x20000000
-    },
-    MANAGE_EMOJIS: {
-        name: 'MANAGE_EMOJIS',
-        value: 0x40000000
-    }
+    CREATE_INSTANT_INVITE: 'CREATE_INSTANT_INVITE',
+    KICK_MEMBERS: 'KICK_MEMBERS',
+    BAN_MEMBERS: 'BAN_MEMBERS',
+    ADMINISTRATOR: 'ADMINISTRATOR',
+    MANAGE_CHANNELS: 'MANAGE_CHANNELS',
+    MANAGE_GUILD: 'MANAGE_GUILD',
+    ADD_REACTIONS: 'ADD_REACTIONS',
+    VIEW_AUDIT_LOG: 'VIEW_AUDIT_LOG',
+    VIEW_CHANNEL: 'VIEW_CHANNEL',
+    SEND_MESSAGES: 'SEND_MESSAGES',
+    SEND_TTS_MESSAGES: 'SEND_TTS_MESSAGES',
+    MANAGE_MESSAGES: 'MANAGE_MESSAGES',
+    EMBED_LINKS: 'EMBED_LINKS',
+    ATTACH_FILES: 'ATTACH_FILES',
+    READ_MESSAGE_HISTORY: 'READ_MESSAGE_HISTORY',
+    MENTION_EVERYONE: 'MENTION_EVERYONE',
+    USE_EXTERNAL_EMOJIS: 'USE_EXTERNAL_EMOJIS',
+    CONNECT: 'CONNECT',
+    SPEAK: 'SPEAK',
+    MUTE_MEMBERS: 'MUTE_MEMBERS',
+    DEAFEN_MEMBERS: 'DEAFEN_MEMBERS',
+    MOVE_MEMBERS: 'MOVE_MEMBERS',
+    USE_VAD: 'USE_VAD',
+    PRIORITY_SPEAKER: 'PRIORITY_SPEAKER',
+    STREAM: 'STREAM',
+    CHANGE_NICKNAME: 'CHANGE_NICKNAME',
+    MANAGE_NICKNAMES: 'MANAGE_NICKNAMES',
+    MANAGE_ROLES: 'MANAGE_ROLES',
+    MANAGE_WEBHOOKS: 'MANAGE_WEBHOOKS',
+    MANAGE_EMOJIS: 'MANAGE_EMOJIS'
 }
 
 export const REQUIRED = [
@@ -185,7 +39,58 @@ export const REQUIRED = [
     PERMISSIONS.SEND_MESSAGES,
     PERMISSIONS.EMBED_LINKS,
     PERMISSIONS.READ_MESSAGE_HISTORY,
-    PERMISSIONS.ADD_REACTIONS
+    PERMISSIONS.ADD_REACTIONS,
+    PERMISSIONS.MANAGE_MESSAGES
 ]
 
 export default PERMISSIONS
+
+export async function verifyBotPermissions(context, request) {
+    const core = missing(context.client.user, context.guild, context.channel, REQUIRED)
+    if (core.length) {
+        await sendMissingPermissions(
+            context,
+            await context.author.createDM(),
+            context.t('permissions.bot_requires_core_permissions', { channel: context.channel.name, server: context.guild.name }),
+            core
+        )
+        throw ERROR_MISSING_PERMISSIONS
+    }
+    const feature = missing(context.client.user, context.guild, context.channel, request.feature.permissions)
+        .filter(p => p !== PERMISSIONS.ADMINISTRATOR)
+    if (feature.length) {
+        await sendMissingPermissions(context, context.channel, context.t('permissions.bot_requires_permissions'), feature)
+        throw ERROR_MISSING_PERMISSIONS
+    }
+    return request
+}
+
+export async function verifyUserPermissions(context, request) {
+    const user = missing(context.author, context.guild, context.channel, request.feature.permissions)
+    if (user.length) {
+        await sendMissingPermissions(
+            context,
+            await context.author.createDM(),
+            context.t('permissions.user_requires_permissions', { channel: context.channel.name, server: context.guild.name }),
+            core
+        )
+        throw ERROR_MISSING_PERMISSIONS
+    }
+    return request
+}
+
+function missing(user, guild, channel, permissions) {
+    return channel
+        .permissionsFor(guild.member(user))
+        .missing(permissions)
+}
+
+async function sendMissingPermissions(context, channel, text, missing) {
+    return error({
+        context: context,
+        channel: channel,
+        text: text,
+        title: context.t('permissions.missing_permissions'),
+        description: missing.map(p => context.t(`permissions.${p}`)).join('\n')
+    })
+}
