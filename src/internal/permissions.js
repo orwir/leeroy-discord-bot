@@ -11,7 +11,7 @@ function missing(user, guild, channel, permissions) {
 async function sendMissingPermissions(channel, message, missing, t) {
     return await channel.send(message, {
         embed: {
-            title: t('permissions.required_permissions'),
+            title: t('permissions.missing_permissions'),
             description: missing.map(p => t(`permissions.${p}`)).join('\n'),
             color: colors.highlightError
         }
@@ -26,7 +26,7 @@ export async function verifyBotPermissions(msg, request) {
         const t = await Server.language(msg.guild)
         await sendMissingPermissions(
             await msg.author.createDM(),
-            t('permissions.core_permissions', { channel: msg.channel.name, server: msg.guild.name }),
+            t('permissions.bot_requires_core_permissions', { channel: msg.channel.name, server: msg.guild.name }),
             core,
             t
         )
@@ -36,7 +36,7 @@ export async function verifyBotPermissions(msg, request) {
         .filter(p => p !== PERMISSIONS.ADMINISTRATOR.name)
     if (feature.length) {
         const t = await Server.language(msg.guild)
-        await sendMissingPermissions(msg.channel, '', feature, t)
+        await sendMissingPermissions(msg.channel, t('permissions.bot_requires_permissions'), feature, t)
         throw MISSING_PERMISSIONS
     }
     return request
@@ -45,6 +45,13 @@ export async function verifyBotPermissions(msg, request) {
 export async function verifyUserPermissions(msg, request) {
     const user = missing(msg.author, msg.guild, msg.channel, request.feature.permissions)
     if (user.length) {
+        const t = await Server.language(msg.guild)
+        await sendMissingPermissions(
+            await msg.author.createDM(),
+            t('permissions.user_requires_permissions', { channel: msg.channel.name, server: msg.guild.name }),
+            core,
+            t
+        )
         throw MISSING_PERMISSIONS
     }
     return request

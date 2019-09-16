@@ -62,8 +62,10 @@
     },
 
     "permissions": {
-        "core_permissions": "В канале [#{{channel}}] на сервере [{{server}}] у бота отстуствуют основные права доступа",
-        "required_permissions": "Необходимые права для бота:",
+        "bot_requires_core_permissions": "Боту необходимы основные права доступа в канале [#{{channel}}] на сервере [{{server}}].",
+        "bot_requires_permissions": "Боту необходимы права доступа.",
+        "user_requires_permissions": "У вас недостаточно прав доступа в канале [#{{channel}}] на сервере [{{server}}].",
+        "missing_permissions": "Отсутствующие права доступа:",
         "ADMINISTRATOR": "Администратор (для пользователя)",
         "VIEW_AUDIT_LOG": "Просматривать журнал аудита",
         "MANAGE_GUILD": "Управлять сервером",
