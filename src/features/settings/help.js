@@ -10,6 +10,7 @@ export default {
     usage: 'help',
     examples: 'help.examples',
     permissions: [],
+    stable: true,
 
     handle: async (msg) => {
         const config = await Server.config(msg.guild)

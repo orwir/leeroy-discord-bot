@@ -1,5 +1,5 @@
 import '../internal/extensions'
-import { Server } from '../internal/config'
+import { Server, PREFIX } from '../internal/config'
 import features from '../features'
 import { verifyBotPermissions, verifyUserPermissions, MISSING_PERMISSIONS } from '../internal/permissions'
 
@@ -11,6 +11,12 @@ async function parsePrefix(msg, request) {
     if (msg.content.startsWith(prefix)) {
         request.prefix = prefix
         return request
+
+    } else if (msg.content.startsWith(PREFIX)) {
+        request.prefix = PREFIX
+        request.onlyStable = true
+        return request
+
     }
     throw NOT_COMMAND
 }
@@ -22,7 +28,9 @@ async function parseFeature(msg, request) {
     if (start + end > 0) {
         const name = raw.slice(start, end)
         request.feature = features[name]
-        return request
+        if (request.feature && !(request.feature.onlyStable && !request.feature.stable)) {
+            return request
+        }
     }
     throw NOT_COMMAND
 }
