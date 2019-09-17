@@ -21,7 +21,7 @@ export async function error({
         })
 }
 
-export async function log(error) {
+export async function log(context, error) {
     if (IGNORED_ERRORS.includes(error)) {
         return
     }

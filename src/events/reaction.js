@@ -31,7 +31,7 @@ export default async function (bot, data, reacted) {
         context.t = await Server.language(context.guild)
         await feature
             .react(context, emoji, member, reacted)
-            .catch(log)
+            .catch(error => log(context, error))
     }
 }
 

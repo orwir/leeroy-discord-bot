@@ -21,7 +21,7 @@ export default async function (context) {
         .then(request => verifyUserPermissions(context, request))
         .then(request => execute(context, request))
         .then(request => clean(context, request))
-        .catch(log)
+        .catch(error => log(context, error))
 }
 
 async function parsePrefix(context, request) {
