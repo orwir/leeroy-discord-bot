@@ -86,4 +86,4 @@ typings/
 # other
 .vscode
 .node-persist
-firebase-credential.json
+firebase-credentials.json

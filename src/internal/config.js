@@ -1,5 +1,5 @@
 import { readFileSync } from 'fs'
-import { obtain as server, save as saveServer } from '../features/settings/server'
+import * as server from '../features/settings/server'
 import { obtain as language } from '../features/settings/language'
 
 export const TOKEN = process.env.leeroy_auth_token
@@ -15,18 +15,13 @@ export const VERSION = readFileSync('./VERSION', 'utf8')
 
 export const Server = {
 
-    config: async (guild) => server(guild),
+    config: async (context) => server.obtain(context),
 
-    language: async (guild) => {
-        const config = await server(guild)
+    language: async (context) => {
+        const config = await server.obtain(context)
         return language(config.language)
     },
 
-    prefix: async (guild) => {
-        const config = await server(guild)
-        return config.prefix
-    },
-
-    save: async (guild) => saveServer(guild)
+    save: async (context, config) => server.save(context, config)
 
 }

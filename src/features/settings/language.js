@@ -15,7 +15,7 @@ export default {
     permissions: [P.ADMINISTRATOR],
 
     execute: async (context, language) => {
-        const config = await Server.config(context.guild)
+        const config = await Server.config(context)
 
         if (!language) {
             return showSupportedLanguages(context)
@@ -28,7 +28,7 @@ export default {
 
         } else {
             config.language = language
-            await Server.save(context.guild)
+            await Server.save(context, config)
             context.t = await obtain(config.language)
             return context.channel.send('', {
                 embed: {

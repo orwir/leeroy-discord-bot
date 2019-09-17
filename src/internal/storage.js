@@ -1,40 +1,56 @@
 import firebase from 'firebase-admin'
-import { TOKEN } from './config'
 import { readFileSync, existsSync } from 'fs'
 
-const memoryCache = {}
+const cache = {}
 const db = connectToFirestore()
 
 export default {
 
-    save: async (id, json) => {
+    save: async (context, collection, object) => {
         return db
-            .doc(`bots/${TOKEN}/servers/${id}`)
-            .set(json)
+            .collection(collection)
+            .doc(key(context))
+            .set(object)
             .then(() => {
-                memoryCache[id] = json
+                cache[cacheKey(context, collection)] = object
             })
     },
 
-    obtain: async (id, def) => {
-        return memoryCache[id] || def
-    },
-
-    remove: async (id) => {
-        delete memoryCache[id]
+    obtain: async (context, collection, def) => {
+        let data = cache[cacheKey(context, collection)]
+        if (!data) {
+            const doc = await db
+                    .collection(collection)
+                    .doc(key(context))
+                    .get()
+            data = doc.data()
+        }
+        if (!data) {
+            data = def
+        }
+        cache[cacheKey(context, collection)] = data
+        return data
     }
 
 }
 
+function key(context) {
+    return `${context.client.user.id}#${context.guild.id}`
+}
+
+function cacheKey(context, collection) {
+    return `${collection}|${key(context)}`
+}
+
 function obtainFirebaseServiceAccount() {
-    const firebaseCredentialFile = './firebase-credential.json'
-    const firebaseCredentialEnv = 'leeroy_firebase_credential'
+    const firebaseCredentialsFile = './firebase-credentials.json'
+    const firebaseCredentialsEnv = 'leeroy_firebase_credentials'
 
-    if (existsSync(firebaseCredentialFile)) {
-        return JSON.parse(readFileSync(firebaseCredentialFile))
+    if (existsSync(firebaseCredentialsFile)) {
+        return JSON.parse(readFileSync(firebaseCredentialsFile))
 
-    } else if (process.env[firebaseCredentialEnv]) {
-        return JSON.parse(process.env[firebaseCredentialEnv])
+    } else if (process.env[firebaseCredentialsEnv]) {
+        return JSON.parse(process.env[firebaseCredentialsEnv])
         
     } else {
         throw 'Firestore credential not found!'

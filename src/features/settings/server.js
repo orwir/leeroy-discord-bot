@@ -3,7 +3,7 @@ import storage from '../../internal/storage'
 import P from '../../internal/permissions'
 import { PREFIX } from '../../internal/config'
 
-const servers = {}
+const SERVER_CONFIG = 'server-config'
 
 export default {
     name: 'server',
@@ -16,21 +16,15 @@ export default {
     execute: async (context) => {}
 }
 
-export async function obtain(guild) {
-    if (!servers[guild.id]) {
-        servers[guild.id] = await storage.obtain(guild.id, {
-            id: guild.id,
-            language: 'en',
-            prefix: PREFIX
-        })
-    }
-    return servers[guild.id]
+export async function obtain(context) {
+    return storage.obtain(context, SERVER_CONFIG, {
+        bot_id: context.client.user.id,
+        server_id: context.guild.id,
+        language: 'en',
+        prefix: PREFIX
+    })
 }
 
-export async function save(guild) {
-    return storage.save(guild.id, servers[guild.id])
-}
-
-export async function remove(guild) {
-    return storage.remove(guild.id).then(() => delete servers[guild.id])
+export async function save(context, config) {
+    return storage.save(context, SERVER_CONFIG, config)
 }

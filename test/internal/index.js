@@ -1,4 +1,4 @@
 import './colors.test'
 import './config.test'
-import './extensions.test'
+import './utils.test'
 import './groups.test'
