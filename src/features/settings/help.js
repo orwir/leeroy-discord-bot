@@ -10,34 +10,34 @@ export default {
     usage: 'help',
     examples: 'help.examples',
     permissions: [],
+    stable: true,
 
-    handle: async (msg) => {
-        const config = await Server.config(msg.guild)
-        const t = await Server.language(msg.guild)
+    execute: async (context) => {
+        const config = await Server.config(context.guild)
 
-        return await msg.channel.send('', {
+        return context.channel.send('', {
             embed: {
                 color: colors.highlightDefault,
                 fields: [
                     {
-                        name: t('help.version'),
+                        name: context.t('help.version'),
                         value: VERSION
                     },
                     {
-                        name: t('help.commands_list'),
+                        name: context.t('help.commands_list'),
                         value: 'man'
                     },
                     {
-                        name: t('help.language'),
+                        name: context.t('help.language'),
                         value: config.language
                     },
                     {
-                        name: t('help.prefix'),
+                        name: context.t('help.prefix'),
                         value: config.prefix
                     },
                     {
-                        name: t('help.core_permissions'),
-                        value: REQUIRED_PERMISSIONS.map(p => t(`permissions.${p.name}`)).join('\n')
+                        name: context.t('help.core_permissions'),
+                        value: REQUIRED_PERMISSIONS.map(p => context.t(`permissions.${p}`)).join('\n')
                     }
                 ]
             }

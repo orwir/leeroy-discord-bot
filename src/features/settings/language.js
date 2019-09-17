@@ -1,13 +1,52 @@
 import i18n from 'i18next'
 import groups from '../../internal/groups'
 import colors from '../../internal/colors'
-import { Server, LANGUAGES } from '../../internal/config'
 import P from '../../internal/permissions'
+import { Server, LANGUAGES } from '../../internal/config'
 
 const languages = {}
 
+export default {
+    name: 'language',
+    group: groups.settings,
+    description: 'language.description',
+    usage: 'language [lang]',
+    examples: 'language.examples',
+    permissions: [P.ADMINISTRATOR],
+
+    execute: async (context, language) => {
+        const config = await Server.config(context.guild)
+
+        if (!language) {
+            return showSupportedLanguages(context)
+
+        } else if (!LANGUAGES[language]) {
+            return showLanguageNotSupported(context, language)
+
+        } else if (language === config.language) {
+            return showLanguageTheSame(context)
+
+        } else {
+            config.language = language
+            await Server.save(context.guild)
+            context.t = await obtain(config.language)
+            return context.channel.send('', {
+                embed: {
+                    title: context.t('global.success'),
+                    description: context.t('language.language_changed'),
+                    color: colors.highlightSuccess
+                }
+            })
+        }
+    }
+}
+
+export async function obtain(language) {
+    return languages[language] || initLocalization().then(() => languages[language])
+}
+
 async function initLocalization() {
-    return await i18n.init({
+    return i18n.init({
         fallbackLng: 'en',
         preload: true,
         resources: LANGUAGES
@@ -20,73 +59,32 @@ async function initLocalization() {
     })
 }
 
-function showSupportedLanguages(msg, t) {
-    return msg.channel.send('', {
+function showSupportedLanguages(context) {
+    return context.channel.send('', {
         embed: {
-            title: t('language.supported_languages'),
+            title: context.t('language.supported_languages'),
             description: Object.keys(LANGUAGES).join(', '),
             color: colors.highlightDefault
         }
     })
 }
 
-function showLanguageNotSupported(msg, language, t) {
-    return msg.channel.send('', {
+function showLanguageNotSupported(context, language) {
+    return context.channel.send('', {
         embed: {
-            title: t('global.error'),
-            description: t('language.language_not_supported', { language: language }),
+            title: context.t('global.error'),
+            description: context.t('language.language_not_supported', { language: language }),
             color: colors.highlightError
         }
     })
 }
 
-function showLanguageTheSame(msg, t) {
-    return msg.channel.send('', {
+function showLanguageTheSame(context) {
+    return context.channel.send('', {
         embed: {
-            title: t('global.error'),
-            description: t('language.language_the_same'),
+            title: context.t('global.error'),
+            description: context.t('language.language_the_same'),
             color: colors.highlightError
         }
     })
-}
-
-export async function obtain(language) {
-    return languages[language]
-        || await initLocalization().then(() => languages[language])
-}
-
-export default {
-    name: 'language',
-    group: groups.settings,
-    description: 'language.description',
-    usage: 'language [lang]',
-    examples: 'language.examples',
-    permissions: [P.ADMINISTRATOR],
-
-    handle: async (msg, language) => {
-        const config = await Server.config(msg.guild)
-        let t = await obtain(config.language)
-
-        if (!language) {
-            return await showSupportedLanguages(msg, t)
-
-        } else if (!LANGUAGES[language]) {
-            return await showLanguageNotSupported(msg, language, t)
-
-        } else if (language === config.language) {
-            return await showLanguageTheSame(msg, t)
-
-        } else {
-            config.language = language
-            await Server.save(msg.guild)
-            t = await obtain(config.language)
-            return await msg.channel.send('', {
-                embed: {
-                    title: t('global.success'),
-                    description: t('language.language_changed'),
-                    color: colors.highlightSuccess
-                }
-            })
-        }
-    }
 }

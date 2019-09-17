@@ -44,6 +44,13 @@
         "permissions": "Permissions"
     },
 
+    "prefix": {
+        "description": "Change prefix for commands.\n'reset' to set default prefix.",
+        "examples": "prefix !\nprefix reset",
+        "max_length_exceeded": "Max length for prefix is {{length}}",
+        "new_prefix": "New prefix: {{prefix}}"
+    },
+
     "poll": {
         "description": "Create 'yes/no' poll. React with 👍 for yes and 👎 for no.",
         "examples": "poll Am I the best bot?",
@@ -62,8 +69,10 @@
     },
 
     "permissions": {
-        "core_permissions": "In channel [#{{channel}}] on server [{{server}}] bot don't have core permissions",
-        "required_permissions": "Required bot's permissions:",
+        "bot_requires_core_permissions": "Bot doesn't have required core permissions in channel [#{{channel}}] on server [{{server}}].",
+        "bot_requires_permissions": "Bot doesn't have required permissions.",
+        "user_requires_permissions": "You don't have required permissions in channel [#{{channel}}] on server [{{server}}].",
+        "missing_permissions": "Missing permissions:",
         "ADMINISTRATOR": "Administrator (for user)",
         "VIEW_AUDIT_LOG": "View Audit Log",
         "MANAGE_GUILD": "Manage Server",
