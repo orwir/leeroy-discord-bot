@@ -1,7 +1,6 @@
-import '../internal/extensions'
 import features from '../features'
 import { Server } from '../internal/config'
-import { log } from '../internal/utils'
+import { log, path } from '../internal/utils'
 
 export const REACTION_ADD = 'MESSAGE_REACTION_ADD'
 export const REACTION_REMOVED = 'MESSAGE_REACTION_REMOVE'
@@ -14,10 +13,10 @@ export default async function (bot, data, reacted) {
     if (user.bot || context.author.id !== bot.user.id) {
         return
     }
-    if (context.path(`${FEATURE_PATH}.name`) !== 'feature') {
+    if (path(context, `${FEATURE_PATH}.name`) !== 'feature') {
         return
     }
-    const feature = features[context.path(`${FEATURE_PATH}.value`)]
+    const feature = features[path(context, `${FEATURE_PATH}.value`)]
     if (!feature) {
         return
     }
@@ -31,7 +30,7 @@ export default async function (bot, data, reacted) {
         context.t = await Server.language(context.guild)
         await feature
             .react(context, emoji, member, reacted)
-            .catch(log)
+            .catch(error => log(context, error))
     }
 }
 

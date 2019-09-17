@@ -1,6 +1,5 @@
 import groups from '../../internal/groups'
 import colors from '../../internal/colors'
-import { Server } from '../../internal/config'
 import { features as getFeaturesList } from '../index'
 import { error } from '../../internal/utils'
 

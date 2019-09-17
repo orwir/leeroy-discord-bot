@@ -2,7 +2,7 @@ import colors from '../../internal/colors'
 import groups from '../../internal/groups'
 import P from '../../internal/permissions'
 import { man } from './man'
-import { Server } from '../../internal/config'
+import { Server, PREFIX } from '../../internal/config'
 
 const MAX_LENGTH = 5
 
@@ -29,14 +29,14 @@ export default {
             })
 
         } else {
-            const config = await Server.config(context.guild)
-            config.prefix = prefix
-            await Server.save(context.guild)
+            const config = await Server.config(context)
+            config.prefix = prefix === 'reset' ? PREFIX : prefix
+            await Server.save(context, config)
 
             return context.channel.send('', {
                 embed: {
                     title: context.t('global.success'),
-                    description: context.t('prefix.new_prefix', { prefix: prefix }),
+                    description: context.t('prefix.new_prefix', { prefix: config.prefix }),
                     color: colors.highlightSuccess
                 }
             })

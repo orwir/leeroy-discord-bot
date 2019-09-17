@@ -1,11 +1,10 @@
-import '../internal/extensions'
 import { Server, PREFIX } from '../internal/config'
 import features from '../features'
 import { verifyBotPermissions, verifyUserPermissions } from '../internal/permissions'
 import { log, ERROR_NOT_COMMAND } from '../internal/utils'
 
 export default async function (context) {
-    if (context.author.bot || context.content.isBlank()) {
+    if (context.author.bot || !context.content.trim()) {
         return
     }
     await Promise.resolve({
@@ -21,11 +20,12 @@ export default async function (context) {
         .then(request => verifyUserPermissions(context, request))
         .then(request => execute(context, request))
         .then(request => clean(context, request))
-        .catch(log)
+        .catch(error => log(context, error))
 }
 
 async function parsePrefix(context, request) {
-    const prefix = await Server.prefix(context.guild)
+    const config = await Server.config(context)
+    const prefix = config.prefix
     if (context.content.startsWith(prefix)) {
         request.prefix = prefix
         return request
@@ -53,7 +53,7 @@ async function parseFeature(context, request) {
 
 async function parseArguments(context, request) {
     let rawargs = context.content.slice(`${request.prefix}${request.feature.name} `.length)
-    if (rawargs.isBlank()) {
+    if (!rawargs.trim()) {
         // do nothing
 
     } else if (!request.feature.arguments) {
@@ -76,7 +76,7 @@ async function parseArguments(context, request) {
 }
 
 async function updateContext(context, request) {
-    context.t = await Server.language(context.guild)
+    context.t = await Server.language(context)
     return request
 }
 

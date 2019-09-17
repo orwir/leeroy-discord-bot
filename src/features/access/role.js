@@ -1,9 +1,7 @@
-import '../../internal/extensions'
 import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { man } from '../settings/man'
-import { Server } from '../../internal/config'
 import { error } from '../../internal/utils'
 
 export default {

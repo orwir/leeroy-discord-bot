@@ -12,6 +12,7 @@ bot.on('ready', () => {
             type: 'PLAYING'
         }
     })
+    console.log('Bot has been started.')
 })
 
 bot.on('message', message)

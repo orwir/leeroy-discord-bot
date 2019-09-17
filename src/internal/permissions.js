@@ -1,4 +1,3 @@
-import './extensions'
 import { error, ERROR_MISSING_PERMISSIONS } from './utils'
 
 export const PERMISSIONS = {
