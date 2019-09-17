@@ -87,5 +87,5 @@ async function execute(context, request) {
 }
 
 async function clean(context, request) {
-    // TODO: implement functionality
+    return context.delete()
 }
