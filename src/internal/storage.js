@@ -28,14 +28,16 @@ export default {
 
 function obtainFirebaseServiceAccount() {
     const firebaseCredentialFile = './firebase-credential.json'
-    const firebaseCredentialEnv = 'executor_firebase_credential'
+    const firebaseCredentialEnv = 'leeroy_firebase_credential'
 
     if (existsSync(firebaseCredentialFile)) {
         return JSON.parse(readFileSync(firebaseCredentialFile))
+
     } else if (process.env[firebaseCredentialEnv]) {
         return JSON.parse(process.env[firebaseCredentialEnv])
+        
     } else {
-        throw 'Firestore credentials not found!'
+        throw 'Firestore credential not found!'
     }
 }
 

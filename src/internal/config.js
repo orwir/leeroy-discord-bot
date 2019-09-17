@@ -2,9 +2,9 @@ import { readFileSync } from 'fs'
 import { obtain as server, save as saveServer } from '../features/settings/server'
 import { obtain as language } from '../features/settings/language'
 
-export const TOKEN = process.env.executor_auth_token
+export const TOKEN = process.env.leeroy_auth_token
 
-export const PREFIX = process.env.executor_prefix || 'e!'
+export const PREFIX = process.env.leeroy_prefix || 'e!'
 
 export const LANGUAGES = {
     en: { translation: JSON.parse(readFileSync('./res/locales/en.json')) },
