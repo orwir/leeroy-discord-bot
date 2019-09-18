@@ -34,7 +34,8 @@ export default {
                 ]
             }
 
-            return context.channel.send(question, { embed: embed })
+            return context.channel
+                .send(question, { embed: embed })
                 .then(message => message.react('👍').then(() => message))
                 .then(message => message.react('👎'))
         }

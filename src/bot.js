@@ -12,7 +12,7 @@ bot.on('ready', () => {
             type: 'PLAYING'
         }
     })
-    console.log('Bot has been started.')
+    console.log(`${bot.user.tag} has been started.`)
 })
 
 bot.on('message', message)
