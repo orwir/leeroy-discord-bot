@@ -27,7 +27,7 @@ export default async function (bot, data, reacted) {
             .find(reaction => reaction.emoji.name === emoji)
             .remove(member)
     } else {
-        context.t = await Server.language(context.guild)
+        context.t = await Server.language(context)
         await feature
             .react(context, emoji, member, reacted)
             .catch(error => log(context, error))

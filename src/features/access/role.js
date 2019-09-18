@@ -36,11 +36,11 @@ export default {
         } else if (!hasHigherRole(context.guild.member(context.client.user), role)) {
             return error({
                 context: context,
-                description: t('role.role_is_higher_or_equals_than_bot')
+                description: context.t('role.role_is_higher_or_equals_than_bot')
             })
 
         } else {
-            return createRoleMessage(context, snowflake, description, t)
+            return createRoleMessage(context, snowflake, description)
         }
     },
 
@@ -57,29 +57,31 @@ export default {
     }
 }
 
-async function createRoleMessage(context, snowflake, description, t) {
-    return context.channel.send(description, {
-        embed: {
-            color: colors.highlightDefault,
-            fields: [
-                {
-                    name: 'feature',
-                    value: 'role',
-                    inline: true
-                },
-                {
-                    name: t('role.role'),
-                    value: '' + snowflake,
-                    inline: true
-                },
-                {
-                    name: t('role.howto'),
-                    value: '👌',
-                    inline: true
-                }
-            ]
-        }
-    })
+async function createRoleMessage(context, snowflake, description) {
+    return context.channel
+        .send(description, {
+            embed: {
+                color: colors.highlightDefault,
+                fields: [
+                    {
+                        name: 'feature',
+                        value: 'role',
+                        inline: true
+                    },
+                    {
+                        name: context.t('role.role'),
+                        value: '' + snowflake,
+                        inline: true
+                    },
+                    {
+                        name: context.t('role.howto'),
+                        value: '👌',
+                        inline: true
+                    }
+                ]
+            }
+        })
+        .then(message => { message.react('👌') })
 }
 
 function hasHigherRole(member, expected) {
