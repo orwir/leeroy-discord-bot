@@ -25,9 +25,8 @@ export default async function (context) {
 
 async function parsePrefix(context, request) {
     const config = await Server.config(context)
-    const prefix = config.prefix
-    if (context.content.startsWith(prefix)) {
-        request.prefix = prefix
+    if (context.content.startsWith(config.prefix)) {
+        request.prefix = config.prefix
         return request
     } else if (context.content.startsWith(PREFIX)) {
         request.prefix = PREFIX

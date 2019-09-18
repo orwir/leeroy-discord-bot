@@ -11,7 +11,6 @@ export default {
     usage: 'role [@role] [description]',
     examples: 'role.examples',
     arguments: 2,
-    reaction: true,
     emojis: ['👌'],
     permissions: [P.MANAGE_ROLES],
 
@@ -49,9 +48,9 @@ export default {
        const role = context.guild.roles.get(snowflake.slice(3, -1))
        if (role && author) {
            if (reacted) {
-               author.addRole(role)
+               return author.addRole(role)
            } else {
-               author.removeRole(role)
+               return author.removeRole(role)
            }
        }
     }
@@ -81,7 +80,7 @@ async function createRoleMessage(context, snowflake, description) {
                 ]
             }
         })
-        .then(message => { message.react('👌') })
+        .then(message => message.react('👌'))
 }
 
 function hasHigherRole(member, expected) {

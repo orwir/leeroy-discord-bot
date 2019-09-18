@@ -25,7 +25,7 @@ export async function log(context, error) {
     if (IGNORED_ERRORS.includes(error)) {
         return
     }
-    console.log(error)
+    console.error(error)
 }
 
 export function path(object, path, def) {
