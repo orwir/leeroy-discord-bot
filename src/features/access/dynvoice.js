@@ -2,11 +2,11 @@ import groups from '../../internal/groups'
 import P from '../../internal/permissions'
 import { register } from '../../events/voice'
 
-const FACTORY_TEMPLATE = /\+ #(\d+) \/(.*?)\//g
-const CHANNEL_TEMPLATE = /# (.*)/g
+const FACTORY_TEMPLATE = /^\+ #(\d+) \/(.*?)\/$/
+const CHANNEL_TEMPLATE = /^# (.*)$/
 
-register(FACTORY_TEMPLATE, 'dynvoice')
-register(CHANNEL_TEMPLATE, 'dynvoice')
+register('dynvoice', FACTORY_TEMPLATE)
+register('dynvoice', CHANNEL_TEMPLATE)
 
 export default {
     name: 'dynvoice',
@@ -18,30 +18,32 @@ export default {
     permissions: [P.MANAGE_CHANNELS, P.MOVE_MEMBERS],
 
     execute: async (context, parent, limit, template) => {
-        return context.guild.createChannel(`${PREFIX_FACTORY} #${limit} ${template}`, {
+        return context.guild.createChannel(`+ #${limit} /${template}/`, {
             type: 'voice',
-            userLimit: limit > 0 ? limit : null,
+            userLimit: limit,
             parent: parent
         })
     },
 
     onJoin: async (member, channel) => {
-        if (channel.name.startsWith(PREFIX_FACTORY)) {
-            return member.guild.createChannel(`${PREFIX_CHANNEL} test`, {
+        const data = channel.name.match(FACTORY_TEMPLATE)
+        if (!data) {
+            return
+        }
+        let [ , limit, template ] = data
+
+        return member.guild
+            .createChannel(`# ${template}`, {
                 type: 'voice',
+                userLimit: limit,
                 parent: channel.parent
             })
-            .then(channel => {
-                member.setVoiceChannel(channel)
-            })
-        }
+            .then(channel => { member.setVoiceChannel(channel) })
     },
 
     onLeave: async (member, channel) => {
-        if (channel.name.startsWith(PREFIX_CHANNEL)) {
-            if (!channel.members.length) {
-                return channel.delete()
-            }
+        if (CHANNEL_TEMPLATE.test(channel.name) && !channel.members.length) {
+            return channel.delete()
         }
     }
 }
