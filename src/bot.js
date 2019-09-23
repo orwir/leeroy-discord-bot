@@ -1,6 +1,7 @@
 import { TOKEN, PREFIX } from './internal/config'
 import discord from 'discord.js'
 import message from './events/message'
+import voice from './events/voice'
 import reaction, { REACTION_TYPES, REACTION_ADD } from './events/reaction'
 
 const bot = new discord.Client()
@@ -16,6 +17,10 @@ bot.on('ready', () => {
 })
 
 bot.on('message', message)
+
+bot.on('voiceStateUpdate', (prevMemberState, currMemberState) => {
+    voice(prevMemberState, currMemberState)
+})
 
 bot.on('raw', event => {
     if (REACTION_TYPES.includes(event.t)) {
