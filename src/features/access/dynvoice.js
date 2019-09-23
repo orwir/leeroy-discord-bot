@@ -42,7 +42,7 @@ export default {
     },
 
     onLeave: async (member, channel) => {
-        if (CHANNEL_TEMPLATE.test(channel.name) && !channel.members.length) {
+        if (CHANNEL_TEMPLATE.test(channel.name) && !channel.members.size) {
             return channel.delete()
         }
     }
