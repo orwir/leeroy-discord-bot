@@ -20,7 +20,7 @@ export default {
     execute: async (context, parent, limit, template) => {
         return context.guild.createChannel(`+ #${limit} /${template}/`, {
             type: 'voice',
-            userLimit: limit,
+            userLimit: 1,
             parent: parent
         })
     },
