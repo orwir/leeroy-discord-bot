@@ -50,7 +50,8 @@ export default {
                 .createChannel(`${CHANNEL_PREFIX} ${applyTemplates(member, template)}`, {
                     type: 'voice',
                     userLimit: limit,
-                    parent: channel.parent
+                    parent: channel.parent,
+                    permissionOverwrites: channel.permissionOverwrites
                 })
                 .then(channel => { member.setVoiceChannel(channel) })
         }

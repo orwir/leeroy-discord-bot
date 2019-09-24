@@ -69,7 +69,7 @@
     },
 
     "dynvoice": {
-        "description": "Create voice-channel factory to automatically balance existing voice channels.\nParameters:\n* [parent id] - ID of a channel group to add\n* [limit] - Limit of persons in the managed voice channel (0 - unlimited)\n* [template] - Name of the managed voice channel\n - <user> is replaced by username\n - <game> is replaced by game at the moment of creation",
+        "description": "Create voice-channel factory to automatically balance existing voice channels. Managed channels inherit factory permissions.\nParameters:\n* [parent id] - ID of a channel group to add\n* [limit] - Limit of persons in the managed voice channel (0 - unlimited)\n* [template] - Name of the managed voice channel\n - <user> is replaced by username\n - <game> is replaced by game in the status at the moment of creation",
         "examples": "dynvoice 12345 0 Chill\ndynvoice 12345 2 Private <user>\ndynvoice 12345 5 <game>",
         "factory_created": "Factory-Channel [{{- name}}] was created in the [{{- parent}}]",
         "root": "Root",
