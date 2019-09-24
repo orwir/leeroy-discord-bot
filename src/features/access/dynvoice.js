@@ -3,11 +3,12 @@ import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { register } from '../../events/voice'
 import { man } from '../settings/man'
+import { Presence } from 'discord.js'
 
 const FACTORY_PREFIX = '+'
-const CHANNEL_PREFIX = '#'
+const CHANNEL_PREFIX = '>'
 const FACTORY_TEMPLATE = /^\+ #(\d+) \/(.*?)\/$/
-const CHANNEL_TEMPLATE = /^# (.*)$/
+const CHANNEL_TEMPLATE = /^\> (.*)$/
 
 register('dynvoice', FACTORY_TEMPLATE)
 register('dynvoice', CHANNEL_TEMPLATE)
@@ -65,4 +66,9 @@ export default {
 function applyTemplates(member, template) {
     return template
         .replace('<user>', member.nickname)
+        .replace('<game>', member.presence.playing(member.t))
+}
+
+Presence.prototype.playing = function(t) {
+    return this.game ? this.game.name : t('dynvoice.chill')
 }
