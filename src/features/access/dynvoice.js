@@ -66,7 +66,7 @@ export default {
 
 function applyTemplates(member, template) {
     return template
-        .replace('<user>', member.nickname)
+        .replace('<user>', member.nickname ? member.nickname : member.user.username)
         .replace('<game>', member.presence.playing(member.t))
 }
 
