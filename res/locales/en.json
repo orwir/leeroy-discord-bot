@@ -68,6 +68,13 @@
         "role_is_higher_or_equals_than_bot": "Role is higher or equals than bot's"
     },
 
+    "dynvoice": {
+        "description": "Create voice-channel factory to automatically balance existing voice channels.\nParameters:\n* [parent id] - ID of a channel group to add\n* [limit] - Limit of persons in the managed voice channel (0 - unlimited)\n* [template] - Name of the managed voice channel",
+        "examples": "dynvoice 12345 0 Chill",
+        "factory_created": "Factory-Channel [{{- name}}] was created in the [{{- parent}}]",
+        "root": "Root"
+    },
+
     "permissions": {
         "bot_requires_core_permissions": "Bot doesn't have required core permissions in channel [#{{channel}}] on server [{{server}}].",
         "bot_requires_permissions": "Bot doesn't have required permissions.",

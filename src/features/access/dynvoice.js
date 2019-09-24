@@ -1,6 +1,8 @@
 import groups from '../../internal/groups'
+import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { register } from '../../events/voice'
+import { man } from '../settings/man'
 
 const FACTORY_TEMPLATE = /^\+ #(\d+) \/(.*?)\/$/
 const CHANNEL_TEMPLATE = /^# (.*)$/
@@ -18,11 +20,22 @@ export default {
     permissions: [P.MANAGE_CHANNELS, P.MOVE_MEMBERS],
 
     execute: async (context, parent, limit, template) => {
+        if (!parent || isNaN(limit) || !template) {
+            return man(context, 'dynvoice')
+        }
+        const group = context.guild.channels.get(parent)
         return context.guild.createChannel(`+ #${limit} /${template}/`, {
-            type: 'voice',
-            userLimit: 1,
-            parent: parent
-        })
+                type: 'voice',
+                userLimit: 1,
+                parent: group
+            })
+            .then(channel => context.channel.send('', {
+                embed: {
+                    title: context.t('global.success'),
+                    description: context.t('dynvoice.factory_created', { name: channel.name, parent: group ? group.name : context.t('dynvoice.root') }),
+                    color: colors.highlightSuccess
+                }
+            }))
     },
 
     onJoin: async (member, channel) => {
