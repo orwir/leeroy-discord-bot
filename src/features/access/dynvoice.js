@@ -4,6 +4,8 @@ import P from '../../internal/permissions'
 import { register } from '../../events/voice'
 import { man } from '../settings/man'
 
+const FACTORY_PREFIX = '+'
+const CHANNEL_PREFIX = '#'
 const FACTORY_TEMPLATE = /^\+ #(\d+) \/(.*?)\/$/
 const CHANNEL_TEMPLATE = /^# (.*)$/
 
@@ -24,7 +26,7 @@ export default {
             return man(context, 'dynvoice')
         }
         const group = context.guild.channels.get(parent)
-        return context.guild.createChannel(`+ #${limit} /${template}/`, {
+        return context.guild.createChannel(`${FACTORY_PREFIX} #${limit} /${template}/`, {
                 type: 'voice',
                 userLimit: 1,
                 parent: group
@@ -39,19 +41,18 @@ export default {
     },
 
     onJoin: async (member, channel) => {
-        const data = channel.name.match(FACTORY_TEMPLATE)
-        if (!data) {
-            return
-        }
-        let [ , limit, template ] = data
+        const factory = channel.name.match(FACTORY_TEMPLATE)
+        if (factory) {
+            let [ , limit, template ] = factory
 
-        return member.guild
-            .createChannel(`# ${template}`, {
-                type: 'voice',
-                userLimit: limit,
-                parent: channel.parent
-            })
-            .then(channel => { member.setVoiceChannel(channel) })
+            return member.guild
+                .createChannel(`${CHANNEL_PREFIX} ${applyTemplates(member, template)}`, {
+                    type: 'voice',
+                    userLimit: limit,
+                    parent: channel.parent
+                })
+                .then(channel => { member.setVoiceChannel(channel) })
+        }
     },
 
     onLeave: async (member, channel) => {
@@ -59,4 +60,9 @@ export default {
             return channel.delete()
         }
     }
+}
+
+function applyTemplates(member, template) {
+    return template
+        .replace('<user>', member.nickname)
 }
