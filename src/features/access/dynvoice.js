@@ -10,6 +10,9 @@ const CHANNEL_PREFIX = '>'
 const FACTORY_TEMPLATE = /^\+ #(\d+) \/(.*?)\/$/
 const CHANNEL_TEMPLATE = /^\> (.*)$/
 
+const COOLDOWN = 2 * 1000
+let USED = Date.now()
+
 register('dynvoice', FACTORY_TEMPLATE)
 register('dynvoice', CHANNEL_TEMPLATE)
 
@@ -43,7 +46,8 @@ export default {
 
     onJoin: async (member, channel) => {
         const factory = channel.name.match(FACTORY_TEMPLATE)
-        if (factory) {
+        if (factory && Date.now() - USED > COOLDOWN) {
+            USED = Date.now()
             let [ , limit, template ] = factory
 
             return member.guild
