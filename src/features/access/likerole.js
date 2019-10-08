@@ -15,10 +15,6 @@ export default {
     permissions: [P.MANAGE_ROLES],
 
     execute: async (context, snowflake, description) => {
-        if (snowflake === 'update') {
-            return updateRoleMessage(context, description)
-        }
-
         if (!snowflake) {
             return man(context, 'likerole')
         }
@@ -90,30 +86,4 @@ async function createRoleMessage(context, snowflake, description) {
 function hasHigherRole(member, expected) {
     return member.roles
         .find(role => role.comparePositionTo(expected) > 0)
-}
-
-async function updateRoleMessage(context, id) {
-    const message = await context.channel.fetchMessage(id)
-    return message.edit(message.content, {
-        embed: {
-            color: colors.highlightDefault,
-            fields: [
-                {
-                    name: 'feature',
-                    value: 'likerole',
-                    inline: true
-                },
-                {
-                    name: message.embeds[0].fields[1].name,
-                    value: message.embeds[0].fields[1].value,
-                    inline: true
-                },
-                {
-                    name: message.embeds[0].fields[2].name,
-                    value: message.embeds[0].fields[2].value,
-                    inline: true
-                }
-            ]
-        }
-    })
 }
