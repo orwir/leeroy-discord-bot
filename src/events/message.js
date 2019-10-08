@@ -1,7 +1,7 @@
 import { Server, PREFIX } from '../internal/config'
 import features from '../features'
 import { verifyBotPermissions, verifyUserPermissions } from '../internal/permissions'
-import { log, ERROR_NOT_COMMAND } from '../internal/utils'
+import { log, ERROR_NOT_COMMAND } from '../utils/response'
 
 export default async function (context) {
     if (context.author.bot || !context.content.trim()) {
@@ -85,6 +85,6 @@ async function execute(context, request) {
         .then(() => request)
 }
 
-async function clean(context, request) {
-    return context.delete()
+async function clean(message, request) {
+    return message.delete()
 }

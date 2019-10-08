@@ -1,7 +1,7 @@
 import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import { features as getFeaturesList } from '../index'
-import { error } from '../../internal/utils'
+import { error } from '../../utils/response'
 
 export async function man(context, name) {
     const features = getFeaturesList()

@@ -1,4 +1,4 @@
-import { error, ERROR_MISSING_PERMISSIONS } from './utils'
+import { error, ERROR_MISSING_PERMISSIONS } from '../utils/response'
 
 export const PERMISSIONS = {
     CREATE_INSTANT_INVITE: 'CREATE_INSTANT_INVITE',
