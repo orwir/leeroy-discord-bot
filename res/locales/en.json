@@ -58,9 +58,9 @@
         "yesno": "Yes - 👍 / No - 👎"
     },
 
-    "role": {
+    "likerole": {
         "description": "Allow to set/remove role by reacting on a \"role message\".",
-        "examples": "role @somerole With this role you will be awesome!",
+        "examples": "likerole @somerole With this role you will be awesome!",
         "howto": "Reaction",
         "role": "Role",
         "role_not_found": "Role \"{{- role}}\" not found!",
