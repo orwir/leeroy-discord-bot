@@ -2,7 +2,7 @@ import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { man } from '../settings/man'
-import { error } from '../../internal/utils'
+import { error } from '../../utils/response'
 
 export default {
     name: 'likerole',

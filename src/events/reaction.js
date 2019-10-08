@@ -1,6 +1,7 @@
 import features from '../features'
 import { Server } from '../internal/config'
-import { log, path } from '../internal/utils'
+import { log } from '../utils/response'
+import { path } from '../utils/object'
 
 export const REACTION_ADD = 'MESSAGE_REACTION_ADD'
 export const REACTION_REMOVED = 'MESSAGE_REACTION_REMOVE'
