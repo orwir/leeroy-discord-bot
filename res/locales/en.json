@@ -73,7 +73,8 @@
         "examples": "dynvoice 12345 0 Chill\ndynvoice 12345 2 Private <user>\ndynvoice 12345 5 <game>",
         "factory_created": "Factory-Channel [{{- name}}] was created in the [{{- parent}}]",
         "root": "Root",
-        "chill": "Chill"
+        "chill": "Chill",
+        "user_created_channel": "{{- username}} ({{- nickname}}) created the channel"
     },
 
     "permissions": {

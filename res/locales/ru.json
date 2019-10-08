@@ -73,7 +73,8 @@
         "examples": "dynvoice 12345 2 Раз на раз\ndynvoice 12345 5 Приват с <user>\ndynvoice 12345 5 <game>",
         "factory_created": "Канал-Создатель [{{name}}] был добавлен в [{{parent}}]",
         "root": "Корень",
-        "chill": "Безделье"
+        "chill": "Безделье",
+        "user_created_channel": "{{- username}} ({{- nickname}}) создал канал"
     },
 
     "permissions": {
