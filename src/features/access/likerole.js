@@ -5,37 +5,41 @@ import { man } from '../settings/man'
 import { error } from '../../internal/utils'
 
 export default {
-    name: 'role',
+    name: 'likerole',
     group: groups.access,
-    description: 'role.description',
-    usage: 'role [@role] [description]',
-    examples: 'role.examples',
+    description: 'likerole.description',
+    usage: 'likerole [@role] [description]',
+    examples: 'likerole.examples',
     arguments: 2,
     emojis: ['👌'],
     permissions: [P.MANAGE_ROLES],
 
     execute: async (context, snowflake, description) => {
-        const role = context.guild.roles.get(snowflake.slice(3, -1))
+        if (snowflake === 'update') {
+            return updateRoleMessage(context, description)
+        }
 
         if (!snowflake) {
-            return man(context, 'role')
+            return man(context, 'likerole')
+        }
+        const role = context.guild.roles.get(snowflake.slice(3, -1))
 
-        } else if (!role) {
+        if (!role) {
             return error({
                 context: context,
-                description: context.t('role.role_not_found', { role: snowflake })
+                description: context.t('likerole.role_not_found', { role: snowflake })
             })
 
         } else if (!hasHigherRole(context.member, role)) {
             return error({
                 context: context,
-                description: context.t('role.role_is_higher_or_equals_than_member')
+                description: context.t('likerole.role_is_higher_or_equals_than_member')
             })
         
         } else if (!hasHigherRole(context.guild.member(context.client.user), role)) {
             return error({
                 context: context,
-                description: context.t('role.role_is_higher_or_equals_than_bot')
+                description: context.t('likerole.role_is_higher_or_equals_than_bot')
             })
 
         } else {
@@ -64,16 +68,16 @@ async function createRoleMessage(context, snowflake, description) {
                 fields: [
                     {
                         name: 'feature',
-                        value: 'role',
+                        value: 'likerole',
                         inline: true
                     },
                     {
-                        name: context.t('role.role'),
+                        name: context.t('likerole.role'),
                         value: '' + snowflake,
                         inline: true
                     },
                     {
-                        name: context.t('role.howto'),
+                        name: context.t('likerole.howto'),
                         value: '👌',
                         inline: true
                     }
@@ -86,4 +90,30 @@ async function createRoleMessage(context, snowflake, description) {
 function hasHigherRole(member, expected) {
     return member.roles
         .find(role => role.comparePositionTo(expected) > 0)
+}
+
+async function updateRoleMessage(context, id) {
+    const message = await context.channel.fetchMessage(id)
+    return message.edit(message.content, {
+        embed: {
+            color: colors.highlightDefault,
+            fields: [
+                {
+                    name: 'feature',
+                    value: 'likerole',
+                    inline: true
+                },
+                {
+                    name: message.embeds[0].fields[1].name,
+                    value: message.embeds[0].fields[1].value,
+                    inline: true
+                },
+                {
+                    name: message.embeds[0].fields[2].name,
+                    value: message.embeds[0].fields[2].value,
+                    inline: true
+                }
+            ]
+        }
+    })
 }
