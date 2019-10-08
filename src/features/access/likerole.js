@@ -3,6 +3,7 @@ import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { man } from '../settings/man'
 import { error } from '../../utils/response'
+import reference from '../../utils/reference'
 
 export default {
     name: 'likerole',
@@ -18,7 +19,7 @@ export default {
         if (!snowflake) {
             return man(context, 'likerole')
         }
-        const role = context.guild.roles.get(snowflake.slice(3, -1))
+        const role = context.guild.roles.get(reference(snowflake))
 
         if (!role) {
             return error({
@@ -45,7 +46,7 @@ export default {
 
     react: async (context, emoji, author, reacted) => {
        const snowflake = context.embeds[0].fields[1].value
-       const role = context.guild.roles.get(snowflake.slice(3, -1))
+       const role = context.guild.roles.get(reference(snowflake))
        if (role && author) {
            if (reacted) {
                return author.addRole(role)
