@@ -3,7 +3,7 @@ import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { register } from '../../events/voice'
 import { man } from '../settings/man'
-import { Presence } from 'discord.js'
+import { GuildMember } from 'discord.js'
 
 const FACTORY_PREFIX = '+'
 const CHANNEL_PREFIX = '>'
@@ -55,7 +55,8 @@ export default {
                     type: 'voice',
                     userLimit: limit,
                     parent: channel.parent,
-                    permissionOverwrites: channel.permissionOverwrites
+                    permissionOverwrites: channel.permissionOverwrites,
+                    reason: member.t('dynvoice.user_created_channel', { username: member.user.tag, nickname: member.name()})
                 })
                 .then(channel => { member.setVoiceChannel(channel) })
         }
@@ -70,10 +71,14 @@ export default {
 
 function applyTemplates(member, template) {
     return template
-        .replace('<user>', member.nickname ? member.nickname : member.user.username)
-        .replace('<game>', member.presence.playing(member.t))
+        .replace('<user>', member.name())
+        .replace('<game>', member.playing(member.t))
 }
 
-Presence.prototype.playing = function(t) {
-    return this.game ? this.game.name : t('dynvoice.chill')
+GuildMember.prototype.name = function() {
+    return this.nickname ? this.nickname : this.user.username
+}
+
+GuildMember.prototype.playing = function(t) {
+    return this.presence.game ? this.presence.game.name : t('dynvoice.chill')
 }
