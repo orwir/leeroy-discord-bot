@@ -1,4 +1,4 @@
-const P_SNOWFLAKE = /<(@[!&]?|#|:\w+:|a:\w+:)(\d)+>/
+const P_SNOWFLAKE = /<(@[!&]?|#|:\w+:|a:\w+:)(\d+)>/
 
 export default function (snowflake) {
     if (!snowflake) {
