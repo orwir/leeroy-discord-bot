@@ -7,7 +7,7 @@ import reference from '../../utils/reference'
 
 export default {
     name: 'likerole',
-    group: groups.access,
+    group: groups.management,
     description: 'likerole.description',
     usage: 'likerole [@role] [description]',
     examples: 'likerole.examples',

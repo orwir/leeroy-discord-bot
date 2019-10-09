@@ -18,7 +18,7 @@ register('dynvoice', CHANNEL_TEMPLATE)
 
 export default {
     name: 'dynvoice',
-    group: groups.access,
+    group: groups.management,
     description: 'dynvoice.description',
     usage: 'dynvoice [parent id] [limit] [template]',
     examples: 'dynvoice.examples',

@@ -4,8 +4,8 @@ export default {
         icon: ':ok_hand:',
         order: 0
     },
-    access: {
-        name: 'group.access',
+    management: {
+        name: 'group.management',
         icon: ':busts_in_silhouette:',
         order: 1
     },
