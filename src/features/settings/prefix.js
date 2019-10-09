@@ -1,4 +1,3 @@
-import colors from '../../internal/colors'
 import groups from '../../internal/groups'
 import P from '../../internal/permissions'
 import { man } from './man'

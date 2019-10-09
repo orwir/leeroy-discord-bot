@@ -2,6 +2,7 @@ import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import { Server, VERSION } from '../../internal/config'
 import { REQUIRED as REQUIRED_PERMISSIONS } from '../../internal/permissions'
+import { message } from '../../utils/response'
 
 export default {
     name: 'help',
@@ -15,32 +16,31 @@ export default {
     execute: async (context) => {
         const config = await Server.config(context)
 
-        return context.channel.send('', {
-            embed: {
-                color: colors.highlightDefault,
-                fields: [
-                    {
-                        name: context.t('help.version'),
-                        value: VERSION
-                    },
-                    {
-                        name: context.t('help.commands_list'),
-                        value: 'man'
-                    },
-                    {
-                        name: context.t('help.language'),
-                        value: config.language
-                    },
-                    {
-                        name: context.t('help.prefix'),
-                        value: config.prefix
-                    },
-                    {
-                        name: context.t('help.core_permissions'),
-                        value: REQUIRED_PERMISSIONS.map(p => context.t(`permissions.${p}`)).join('\n')
-                    }
-                ]
-            }
+        return message({
+            channel: context.channel,
+            color: colors.highlightDefault,
+            fields: [
+                {
+                    name: context.t('help.version'),
+                    value: VERSION
+                },
+                {
+                    name: context.t('help.commands_list'),
+                    value: 'man'
+                },
+                {
+                    name: context.t('help.language'),
+                    value: config.language
+                },
+                {
+                    name: context.t('help.prefix'),
+                    value: config.prefix
+                },
+                {
+                    name: context.t('help.core_permissions'),
+                    value: REQUIRED_PERMISSIONS.map(p => context.t(`permissions.${p}`)).join('\n')
+                }
+            ]
         })
     }
 }
