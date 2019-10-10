@@ -2,7 +2,8 @@ import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { man } from '../settings/man'
-import { error } from '../../utils/response'
+import { error, message } from '../../utils/response'
+import { verifyRolePosition } from '../../utils/role'
 import reference from '../../utils/reference'
 
 export default {
@@ -20,71 +21,51 @@ export default {
             return man(context, 'likerole')
         }
         const role = context.guild.roles.get(reference(snowflake))
-
+        
         if (!role) {
             return error({
                 context: context,
                 description: context.t('likerole.role_not_found', { role: snowflake })
             })
-
-        } else if (!hasHigherRole(context.member, role)) {
-            return error({
-                context: context,
-                description: context.t('likerole.role_is_higher_or_equals_than_member')
-            })
-        
-        } else if (!hasHigherRole(context.guild.member(context.client.user), role)) {
-            return error({
-                context: context,
-                description: context.t('likerole.role_is_higher_or_equals_than_bot')
-            })
-
-        } else {
-            return createRoleMessage(context, snowflake, description)
         }
+
+        if (!verifyRolePosition(context, role)) {
+            return error({
+                context: context,
+                description: context.t('likerole.role_should_be_lower', { role: snowflake })
+            })
+        }
+
+        return message({
+            channel: context.channel,
+            text: description,
+            color: colors.highlightDefault,
+            fields: [
+                {
+                    name: 'feature',
+                    value: 'likerole',
+                    inline: true
+                },
+                {
+                    name: context.t('likerole.role'),
+                    value: '' + snowflake,
+                    inline: true
+                },
+                {
+                    name: context.t('likerole.howto'),
+                    value: '👌',
+                    inline: true
+                }
+            ]
+        })
+        .then(message => message.react('👌'))
     },
 
     react: async (context, emoji, author, reacted) => {
        const snowflake = context.embeds[0].fields[1].value
        const role = context.guild.roles.get(reference(snowflake))
        if (role && author) {
-           if (reacted) {
-               return author.addRole(role)
-           } else {
-               return author.removeRole(role)
-           }
+           return author[reacted ? 'addRole' : 'removeRole'](role)
        }
     }
-}
-
-async function createRoleMessage(context, snowflake, description) {
-    return context.channel
-        .send(description, {
-            embed: {
-                color: colors.highlightDefault,
-                fields: [
-                    {
-                        name: 'feature',
-                        value: 'likerole',
-                        inline: true
-                    },
-                    {
-                        name: context.t('likerole.role'),
-                        value: '' + snowflake,
-                        inline: true
-                    },
-                    {
-                        name: context.t('likerole.howto'),
-                        value: '👌',
-                        inline: true
-                    }
-                ]
-            }
-        })
-        .then(message => message.react('👌'))
-}
-
-function hasHigherRole(member, expected) {
-    return member.roles
-        .find(role => role.comparePositionTo(expected) > 0)
 }

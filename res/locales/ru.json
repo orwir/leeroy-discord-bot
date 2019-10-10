@@ -64,8 +64,7 @@
         "howto": "Реакция",
         "role": "Роль",
         "role_not_found": "Роль \"{{- role}}\" не найдена!",
-        "role_is_higher_or_equals_than_member": "Роль равна или выше вашей.",
-        "role_is_higher_or_equals_than_bot": "Роль равна или выше, чем у бота."
+        "role_should_be_lower": "Ваша (и бота) максимальная роль должна быть выше, чем \"{{- role}}\"."
     },
 
     "dynvoice": {
