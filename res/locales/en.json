@@ -86,6 +86,12 @@
         "user_created_channel": "{{- username}} ({{- nickname}}) created the channel"
     },
 
+    "purge": {
+        "description": "Delete last messages from channel. Can be filtered by user.",
+        "examples": "purge 10\npurge 5 @user",
+        "limit_exceeded_or_not_number": "Exceed limit of handling messages ({{max}}) or not a number."
+    },
+
     "permissions": {
         "bot_requires_core_permissions": "Bot doesn't have required core permissions in channel [#{{channel}}] on server [{{server}}].",
         "bot_requires_permissions": "Bot doesn't have required permissions.",
