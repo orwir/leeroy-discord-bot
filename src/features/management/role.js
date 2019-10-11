@@ -1,5 +1,4 @@
 import groups from '../../internal/groups'
-import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import reference from '../../utils/reference'
 import { man } from '../settings/man'
@@ -13,7 +12,6 @@ export default {
     usage: 'role [add/remove] [@role] [@user/voice]',
     examples: 'role.examples',
     arguments: 3,
-    emojis: ['👌'],
     permissions: [P.MANAGE_ROLES],
 
     execute: async (context, action, roleflake, userflake) => {
@@ -45,6 +43,7 @@ export default {
                     description: context.t('role.you_are_not_in_voice_channel')
                 })
             }
+            members.push(...context.member.voiceChannel.members.array())
 
         } else {
             const member = context.guild.members.get(reference(userflake))

@@ -60,8 +60,11 @@
 
     "role": {
         "description": "Add/remove role to a person or everyone in the same voice channel",
+        "examples": "role add @Role @User#0000\nrole remove @Role voice",
         "role_not_found": "Role \"{{- role}}\" not found!",
         "role_should_be_lower": "Your (and bot's) highest role should be higher than \"{{- role}}\"",
+        "you_are_not_in_voice_channel": "You are not in a voice channel.",
+        "member_not_found": "Member \"{{- member}}\" not found.",
         "add": "added to",
         "remove": "removed from",
         "role_is_updated": "Role {{- role}} is {{action}}:\n\n{{- members}}"
