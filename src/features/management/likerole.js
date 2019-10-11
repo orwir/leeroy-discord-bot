@@ -25,14 +25,14 @@ export default {
         if (!role) {
             return error({
                 context: context,
-                description: context.t('likerole.role_not_found', { role: snowflake })
+                description: context.t('role.role_not_found', { role: snowflake })
             })
         }
 
         if (!verifyRolePosition(context, role)) {
             return error({
                 context: context,
-                description: context.t('likerole.role_should_be_lower', { role: snowflake })
+                description: context.t('role.role_should_be_lower', { role: snowflake })
             })
         }
 

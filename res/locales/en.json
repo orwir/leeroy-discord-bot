@@ -58,13 +58,20 @@
         "yesno": "Yes - 👍 / No - 👎"
     },
 
+    "role": {
+        "description": "Add/remove role to a person or everyone in the same voice channel",
+        "role_not_found": "Role \"{{- role}}\" not found!",
+        "role_should_be_lower": "Your (and bot's) highest role should be higher than \"{{- role}}\"",
+        "add": "added to",
+        "remove": "removed from",
+        "role_is_updated": "Role {{- role}} is {{action}}:\n\n{{- members}}"
+    },
+
     "likerole": {
         "description": "Allow to set/remove role by reacting on a \"role message\".",
         "examples": "likerole @somerole With this role you will be awesome!",
         "howto": "Reaction",
-        "role": "Role",
-        "role_not_found": "Role \"{{- role}}\" not found!",
-        "role_should_be_lower": "Your (and bot's) highest role should be higher than \"{{- role}}\""
+        "role": "Role"
     },
 
     "dynvoice": {
