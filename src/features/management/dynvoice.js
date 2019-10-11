@@ -1,8 +1,8 @@
 import groups from '../../internal/groups'
-import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { register } from '../../events/voice'
 import { man } from '../settings/man'
+import { success } from '../../utils/response'
 import { GuildMember } from 'discord.js'
 
 const FACTORY_PREFIX = '+'
@@ -18,7 +18,7 @@ register('dynvoice', CHANNEL_TEMPLATE)
 
 export default {
     name: 'dynvoice',
-    group: groups.access,
+    group: groups.management,
     description: 'dynvoice.description',
     usage: 'dynvoice [parent id] [limit] [template]',
     examples: 'dynvoice.examples',
@@ -30,17 +30,15 @@ export default {
             return man(context, 'dynvoice')
         }
         const group = context.guild.channels.get(parent)
+        const groupName = group ? group.name : context.t('dynvoice.root')
         return context.guild.createChannel(`${FACTORY_PREFIX} #${limit} /${template}/`, {
                 type: 'voice',
                 userLimit: 1,
                 parent: group
             })
-            .then(channel => context.channel.send('', {
-                embed: {
-                    title: context.t('global.success'),
-                    description: context.t('dynvoice.factory_created', { name: channel.name, parent: group ? group.name : context.t('dynvoice.root') }),
-                    color: colors.highlightSuccess
-                }
+            .then(channel => success({
+                context: context,
+                description: context.t('dynvoice.factory_created', { name: channel.name, parent: groupName })
             }))
     },
 

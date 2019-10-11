@@ -1,12 +1,12 @@
 import settings from './settings'
 import fun from './fun'
-import access from './access'
+import management from './management'
 
 export function features() {
     return [
             ...settings,
             ...fun,
-            ...access
+            ...management
         ]
         .reduce((features, feature) => {
             features[feature.name] = feature

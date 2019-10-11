@@ -3,6 +3,7 @@ import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { Server, LANGUAGES } from '../../internal/config'
+import { success, error, message } from '../../utils/response'
 
 const languages = {}
 
@@ -18,24 +19,33 @@ export default {
         const config = await Server.config(context)
 
         if (!language) {
-            return showSupportedLanguages(context)
+            return message({
+                channel: context.channel,
+                title: context.t('language.supported_languages'),
+                description: Object.keys(LANGUAGES).join(', '),
+                color: colors.highlightDefault
+            })
 
         } else if (!LANGUAGES[language]) {
-            return showLanguageNotSupported(context, language)
+            return error({
+                context: context,
+                description: context.t('language.language_not_supported', { language: language })
+            })
 
         } else if (language === config.language) {
-            return showLanguageTheSame(context)
+            return error({
+                context: context,
+                description: context.t('language.language_the_same')
+            })
 
         } else {
             config.language = language
             await Server.save(context, config)
             context.t = await obtain(config.language)
-            return context.channel.send('', {
-                embed: {
-                    title: context.t('global.success'),
-                    description: context.t('language.language_changed'),
-                    color: colors.highlightSuccess
-                }
+            
+            return success({
+                context: context,
+                description: context.t('language.language_changed')
             })
         }
     }
@@ -53,38 +63,6 @@ async function initLocalization() {
     })
     .then(t => {
         Object.keys(LANGUAGES)
-            .forEach(language => {
-                languages[language] = i18n.getFixedT(language)
-            })
-    })
-}
-
-function showSupportedLanguages(context) {
-    return context.channel.send('', {
-        embed: {
-            title: context.t('language.supported_languages'),
-            description: Object.keys(LANGUAGES).join(', '),
-            color: colors.highlightDefault
-        }
-    })
-}
-
-function showLanguageNotSupported(context, language) {
-    return context.channel.send('', {
-        embed: {
-            title: context.t('global.error'),
-            description: context.t('language.language_not_supported', { language: language }),
-            color: colors.highlightError
-        }
-    })
-}
-
-function showLanguageTheSame(context) {
-    return context.channel.send('', {
-        embed: {
-            title: context.t('global.error'),
-            description: context.t('language.language_the_same'),
-            color: colors.highlightError
-        }
+            .forEach(language => { languages[language] = i18n.getFixedT(language) })
     })
 }

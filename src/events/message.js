@@ -1,7 +1,7 @@
 import { Server, PREFIX } from '../internal/config'
 import features from '../features'
 import { verifyBotPermissions, verifyUserPermissions } from '../internal/permissions'
-import { log, ERROR_NOT_COMMAND } from '../internal/utils'
+import { log, ERROR_NOT_COMMAND } from '../utils/response'
 
 export default async function (context) {
     if (context.author.bot || !context.content.trim()) {
@@ -16,11 +16,13 @@ export default async function (context) {
         .then(request => parseFeature(context, request))
         .then(request => parseArguments(context, request))
         .then(request => updateContext(context, request))
+        .then(request => progress(context, request, true))
         .then(request => verifyBotPermissions(context, request))
         .then(request => verifyUserPermissions(context, request))
         .then(request => execute(context, request))
         .then(request => clean(context, request))
         .catch(error => log(context, error))
+        .finally(() => progress(context, null, false))
 }
 
 async function parsePrefix(context, request) {
@@ -85,6 +87,15 @@ async function execute(context, request) {
         .then(() => request)
 }
 
-async function clean(context, request) {
-    return context.delete()
+async function clean(message, request) {
+    return message.delete()
+}
+
+async function progress(context, request, show) {
+    if (show) {
+        context.channel.startTyping()
+    } else {
+        context.channel.stopTyping(true)
+    }
+    return request
 }

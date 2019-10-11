@@ -7,7 +7,7 @@
 
     "group": {
         "fun": "Fun",
-        "access": "Access",
+        "management": "Management",
         "settings": "Settings"
     },
 
@@ -58,14 +58,23 @@
         "yesno": "Yes - 👍 / No - 👎"
     },
 
+    "role": {
+        "description": "Add/remove role to a person or everyone in the same voice channel",
+        "examples": "role add @Role @User#0000\nrole remove @Role voice",
+        "role_not_found": "Role \"{{- role}}\" not found!",
+        "role_should_be_lower": "Your (and bot's) highest role should be higher than \"{{- role}}\"",
+        "you_are_not_in_voice_channel": "You are not in a voice channel.",
+        "member_not_found": "Member \"{{- member}}\" not found.",
+        "add": "added to",
+        "remove": "removed from",
+        "role_is_updated": "Role {{- role}} is {{action}}:\n\n{{- members}}"
+    },
+
     "likerole": {
         "description": "Allow to set/remove role by reacting on a \"role message\".",
         "examples": "likerole @somerole With this role you will be awesome!",
         "howto": "Reaction",
-        "role": "Role",
-        "role_not_found": "Role \"{{- role}}\" not found!",
-        "role_is_higher_or_equals_than_member": "Role is higher or equals than yours",
-        "role_is_higher_or_equals_than_bot": "Role is higher or equals than bot's"
+        "role": "Role"
     },
 
     "dynvoice": {
@@ -75,6 +84,12 @@
         "root": "Root",
         "chill": "Chill",
         "user_created_channel": "{{- username}} ({{- nickname}}) created the channel"
+    },
+
+    "purge": {
+        "description": "Delete last messages from channel. Can be filtered by user.",
+        "examples": "purge 10\npurge 5 @user",
+        "limit_exceeded_or_not_number": "Exceed limit of handling messages ({{max}}) or not a number."
     },
 
     "permissions": {

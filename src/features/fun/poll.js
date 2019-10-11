@@ -2,6 +2,7 @@ import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import P from '../../internal/permissions'
 import { man } from '../settings/man'
+import { message } from '../../utils/response'
 
 export default {
     name: 'poll',
@@ -18,7 +19,9 @@ export default {
             return man(context, 'poll')
 
         } else {
-            const embed = {
+            return message({
+                channel: context.channel,
+                text: question,
                 color: colors.highlightDefault,
                 fields: [
                     {
@@ -32,12 +35,9 @@ export default {
                         inline: true
                     }
                 ]
-            }
-
-            return context.channel
-                .send(question, { embed: embed })
-                .then(message => message.react('👍').then(() => message))
-                .then(message => message.react('👎'))
+            })
+            .then(message => message.react('👍').then(() => message))
+            .then(message => message.react('👎'))
         }
     },
 

@@ -1,5 +1,5 @@
 import features from '../features'
-import { log } from '../internal/utils'
+import { log } from '../utils/response'
 import { Server } from '../internal/config'
 
 const LISTENERS = []
