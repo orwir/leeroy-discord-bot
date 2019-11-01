@@ -61,7 +61,6 @@ export async function verifyBotPermissions(context, request) {
         await sendMissingPermissions(context, context.channel, context.t('permissions.bot_requires_permissions'), feature)
         throw ERROR_MISSING_PERMISSIONS
     }
-    return request
 }
 
 export async function verifyUserPermissions(context, request) {
@@ -75,7 +74,6 @@ export async function verifyUserPermissions(context, request) {
         )
         throw ERROR_MISSING_PERMISSIONS
     }
-    return request
 }
 
 function missing(user, guild, channel, permissions) {

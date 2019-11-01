@@ -7,22 +7,26 @@ export default async function (context) {
     if (context.author.bot || !context.content.trim()) {
         return
     }
-    await Promise.resolve({
+    try {
+        const request = {
             prefix: undefined,
             feature: undefined,
             args: []
-        })
-        .then(request => parsePrefix(context, request))
-        .then(request => parseFeature(context, request))
-        .then(request => parseArguments(context, request))
-        .then(request => updateContext(context, request))
-        .then(request => progress(context, request, true))
-        .then(request => verifyBotPermissions(context, request))
-        .then(request => verifyUserPermissions(context, request))
-        .then(request => execute(context, request))
-        .then(request => clean(context, request))
-        .catch(error => log(context, error))
-        .finally(() => progress(context, null, false))
+        }
+        await parsePrefix(context, request)
+        await parseFeature(context, request)
+        await parseArguments(context, request)
+        progress(context, true)
+        await updateContext(context)
+        await verifyBotPermissions(context, request)
+        await verifyUserPermissions(context, request)
+        await execute(context, request)
+        await clean(context)
+    } catch (error) {
+        log(context, error)
+    } finally {
+        progress(context, false)
+    }
 }
 
 async function parsePrefix(context, request) {
@@ -73,29 +77,24 @@ async function parseArguments(context, request) {
             request.args.push(arg)
         }
     }
-    return request
 }
 
-async function updateContext(context, request) {
+async function updateContext(context) {
     context.t = await Server.language(context)
-    return request
 }
 
 async function execute(context, request) {
-    return request.feature
-        .execute(context, ...request.args)
-        .then(() => request)
+    return request.feature.execute(context, ...request.args)
 }
 
-async function clean(message, request) {
-    return message.delete()
+async function clean(message) {
+    return message.delete().catch({})
 }
 
-async function progress(context, request, show) {
+function progress(context, show) {
     if (show) {
         context.channel.startTyping()
     } else {
         context.channel.stopTyping(true)
     }
-    return request
 }
