@@ -33,13 +33,12 @@ async function parsePrefix(context, request) {
     const config = await Server.config(context)
     if (context.content.startsWith(config.prefix)) {
         request.prefix = config.prefix
-        return request
     } else if (context.content.startsWith(PREFIX)) {
         request.prefix = PREFIX
         request.stablePrefix = true
-        return request
+    } else {
+        throw ERROR_NOT_COMMAND
     }
-    throw ERROR_NOT_COMMAND
 }
 
 async function parseFeature(context, request) {
@@ -50,7 +49,7 @@ async function parseFeature(context, request) {
         const name = raw.slice(start, end)
         request.feature = features[name]
         if (request.feature && !(request.stablePrefix && !request.feature.stable)) {
-            return request
+            return
         }
     }
     throw ERROR_NOT_COMMAND
