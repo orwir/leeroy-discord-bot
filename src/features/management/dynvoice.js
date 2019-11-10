@@ -23,7 +23,7 @@ export default {
     usage: 'dynvoice [parent id] [limit] [template]',
     examples: 'dynvoice.examples',
     arguments: 3,
-    permissions: [P.MANAGE_CHANNELS, P.MOVE_MEMBERS],
+    permissions: [P.MANAGE_CHANNELS, P.MOVE_MEMBERS, P.MANAGE_ROLES],
 
     execute: async (context, parent, limit, template) => {
         if (!parent || isNaN(limit) || !template) {
@@ -56,7 +56,14 @@ export default {
                     permissionOverwrites: channel.permissionOverwrites,
                     reason: member.t('dynvoice.user_created_channel', { username: member.user.tag, nickname: member.name()})
                 })
-                .then(channel => { member.setVoiceChannel(channel) })
+                .then(channel => {
+                    const permission = {}
+                    permission[P.MANAGE_CHANNELS] = true
+                    permission[P.MUTE_MEMBERS] = true
+                    permission[P.MANAGE_ROLES] = true
+                    return channel.overwritePermissions(member.user, permission)
+                })
+                .then(channel => member.setVoiceChannel(channel))
         }
     },
 
