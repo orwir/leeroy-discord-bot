@@ -78,5 +78,6 @@ GuildMember.prototype.name = function() {
 }
 
 GuildMember.prototype.playing = function(t) {
-    return this.presence.game ? this.presence.game.name : t('dynvoice.chill')
+    const playing = this.presence.activities.find(e => e.type === 0)
+    return playing ? playing.name : t('dynvoice.chill')
 }
