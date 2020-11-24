@@ -1,9 +1,9 @@
+import { GuildMember } from 'discord.js'
 import groups from '../../internal/groups'
 import P from '../../internal/permissions'
-import { register } from '../../events/voice'
-import { man } from '../settings/man'
+import { registerVoiceChannelHandler } from '../../internal/register'
 import { success } from '../../utils/response'
-import { GuildMember } from 'discord.js'
+import { man } from '../settings/man'
 
 const FACTORY_PREFIX = '+'
 const CHANNEL_PREFIX = '>'
@@ -13,8 +13,8 @@ const CHANNEL_TEMPLATE = /^\> (.*)$/
 const COOLDOWN = 2 * 1000
 let USED = Date.now()
 
-register('dynvoice', FACTORY_TEMPLATE)
-register('dynvoice', CHANNEL_TEMPLATE)
+registerVoiceChannelHandler('dynvoice', FACTORY_TEMPLATE)
+registerVoiceChannelHandler('dynvoice', CHANNEL_TEMPLATE)
 
 export default {
     name: 'dynvoice',

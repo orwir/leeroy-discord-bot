@@ -1,7 +1,7 @@
 import features from '../features'
 import { Server } from '../internal/config'
-import { log } from '../utils/response'
 import { path } from '../utils/object'
+import { log } from '../utils/response'
 
 export const REACTION_ADD = 'MESSAGE_REACTION_ADD'
 export const REACTION_REMOVED = 'MESSAGE_REACTION_REMOVE'
@@ -11,6 +11,9 @@ const FEATURE_PATH = 'embeds[0].fields[0]'
 
 export default async function (bot, data, reacted) {
     const user = bot.users.get(data.user_id)
+    if (!user) {
+        return
+    }
     const emoji = data.emoji.name
     const channel = bot.channels.get(data.channel_id)
     const context = await channel.fetchMessage(data.message_id).catch(error => null)
