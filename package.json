@@ -16,10 +16,11 @@
     "dependencies": {
         "discord.js": "^11.6.4",
         "firebase-admin": "^9.4.1",
-        "i18next": "^17.3.1"
+        "i18next": "^17.3.1",
+        "node-forge": ">=0.10.0"
     },
     "devDependencies": {
-        "@babel/core": "^7.12.7",
+        "@babel/core": "^7.12.8",
         "@babel/node": "^7.12.6",
         "@babel/preset-env": "^7.12.7",
         "chai": "^4.2.0",
