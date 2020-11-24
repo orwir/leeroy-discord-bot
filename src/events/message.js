@@ -1,7 +1,7 @@
-import { Server, PREFIX } from '../internal/config'
 import features from '../features'
+import { PREFIX, Server } from '../internal/config'
 import { verifyBotPermissions, verifyUserPermissions } from '../internal/permissions'
-import { log, ERROR_NOT_COMMAND } from '../utils/response'
+import { ERROR_NOT_COMMAND, log } from '../utils/response'
 
 export default async function (context) {
     if (context.author.bot || !context.content.trim()) {
@@ -17,7 +17,6 @@ export default async function (context) {
         await parseFeature(context, request)
         await parseArguments(context, request)
         progress(context, true)
-        await updateContext(context)
         await verifyBotPermissions(context, request)
         await verifyUserPermissions(context, request)
         await execute(context, request)
@@ -76,10 +75,6 @@ async function parseArguments(context, request) {
             request.args.push(arg)
         }
     }
-}
-
-async function updateContext(context) {
-    context.t = await Server.language(context)
 }
 
 async function execute(context, request) {

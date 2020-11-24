@@ -92,6 +92,17 @@
         "limit_exceeded_or_not_number": "Exceed limit of handling messages ({{max}}) or not a number."
     },
 
+    "sentry": {
+        "description": "Observes current channel and sets emoji for every message if they are written by a single person in a sequence. If a person blocked the bot - deletes last two messages and rewrite them into one.",
+        "examples": "sentry on\nsentry list",
+        "on": "This channel now under guard!",
+        "already_on": "This channel already under guard!",
+        "off": "No law in this wild channel anymore!",
+        "list_title": "Observable channels",
+        "no_channels": "No observable channels yet.",
+        "user_said": "{{- username}} said:"
+    },
+
     "permissions": {
         "bot_requires_core_permissions": "Bot doesn't have required core permissions in channel [#{{channel}}] on server [{{server}}].",
         "bot_requires_permissions": "Bot doesn't have required permissions.",

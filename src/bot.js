@@ -1,8 +1,10 @@
-import { TOKEN, PREFIX } from './internal/config'
 import discord from 'discord.js'
-import message from './events/message'
+import command from './events/message'
+import reaction, { REACTION_ADD, REACTION_TYPES } from './events/reaction'
 import voice from './events/voice'
-import reaction, { REACTION_TYPES, REACTION_ADD } from './events/reaction'
+import features from './features'
+import { PREFIX, Server, TOKEN } from './internal/config'
+import { textChannelHandlers } from './internal/register'
 
 const bot = new discord.Client()
 
@@ -16,7 +18,13 @@ bot.on('ready', () => {
     console.log(`${bot.user.tag} has been started.`)
 })
 
-bot.on('message', message)
+bot.on('message', async (msg) => {
+    msg.t = await Server.language(msg)
+    command(msg)
+    for (const handler of textChannelHandlers()) {
+        features[handler].onMessage(msg)
+    }
+})
 
 bot.on('voiceStateUpdate', (prevMemberState, currMemberState) => {
     voice(prevMemberState, currMemberState)

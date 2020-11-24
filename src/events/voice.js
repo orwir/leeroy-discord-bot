@@ -1,12 +1,7 @@
 import features from '../features'
-import { log } from '../utils/response'
 import { Server } from '../internal/config'
-
-const LISTENERS = []
-
-export function register(feature, template) {
-    LISTENERS.push({ feature: feature, template: template })
-}
+import { voiceChannelHandlers } from '../internal/register'
+import { log } from '../utils/response'
 
 export default async function(prevMemberState, currMemberState) {
     await Server
@@ -30,7 +25,8 @@ async function onUserChangedChannel(member, method) {
     if (!member.voiceChannel) {
         return
     }
-    const listener = LISTENERS.find(({ template }) => template.test(member.voiceChannel.name))
+    const handlers = voiceChannelHandlers();
+    const listener = handlers.find(({ template }) => template.test(member.voiceChannel.name))
     if (!listener) {
         return
     }
