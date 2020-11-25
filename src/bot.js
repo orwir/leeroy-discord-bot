@@ -1,39 +1,19 @@
 import discord from 'discord.js'
-import command from './events/message'
-import reaction, { REACTION_ADD, REACTION_TYPES } from './events/reaction'
+import message from './events/message'
+import reaction from './events/reaction'
+import ready from './events/ready'
 import voice from './events/voice'
-import features from './features'
-import { PREFIX, Server, TOKEN } from './internal/config'
-import { textChannelHandlers } from './internal/register'
+import { TOKEN } from './internal/config'
+import event from './internal/event'
+
+console.log('Initializing bot...')
 
 const bot = new discord.Client()
 
-bot.on('ready', () => {
-    bot.user.setPresence({
-        game: {
-            name: `${PREFIX}help`,
-            type: 'PLAYING'
-        }
-    })
-    console.log(`${bot.user.tag} has been started.`)
-})
-
-bot.on('message', async (msg) => {
-    msg.t = await Server.language(msg)
-    command(msg)
-    for (const handler of textChannelHandlers()) {
-        features[handler].onMessage(msg)
-    }
-})
-
-bot.on('voiceStateUpdate', (prevMemberState, currMemberState) => {
-    voice(prevMemberState, currMemberState)
-})
-
-bot.on('raw', event => {
-    if (REACTION_TYPES.includes(event.t)) {
-        reaction(bot, event.d, REACTION_ADD === event.t)
-    }
-})
+bot.on('ready', () => { ready(bot) })
+bot.on('message', (context) => { message(context, event.onMessage) })
+bot.on('voiceStateUpdate', (previous, current) => { voice(previous, current) })
+bot.on('messageReactionAdd', (context, user) => { reaction(context, user, true) })
+bot.on('messageReactionRemove', (context, user) => { reaction(context, user, false) })
 
 bot.login(TOKEN)

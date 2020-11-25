@@ -1,8 +1,8 @@
-import groups from '../../internal/groups'
 import colors from '../../internal/colors'
+import groups from '../../internal/groups'
 import P from '../../internal/permissions'
-import { man } from '../settings/man'
 import { message } from '../../utils/response'
+import { man } from '../settings/man'
 
 export default {
     name: 'poll',
@@ -40,6 +40,4 @@ export default {
             .then(message => message.react('👎'))
         }
     },
-
-    react: async (msg, emoji, author, reacted) => {}
 }

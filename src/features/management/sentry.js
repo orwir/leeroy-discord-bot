@@ -1,13 +1,16 @@
+import channel from '../../internal/channel'
+import colors from '../../internal/colors'
+import event from '../../internal/event'
 import groups from '../../internal/groups'
 import P from '../../internal/permissions'
-import { registerTextChannelHandler } from '../../internal/register'
-import { message, success } from '../../utils/response'
+import { register } from '../../internal/register'
+import { message as response, success } from '../../utils/response'
 import { man } from '../settings/man'
 
 const channels = {}
 const cooldown = 10 * 1000
 
-registerTextChannelHandler('sentry')
+register('sentry', channel.text, event.onMessage)
 
 export default {
     name: 'sentry',
@@ -66,29 +69,30 @@ export default {
         }
     },
 
-    onMessage: async (context) => {
-        const observable = channels[context.channel.id]
+    [event.onMessage]: async (message) => {
+        const observable = channels[message.channel.id]
         if (!observable) return
         const last = observable.lastMessage
-        observable.lastMessage = context
+        observable.lastMessage = message
 
-        if (!(last && last.author.id === context.author.id
-            && context.createdAt.getTime() - last.createdAt.getTime() < cooldown)) {
+        if (!(last && last.author.id === message.author.id
+            && message.createdAt.getTime() - last.createdAt.getTime() < cooldown)) {
             return
         }
 
         try {
-            await Promise.all([last.react('🤡'), context.react('🤡')])
+            await Promise.all([message.react('🤡'), last.react('🤡')]).catch(error => log(message, error))
         } catch (error) {
             if (error.code === 90001) {
-                await Promise.all([last.delete(), context.delete()]).catch(_ => {})
-                await message({
-                    channel: context.channel,
-                    text: context.t('sentry.user_said', { username: context.author }),
-                    description: `${last.content} ${context.content}`
-                })
-            } else {
-                throw error
+                await Promise
+                    .all([last.delete(), message.delete()])
+                    .then(_ => response({
+                        channel: message.channel,
+                        text: message.t('sentry.user_said', { username: message.author }),
+                        description: `${last.content} ${message.content}`,
+                        color: colors.highlightDefault
+                    }))
+                    .catch(error => log(message, error))
             }
         }
     }

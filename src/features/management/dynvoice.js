@@ -1,9 +1,14 @@
 import { GuildMember } from 'discord.js'
+import channel from '../../internal/channel'
+import event from '../../internal/event'
 import groups from '../../internal/groups'
 import P from '../../internal/permissions'
-import { registerVoiceChannelHandler } from '../../internal/register'
-import { success } from '../../utils/response'
+import { register } from '../../internal/register'
+import { log, success } from '../../utils/response'
 import { man } from '../settings/man'
+
+register('dynvoice', channel.voice, event.onJoinVoice)
+register('dynvoice', channel.voice, event.onLeaveVoice)
 
 const FACTORY_PREFIX = '+'
 const CHANNEL_PREFIX = '>'
@@ -12,9 +17,6 @@ const CHANNEL_TEMPLATE = /^\> (.*)$/
 
 const COOLDOWN = 2 * 1000
 let USED = Date.now()
-
-registerVoiceChannelHandler('dynvoice', FACTORY_TEMPLATE)
-registerVoiceChannelHandler('dynvoice', CHANNEL_TEMPLATE)
 
 export default {
     name: 'dynvoice',
@@ -32,7 +34,7 @@ export default {
         const group = context.guild.channels.get(parent)
         const groupName = group ? group.name : context.t('dynvoice.root')
         return context.guild.createChannel(`${FACTORY_PREFIX} #${limit} /${template}/`, {
-                type: 'voice',
+                type: channel.voice,
                 userLimit: 1,
                 parent: group
             })
@@ -42,32 +44,31 @@ export default {
             }))
     },
 
-    onJoin: async (member, channel) => {
-        const factory = channel.name.match(FACTORY_TEMPLATE)
-        if (factory && Date.now() - USED > COOLDOWN) {
-            USED = Date.now()
-            let [ , limit, template ] = factory
+    [event.onJoinVoice]: async (member) => {
+        const factory = member.voiceChannel.name.match(FACTORY_TEMPLATE)
+        if (!factory || Date.now() - USED - COOLDOWN) return
+        USED = Date.now()
+        let [ , limit, template ] = factory
 
-            return member.guild
-                .createChannel(`${CHANNEL_PREFIX} ${applyTemplates(member, template)}`, {
-                    type: 'voice',
-                    userLimit: limit,
-                    parent: channel.parent,
-                    permissionOverwrites: channel.permissionOverwrites,
-                    reason: member.t('dynvoice.user_created_channel', { username: member.user.tag, nickname: member.name()})
-                })
-                .then(channel => member.setVoiceChannel(channel))
-        }
+        await member.guild.createChannel(`${CHANNEL_PREFIX} ${_template(member, template)}`, {
+                type: channel.voice,
+                userLimit: limit,
+                parent: member.voiceChannel.parent,
+                permissionOverwrites: member.voiceChannel.permissionOverwrites,
+                reason: member.t('dynvoice.user_created_channel', { username: member.user.tag, nickname: member.name()})
+            })
+            .then(channel => member.setVoiceChannel(channel))
+            .catch(error => log(member, error))
     },
 
-    onLeave: async (member, channel) => {
-        if (CHANNEL_TEMPLATE.test(channel.name) && !channel.members.size) {
-            return channel.delete()
+    [event.onLeaveVoice]: async (member) => {
+        if (CHANNEL_TEMPLATE.test(member.voiceChannel.name) && !member.voiceChannel.members.size) {
+            await member.voiceChannel.delete().catch(error => log(member, error))
         }
     }
 }
 
-function applyTemplates(member, template) {
+function _template(member, template) {
     return template
         .replace('<user>', member.name())
         .replace('<game>', member.playing(member.t))

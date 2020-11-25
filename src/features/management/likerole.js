@@ -1,10 +1,17 @@
-import groups from '../../internal/groups'
+import channel from '../../internal/channel'
 import colors from '../../internal/colors'
+import event from '../../internal/event'
+import groups from '../../internal/groups'
 import P from '../../internal/permissions'
-import { man } from '../settings/man'
+import { register } from '../../internal/register'
+import { path } from '../../utils/object'
+import reference from '../../utils/reference'
 import { error, message } from '../../utils/response'
 import { verifyRolePosition } from '../../utils/role'
-import reference from '../../utils/reference'
+import features from '../index'
+import { man } from '../settings/man'
+
+register('likerole', channel.text, event.onReaction)
 
 export default {
     name: 'likerole',
@@ -17,25 +24,21 @@ export default {
     permissions: [P.MANAGE_ROLES],
 
     execute: async (context, snowflake, description) => {
-        if (!snowflake) {
-            return man(context, 'likerole')
-        }
-        const role = context.guild.roles.get(reference(snowflake))
+        if (!snowflake) return man(context, 'likerole')
         
+        const role = await context.guild.roles.fetch(reference(snowflake))
         if (!role) {
             return error({
                 context: context,
                 description: context.t('role.role_not_found', { role: snowflake })
             })
         }
-
-        if (!verifyRolePosition(context, role)) {
+        if (!(await verifyRolePosition(context, context.member, role))) {
             return error({
                 context: context,
                 description: context.t('role.role_should_be_lower', { role: snowflake })
             })
         }
-
         return message({
             channel: context.channel,
             text: description,
@@ -61,11 +64,18 @@ export default {
         .then(message => message.react('👌'))
     },
 
-    react: async (context, emoji, author, reacted) => {
-       const snowflake = context.embeds[0].fields[1].value
-       const role = context.guild.roles.get(reference(snowflake))
-       if (role && author) {
-           return author[reacted ? 'addRole' : 'removeRole'](role)
-       }
+    [event.onReaction]: async (context, user, reacted) => {
+        const field = path(context.message, 'embeds[0].fields[0]')
+        if (field.name !== 'feature') return
+        const feature = features[field.value]
+        if (!feature && feature.name !== 'likerole') return
+        if (!feature.emojis.includes(context.emoji.name)) return
+        
+        const snowflake = context.message.embeds[0].fields[1].value
+        const role = context.message.guild.roles.get(reference(snowflake))
+        const member = context.guild.member(user)
+        if (role && member) {
+            await member.roles[reacted ? 'add' : 'remove'](role)
+        }
     }
 }

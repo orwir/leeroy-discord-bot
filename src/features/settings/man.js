@@ -1,7 +1,7 @@
-import groups from '../../internal/groups'
 import colors from '../../internal/colors'
-import { features as getFeaturesList } from '../index'
+import groups from '../../internal/groups'
 import { error } from '../../utils/response'
+import { features as getFeaturesList } from '../index'
 
 export async function man(context, name) {
     const features = getFeaturesList()
@@ -89,6 +89,7 @@ async function showFeaturesList(context, features) {
     }
 
     Object.values(features)
+        .filter(feature => !feature.exclude)
         .sort(sorter)
         .reduce(formatter, {})
 
