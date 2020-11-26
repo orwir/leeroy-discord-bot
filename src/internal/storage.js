@@ -45,15 +45,18 @@ function connect() {
     try {
         let serviceAccount
         if (existsSync(_firebaseCredentialsFile)) {
-            serviceAccont = readFileSync(_firebaseCredentialsFile)
+            serviceAccount = readFileSync(_firebaseCredentialsFile)
         } else {
             serviceAccount = process.env[_firebaseCredentialsEnv]
         }
         if (serviceAccount) {
             serviceAccount = JSON.parse(serviceAccount)
             firebase.initializeApp({ credential: firebase.credential.cert(serviceAccount) })
+            console.log('Database connection established.')
+            return firebase.firestore()
         }
     } catch (error) {
+        console.log(`Database connection failure:\n${error}`)
         return null
     }
 }
