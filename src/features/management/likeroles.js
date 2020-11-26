@@ -17,14 +17,24 @@ export default {
     name: 'likeroles',
     group: groups.management,
     description: 'likeroles.description',
-    usage: `likeroles 
+    usage: `likeroles \`create|message_id\`
     [emoji] [@role] [description]
     [emoji] [@role] [description]`,
     examples: 'likeroles.examples',
-    arguments: 1,
+    arguments: 2,
     permissions: [P.MANAGE_ROLES],
 
-    execute: async (context, ...args) => {
+    execute: async (context, action, ...args) => {
+
+        if (!action) {
+            return man(context, 'likeroles')
+        }
+
+        if (action !== 'create' && isNaN(action)) {
+            return man(context, 'likeroles')
+        }
+
+        const msg = action === 'create' ? null : await context.channel.messages.fetch(action);
 
         if (args.length === 0) {
             return man(context, 'likeroles')
@@ -71,12 +81,27 @@ export default {
             return true;
         }))
 
-        return message({
-            channel: context.channel,
-            color: colors.highlightDefault,
-            fields: fields
-        })
-        .then(message => {
+        let result
+        if (msg) {
+            var embed = path(msg, 'embeds[0]');
+            result = msg.edit({
+                embed: {
+                    title: embed.title,
+                    description: embed.description,
+                    color: embed.color,
+                    fields: fields
+                }
+            }).then(message => message.reactions.removeAll())
+        }
+        else{
+            result = message({
+                channel: context.channel,
+                color: colors.highlightDefault,
+                fields: fields
+            })
+        }
+
+        return result.then(message => {
             emojis.forEach((emoji) => message.react(emoji))
         })
     },
@@ -159,4 +184,4 @@ Object.defineProperty(String.prototype, "trimStart", {
     },
     writable: true,
     configurable: true
-});
+})

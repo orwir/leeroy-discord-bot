@@ -7,22 +7,21 @@ import { register } from '../../internal/register.js'
 import { ERROR_NOT_COMMAND, log, success } from '../../utils/response.js'
 import features from '../index.js'
 
-register('command', event.onMessage, channel.text)
+register('command', channel.text, event.onMessage)
 
 export default {
     name: 'command',
-    group: groups.system,
+    group: groups.management,
     description: 'command.description',
     usage: '[command] [arguments]?',
     examples: 'command.examples',
     permissions: [],
+    exclude: true,
     unstoppable: true,
 
     execute: async (context) => success({
         context: context,
-        description: context.t('command.response'),
-        command: 'command',
-        member: context.member
+        description: context.t('command.response')
     }),
 
     [event.onMessage]: async (message) => {

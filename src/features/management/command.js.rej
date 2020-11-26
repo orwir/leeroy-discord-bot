@@ -1,0 +1,11 @@
+diff a/src/features/management/command.js b/src/features/management/command.js	(rejected hunks)
+@@ -63,7 +63,8 @@
+ async function parseFeature(message, request) {
+     const raw = message.content
+     const start = request.prefix.length
+-    const end = raw.indexOf(' ', start) > 0 ? raw.indexOf(' ', start) : raw.length
++    const separator = raw.indexOf(' ') < raw.indexOf('\n') ? ' ' : '\n'
++    const end = raw.indexOf(separator, start) > 0 ? raw.indexOf(separator, start) : raw.length
+     if (start + end > 0) {
+         const name = raw.slice(start, end)
+         request.feature = features[name]
