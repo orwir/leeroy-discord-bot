@@ -11,7 +11,9 @@ export async function man(context, name) {
     } else if (!features[name]) {
         return error({
             context: context,
-            description: context.t('global.unknown_command', { command: name })
+            description: context.t('global.unknown_command', { command: name }),
+            command: 'man',
+            member: context.member
         })
     } else {
         const feature = features[name]
@@ -19,6 +21,8 @@ export async function man(context, name) {
             title: feature.name,
             description: context.t(feature.description),
             color: colors.highlightDefault,
+            command: 'man',
+            member: context.member,
             fields: [
                 {
                     name: context.t('man.usage'),
@@ -85,7 +89,7 @@ async function showFeaturesList(context, features) {
     }
 
     Object.values(features)
-        .filter(feature => !feature.exclude)
+        .filter(feature => feature.group != groups.system)
         .sort(sorter)
         .reduce(formatter, {})
 

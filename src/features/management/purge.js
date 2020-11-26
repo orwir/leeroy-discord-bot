@@ -18,7 +18,9 @@ export default {
         if (!count || count > _limit) {
             return error({
                 context: context,
-                description: context.t('purge.limit_exceeded_or_not_number', { max: _limit })
+                description: context.t('purge.limit_exceeded_or_not_number', { max: _limit }),
+                command: 'purge',
+                member: context.member
             })
         }
         const member = userflake ? await context.guild.members.fetch(reference(userflake)) : null

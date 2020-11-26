@@ -22,6 +22,8 @@ export default {
                 channel: context.channel,
                 text: question,
                 color: colors.highlightDefault,
+                command: 'poll',
+                member: context.member,
                 fields: [
                     {
                         name: 'feature',

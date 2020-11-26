@@ -23,13 +23,17 @@ export default {
         if (!role) {
             return error({
                 context: context,
-                description: context.t('role.role_not_found', { role: roleflake })
+                description: context.t('role.role_not_found', { role: roleflake }),
+                command: 'role',
+                member: context.member
             })
         }
         if (!verifyRolePosition(context, context.member, role)) {
             return error({
                 context: context,
-                description: context.t('role.role_should_be_lower', { role: roleflake })
+                description: context.t('role.role_should_be_lower', { role: roleflake }),
+                command: 'role',
+                member: context.member
             })
         }
 
@@ -38,7 +42,9 @@ export default {
             if (!context.member.voice.channelID) {
                 return error({
                     context: context,
-                    description: context.t('role.you_are_not_in_voice_channel')
+                    description: context.t('role.you_are_not_in_voice_channel'),
+                    command: 'role',
+                    member: context.member
                 })
             }
             members.push(...context.member.voice.channel.members.array())
@@ -47,7 +53,9 @@ export default {
             if (!member) {
                 return error({
                     context: context,
-                    description: context.t('role.member_not_found', { member: userflake })
+                    description: context.t('role.member_not_found', { member: userflake }),
+                    command: 'role',
+                    member: context.member
                 })
             }
             members.push(member)
@@ -60,7 +68,9 @@ export default {
                     role: roleflake,
                     action: context.t(`role.${action}`),
                     members: members.join('\n')
-                })
+                }),
+                command: 'role',
+                member: context.member
             }))
     }
 }

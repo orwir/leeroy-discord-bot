@@ -5,9 +5,10 @@ import groups from '../../internal/groups.js'
 import P from '../../internal/permissions.js'
 import { register } from '../../internal/register.js'
 import { message as response, success } from '../../utils/response.js'
+import { isContentEmoji } from '../../utils/text.js'
 import { man } from '../settings/man.js'
 
-register('sentry', channel.text, event.onMessage)
+register('sentry', event.onMessage, channel.text)
 
 const _channels = {}
 const _cooldown = 5 * 1000
@@ -39,12 +40,16 @@ export default {
                 }
                 return success({
                     context: context,
-                    description: context.t('sentry.on')
+                    description: context.t('sentry.on'),
+                    command: 'sentry',
+                    member: context.member
                 })
             } else {
                 return success({
                     context: context,
-                    description: context.t('sentry.already_on')
+                    description: context.t('sentry.already_on'),
+                    command: 'sentry',
+                    member: context.member
                 })
             }
         }
@@ -52,19 +57,25 @@ export default {
             delete _channels[channel.id]
             return success({
                 context: context,
-                description: context.t('sentry.off')
+                description: context.t('sentry.off'),
+                command: 'sentry',
+                member: context.member
             })
         }
         if (state === 'list') {
+            const description = _channels.size === 0
+                ? context.t('sentry.no_channels')
+                : Object.values(_channels)
+                    .filter(observable => observable.guildID === guild.id)
+                    .map(observable => `<#${observable.id}>`)
+                    .join('\n')
+
             return success({
                 channel: channel,
                 title: context.t('sentry.list_title'),
-                description: _channels.size === 0
-                    ? context.t('sentry.no_channels')
-                    : Object.values(_channels)
-                        .filter(observable => observable.guildID === guild.id)
-                        .map(observable => `<#${observable.id}>`)
-                        .join('\n')
+                description: description,
+                command: 'sentry',
+                member: context.member
             })
         }
     },
@@ -76,7 +87,8 @@ export default {
         observable.lastMessage = message
 
         if (!(last && last.author.id === message.author.id
-            && message.createdAt.getTime() - last.createdAt.getTime() < _cooldown)) {
+            && message.createdAt.getTime() - last.createdAt.getTime() < _cooldown
+            && (isContentEmoji(last.content) === isContentEmoji(message.content)))) {
             return
         }
 
