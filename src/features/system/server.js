@@ -15,14 +15,16 @@ export default {
 }
 
 export async function obtain(context) {
-    return storage.obtain(context, SERVER_CONFIG, {
-        bot_id: context.client.user.id,
-        bot_name: context.client.user.name,
-        server_id: context.guild.id,
-        server_name: context.guild.name,
-        language: 'en',
-        prefix: PREFIX
-    })
+    const config = await storage.obtain(context, SERVER_CONFIG, {})
+    
+    config.bot_id = config.bot_id || context.client.user.id
+    config.bot_name = config.bot_name || context.client.user.tag
+    config.server_id = config.server_id || context.guild.id
+    config.server_name = config.server_name || context.guild.name
+    config.language = config.language || 'en'
+    config.prefix = config.prefix || PREFIX
+
+    return config
 }
 
 export async function save(context, config) {
