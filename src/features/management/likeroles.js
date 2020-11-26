@@ -11,7 +11,7 @@ import { verifyRolePosition } from '../../utils/role.js'
 import features from '../index.js'
 import { man } from '../settings/man.js'
 
-register('likeroles', channel.text, event.onReaction)
+register('likeroles', event.onReaction, channel.text)
 
 export default {
     name: 'likeroles',

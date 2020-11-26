@@ -86,7 +86,7 @@
 
     "likeroles": {
         "description": "Allow to set/remove roles by reacting on a \"role message\".",
-        "examples": "likeroles `create|message_id` 👍 @somerole With this role you will be awesome! 🤡 @somerole With this role you will not be awesome!",
+        "examples": "likeroles create \n👍 @somerole With this role you will be awesome! \n🤡 @somerole With this role you will not be awesome!",
         "howto": "Description",
         "role": "Role",
         "emoji": "Reaction"
