@@ -1,10 +1,10 @@
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import { man } from './man'
-import { Server, PREFIX } from '../../internal/config'
-import { success, error } from '../../utils/response'
+import { PREFIX, Server } from '../../internal/config.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import { error, success } from '../../utils/response.js'
+import { man } from './man.js'
 
-const MAX_LENGTH = 5
+const _maxLength = 5
 
 export default {
     name: 'prefix',
@@ -18,13 +18,11 @@ export default {
     execute: async (context, prefix) => {
         if (!prefix) {
             return man(context, 'prefix')
-
-        } else if (prefix.length > MAX_LENGTH) {
+        } else if (prefix.length > _maxLength) {
             return error({
                 context: context,
-                description: context.t('prefix.max_length_exceeded', { length: MAX_LENGTH })
+                description: context.t('prefix._maxLength_exceeded', { length: _maxLength })
             })
-
         } else {
             const config = await Server.config(context)
             config.prefix = prefix === 'reset' ? PREFIX : prefix

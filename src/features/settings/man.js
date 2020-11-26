@@ -1,20 +1,18 @@
-import groups from '../../internal/groups'
-import colors from '../../internal/colors'
-import { features as getFeaturesList } from '../index'
-import { error } from '../../utils/response'
+import colors from '../../internal/colors.js'
+import groups from '../../internal/groups.js'
+import { error } from '../../utils/response.js'
+import { features as getFeaturesList } from '../index.js'
 
 export async function man(context, name) {
     const features = getFeaturesList()
 
     if (!name) {
         return showFeaturesList(context, features)
-
     } else if (!features[name]) {
         return error({
             context: context,
             description: context.t('global.unknown_command', { command: name })
         })
-
     } else {
         const feature = features[name]
         const embed = {
@@ -38,10 +36,8 @@ export async function man(context, name) {
                 value: feature.permissions.map(p => context.t(`permissions.${p}`)).join('\n')
             })
         }
-
         return context.channel.send('', { embed: embed })
     }
-
 }
 
 export default {
@@ -89,6 +85,7 @@ async function showFeaturesList(context, features) {
     }
 
     Object.values(features)
+        .filter(feature => !feature.exclude)
         .sort(sorter)
         .reduce(formatter, {})
 

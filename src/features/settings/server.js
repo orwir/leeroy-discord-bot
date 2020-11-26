@@ -1,7 +1,7 @@
-import groups from '../../internal/groups'
-import storage from '../../internal/storage'
-import P from '../../internal/permissions'
-import { PREFIX } from '../../internal/config'
+import { PREFIX } from '../../internal/config.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import storage from '../../internal/storage.js'
 
 const SERVER_CONFIG = 'server-config'
 
@@ -12,8 +12,7 @@ export default {
     usage: 'n/a',
     examples: 'server.examples',
     permissions: [P.ADMINISTRATOR],
-
-    execute: async (context) => {}
+    exclude: true
 }
 
 export async function obtain(context) {

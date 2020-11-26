@@ -1,9 +1,9 @@
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import reference from '../../utils/reference'
-import { man } from '../settings/man'
-import { verifyRolePosition } from '../../utils/role'
-import { error, success } from '../../utils/response'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import reference from '../../utils/reference.js'
+import { error, success } from '../../utils/response.js'
+import { verifyRolePosition } from '../../utils/role.js'
+import { man } from '../settings/man.js'
 
 export default {
     name: 'role',
@@ -19,15 +19,14 @@ export default {
             return man(context, 'role')
         }
 
-        const role = context.guild.roles.get(reference(roleflake))
+        const role = await context.guild.roles.fetch(reference(roleflake))
         if (!role) {
             return error({
                 context: context,
                 description: context.t('role.role_not_found', { role: roleflake })
             })
         }
-
-        if (!verifyRolePosition(context, role)) {
+        if (!verifyRolePosition(context, context.member, role)) {
             return error({
                 context: context,
                 description: context.t('role.role_should_be_lower', { role: roleflake })
@@ -35,18 +34,16 @@ export default {
         }
 
         const members = []
-
         if (userflake === 'voice') {
-            if (!context.member.voiceChannelID) {
+            if (!context.member.voice.channelID) {
                 return error({
                     context: context,
                     description: context.t('role.you_are_not_in_voice_channel')
                 })
             }
-            members.push(...context.member.voiceChannel.members.array())
-
+            members.push(...context.member.voice.channel.members.array())
         } else {
-            const member = context.guild.members.get(reference(userflake))
+            const member = await context.guild.members.fetch(reference(userflake))
             if (!member) {
                 return error({
                     context: context,
@@ -55,9 +52,8 @@ export default {
             }
             members.push(member)
         }
-
         return Promise
-            .all(members.map(m => m[action === 'add' ? 'addRole' : 'removeRole'](role)))
+            .all(members.map(member => member.roles[action](role)))
             .then(success({
                 context: context,
                 description: context.t('role.role_is_updated', {

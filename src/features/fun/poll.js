@@ -1,8 +1,8 @@
-import groups from '../../internal/groups'
-import colors from '../../internal/colors'
-import P from '../../internal/permissions'
-import { man } from '../settings/man'
-import { message } from '../../utils/response'
+import colors from '../../internal/colors.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import { message } from '../../utils/response.js'
+import { man } from '../settings/man.js'
 
 export default {
     name: 'poll',
@@ -17,7 +17,6 @@ export default {
     execute: async (context, question) => {
         if (!question) {
             return man(context, 'poll')
-
         } else {
             return message({
                 channel: context.channel,
@@ -40,6 +39,4 @@ export default {
             .then(message => message.react('👎'))
         }
     },
-
-    react: async (msg, emoji, author, reacted) => {}
 }

@@ -1,13 +1,17 @@
-import dynvoice from './dynvoice'
-import likerole from './likerole'
-import purge from './purge'
-import role from './role'
-import sentry from './sentry'
+import command from './command.js'
+import dynvoice from './dynvoice.js'
+import likerole from './likerole.js'
+import purge from './purge.js'
+import reactionGuardian from './reaction_guardian.js'
+import role from './role.js'
+import sentry from './sentry.js'
 
 export default [
-    role,
-    likerole,
+    command,
+    reactionGuardian,
     dynvoice,
+    likerole,
     purge,
+    role,
     sentry
 ]

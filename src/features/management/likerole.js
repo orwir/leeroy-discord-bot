@@ -1,10 +1,17 @@
-import groups from '../../internal/groups'
-import colors from '../../internal/colors'
-import P from '../../internal/permissions'
-import { man } from '../settings/man'
-import { error, message } from '../../utils/response'
-import { verifyRolePosition } from '../../utils/role'
-import reference from '../../utils/reference'
+import channel from '../../internal/channel.js'
+import colors from '../../internal/colors.js'
+import event from '../../internal/event.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import { register } from '../../internal/register.js'
+import { path } from '../../utils/object.js'
+import reference from '../../utils/reference.js'
+import { error, message } from '../../utils/response.js'
+import { verifyRolePosition } from '../../utils/role.js'
+import features from '../index.js'
+import { man } from '../settings/man.js'
+
+register('likerole', channel.text, event.onReaction)
 
 export default {
     name: 'likerole',
@@ -17,25 +24,21 @@ export default {
     permissions: [P.MANAGE_ROLES],
 
     execute: async (context, snowflake, description) => {
-        if (!snowflake) {
-            return man(context, 'likerole')
-        }
-        const role = context.guild.roles.get(reference(snowflake))
+        if (!snowflake) return man(context, 'likerole')
         
+        const role = await context.guild.roles.fetch(reference(snowflake))
         if (!role) {
             return error({
                 context: context,
                 description: context.t('role.role_not_found', { role: snowflake })
             })
         }
-
-        if (!verifyRolePosition(context, role)) {
+        if (!verifyRolePosition(context, context.member, role)) {
             return error({
                 context: context,
                 description: context.t('role.role_should_be_lower', { role: snowflake })
             })
         }
-
         return message({
             channel: context.channel,
             text: description,
@@ -61,11 +64,19 @@ export default {
         .then(message => message.react('👌'))
     },
 
-    react: async (context, emoji, author, reacted) => {
-       const snowflake = context.embeds[0].fields[1].value
-       const role = context.guild.roles.get(reference(snowflake))
-       if (role && author) {
-           return author[reacted ? 'addRole' : 'removeRole'](role)
-       }
+    [event.onReaction]: async (context, user, reacted) => {
+        const field = path(context.message, 'embeds[0].fields[0]')
+        if (!field || field.name !== 'feature') return
+        const feature = features[field.value]
+        if (!feature || feature.name !== 'likerole') return
+        if (!feature.emojis.includes(context.emoji.name)) return
+        
+        const snowflake = context.message.embeds[0].fields[1].value
+        const guild = context.message.guild
+        const role = await guild.roles.fetch(reference(snowflake))
+        const member = await guild.members.fetch(user)
+        if (role && member) {
+            await member.roles[reacted ? 'add' : 'remove'](role)
+        }
     }
 }

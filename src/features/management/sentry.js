@@ -1,13 +1,16 @@
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import { registerTextChannelHandler } from '../../internal/register'
-import { message, success } from '../../utils/response'
-import { man } from '../settings/man'
+import channel from '../../internal/channel.js'
+import colors from '../../internal/colors.js'
+import event from '../../internal/event.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import { register } from '../../internal/register.js'
+import { message as response, success } from '../../utils/response.js'
+import { man } from '../settings/man.js'
 
-const channels = {}
-const cooldown = 10 * 1000
+register('sentry', channel.text, event.onMessage)
 
-registerTextChannelHandler('sentry')
+const _channels = {}
+const _cooldown = 5 * 1000
 
 export default {
     name: 'sentry',
@@ -27,8 +30,8 @@ export default {
         const guild = context.guild
 
         if (state === 'on') {
-            if (!channels.hasOwnProperty(channel.id)) {
-                channels[channel.id] = {
+            if (!_channels.hasOwnProperty(channel.id)) {
+                _channels[channel.id] = {
                     id: channel.id,
                     name: channel.name,
                     guildID: guild.id,
@@ -46,7 +49,7 @@ export default {
             }
         }
         if (state === 'off') {
-            delete channels[channel.id]
+            delete _channels[channel.id]
             return success({
                 context: context,
                 description: context.t('sentry.off')
@@ -56,9 +59,9 @@ export default {
             return success({
                 channel: channel,
                 title: context.t('sentry.list_title'),
-                description: channels.size === 0
+                description: _channels.size === 0
                     ? context.t('sentry.no_channels')
-                    : Object.values(channels)
+                    : Object.values(_channels)
                         .filter(observable => observable.guildID === guild.id)
                         .map(observable => `<#${observable.id}>`)
                         .join('\n')
@@ -66,29 +69,30 @@ export default {
         }
     },
 
-    onMessage: async (context) => {
-        const observable = channels[context.channel.id]
+    [event.onMessage]: async (message) => {
+        const observable = _channels[message.channel.id]
         if (!observable) return
         const last = observable.lastMessage
-        observable.lastMessage = context
+        observable.lastMessage = message
 
-        if (!(last && last.author.id === context.author.id
-            && context.createdAt.getTime() - last.createdAt.getTime() < cooldown)) {
+        if (!(last && last.author.id === message.author.id
+            && message.createdAt.getTime() - last.createdAt.getTime() < _cooldown)) {
             return
         }
 
         try {
-            await Promise.all([last.react('🤡'), context.react('🤡')])
+            await Promise.all([message.react('🤡'), last.react('🤡')]).catch(error => log(message, error))
         } catch (error) {
             if (error.code === 90001) {
-                await Promise.all([last.delete(), context.delete()]).catch(_ => {})
-                await message({
-                    channel: context.channel,
-                    text: context.t('sentry.user_said', { username: context.author }),
-                    description: `${last.content} ${context.content}`
-                })
-            } else {
-                throw error
+                await Promise
+                    .all([last.delete(), message.delete()])
+                    .then(_ => response({
+                        channel: message.channel,
+                        text: message.t('sentry.user_said', { username: message.author }),
+                        description: `${last.content} ${message.content}`,
+                        color: colors.highlightDefault
+                    }))
+                    .catch(error => log(message, error))
             }
         }
     }

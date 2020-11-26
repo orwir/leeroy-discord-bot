@@ -2,7 +2,8 @@
     "global": {
         "error": "Error!",
         "success": "Success!",
-        "unknown_command": "Command \"{{command}}\" is unrecognized!"
+        "unknown_command": "Command \"{{command}}\" is unrecognized!",
+        "na": "N/A"
     },
 
     "group": {
@@ -14,6 +15,12 @@
     "server": {
         "description": "n/a",
         "examples": "n/a"
+    },
+
+    "command": {
+        "description": "A command the bot can perform.",
+        "examples": "man\nhelp",
+        "response": "So what are you expected?"
     },
 
     "language": {
@@ -101,6 +108,15 @@
         "list_title": "Observable channels",
         "no_channels": "No observable channels yet.",
         "user_said": "{{- username}} said:"
+    },
+
+    "pause": {
+        "description": "Pause handling all events but commands.",
+        "examples": "pause on\npause status",
+        "paused": "The bot is paused.",
+        "resumed": "The bot is resumed.",
+        "running": "The bot is running.",
+        "status": "Current status"
     },
 
     "permissions": {
