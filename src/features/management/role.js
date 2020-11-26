@@ -1,9 +1,9 @@
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import reference from '../../utils/reference'
-import { error, success } from '../../utils/response'
-import { verifyRolePosition } from '../../utils/role'
-import { man } from '../settings/man'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import reference from '../../utils/reference.js'
+import { error, success } from '../../utils/response.js'
+import { verifyRolePosition } from '../../utils/role.js'
+import { man } from '../settings/man.js'
 
 export default {
     name: 'role',

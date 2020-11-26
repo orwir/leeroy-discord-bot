@@ -1,11 +1,11 @@
-import channel from '../../internal/channel'
-import { PREFIX, Server } from '../../internal/config'
-import event from '../../internal/event'
-import groups from '../../internal/groups'
-import { verifyBotPermissions, verifyUserPermissions } from '../../internal/permissions'
-import { register } from '../../internal/register'
-import { ERROR_NOT_COMMAND, log, success } from '../../utils/response'
-import features from '../index'
+import channel from '../../internal/channel.js'
+import { PREFIX, Server } from '../../internal/config.js'
+import event from '../../internal/event.js'
+import groups from '../../internal/groups.js'
+import { verifyBotPermissions, verifyUserPermissions } from '../../internal/permissions.js'
+import { register } from '../../internal/register.js'
+import { ERROR_NOT_COMMAND, log, success } from '../../utils/response.js'
+import features from '../index.js'
 
 register('command', channel.text, event.onMessage)
 

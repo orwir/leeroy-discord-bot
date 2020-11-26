@@ -1,5 +1,5 @@
-import { PREFIX } from "../internal/config"
-import { log } from "../utils/response"
+import { PREFIX } from "../internal/config.js"
+import { log } from "../utils/response.js"
 
 export default async function (bot) {
     bot.user.setPresence({

@@ -1,7 +1,7 @@
-import colors from '../../internal/colors'
-import groups from '../../internal/groups'
-import { error } from '../../utils/response'
-import { features as getFeaturesList } from '../index'
+import colors from '../../internal/colors.js'
+import groups from '../../internal/groups.js'
+import { error } from '../../utils/response.js'
+import { features as getFeaturesList } from '../index.js'
 
 export async function man(context, name) {
     const features = getFeaturesList()

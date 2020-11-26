@@ -1,9 +1,9 @@
 import i18n from 'i18next'
-import colors from '../../internal/colors'
-import { LANGUAGES, Server } from '../../internal/config'
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import { error, message, success } from '../../utils/response'
+import colors from '../../internal/colors.js'
+import { LANGUAGES, Server } from '../../internal/config.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import { error, message, success } from '../../utils/response.js'
 
 const languages = {}
 

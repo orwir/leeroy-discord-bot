@@ -1,11 +1,11 @@
-import channel from '../../internal/channel'
-import colors from '../../internal/colors'
-import event from '../../internal/event'
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import { register } from '../../internal/register'
-import { message as response, success } from '../../utils/response'
-import { man } from '../settings/man'
+import channel from '../../internal/channel.js'
+import colors from '../../internal/colors.js'
+import event from '../../internal/event.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import { register } from '../../internal/register.js'
+import { message as response, success } from '../../utils/response.js'
+import { man } from '../settings/man.js'
 
 register('sentry', channel.text, event.onMessage)
 

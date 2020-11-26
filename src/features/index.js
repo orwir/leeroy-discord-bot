@@ -1,6 +1,6 @@
-import fun from './fun'
-import management from './management'
-import settings from './settings'
+import fun from './fun/index.js'
+import management from './management/index.js'
+import settings from './settings/index.js'
 
 export function features() {
     return [

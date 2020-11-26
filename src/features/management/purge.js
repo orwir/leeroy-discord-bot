@@ -1,7 +1,7 @@
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import reference from '../../utils/reference'
-import { error } from '../../utils/response'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import reference from '../../utils/reference.js'
+import { error } from '../../utils/response.js'
 
 const _limit = 90
 

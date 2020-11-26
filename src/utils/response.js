@@ -1,4 +1,4 @@
-import colors from '../internal/colors'
+import colors from '../internal/colors.js'
 
 export const ERROR_NOT_COMMAND = 'NOT_COMMAND'
 export const ERROR_MISSING_PERMISSIONS = 'MISSING_PERMISSIONS'

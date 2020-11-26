@@ -1,9 +1,9 @@
-import features from '../features'
-import { isRunning } from "../features/settings/pause"
-import channel from "../internal/channel"
-import { Server } from "../internal/config"
-import { handlers } from "../internal/register"
-import { log } from "../utils/response"
+import features from '../features/index.js'
+import { isRunning } from "../features/settings/pause.js"
+import channel from "../internal/channel.js"
+import { Server } from "../internal/config.js"
+import { handlers } from "../internal/register.js"
+import { log } from "../utils/response.js"
 
 export default async function (message, event) {
     if (!(message.content || '').trim()) return

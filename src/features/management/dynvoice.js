@@ -1,12 +1,12 @@
 import { GuildMember } from 'discord.js'
-import channel from '../../internal/channel'
-import { devConfig } from '../../internal/config'
-import event from '../../internal/event'
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import { register } from '../../internal/register'
-import { success } from '../../utils/response'
-import { man } from '../settings/man'
+import channel from '../../internal/channel.js'
+import { devConfig } from '../../internal/config.js'
+import event from '../../internal/event.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import { register } from '../../internal/register.js'
+import { success } from '../../utils/response.js'
+import { man } from '../settings/man.js'
 
 register('dynvoice', channel.voice, event.onJoinVoice)
 register('dynvoice', channel.voice, event.onLeaveVoice)

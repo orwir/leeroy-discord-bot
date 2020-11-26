@@ -1,5 +1,5 @@
 import { MessageReaction } from "discord.js"
-import { log } from "../utils/response"
+import { log } from "../utils/response.js"
 
 export default async function (bot, event) {
     if (['MESSAGE_REACTION_ADD', 'MESSAGE_REACTION_REMOVE'].includes(event.t)) {

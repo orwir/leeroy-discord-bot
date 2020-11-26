@@ -1,9 +1,9 @@
-import channel from "../../internal/channel"
-import event from "../../internal/event"
-import groups from "../../internal/groups"
-import { register } from "../../internal/register"
-import { path } from "../../utils/object"
-import features from '../index'
+import channel from "../../internal/channel.js"
+import event from "../../internal/event.js"
+import groups from "../../internal/groups.js"
+import { register } from "../../internal/register.js"
+import { path } from "../../utils/object.js"
+import features from '../index.js'
 
 register('reaction_guardian', channel.text, event.onReaction)
 

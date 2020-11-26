@@ -1,9 +1,9 @@
-import help from './help'
-import language from './language'
-import man from './man'
-import pause from './pause'
-import prefix from './prefix'
-import server from './server'
+import help from './help.js'
+import language from './language.js'
+import man from './man.js'
+import pause from './pause.js'
+import prefix from './prefix.js'
+import server from './server.js'
 
 export default [
     language,

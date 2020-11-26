@@ -1,8 +1,8 @@
-import colors from '../../internal/colors'
-import groups from '../../internal/groups'
-import P from '../../internal/permissions'
-import { message, success } from '../../utils/response'
-import { man } from './man'
+import colors from '../../internal/colors.js'
+import groups from '../../internal/groups.js'
+import P from '../../internal/permissions.js'
+import { message, success } from '../../utils/response.js'
+import { man } from './man.js'
 
 let running = true
 
