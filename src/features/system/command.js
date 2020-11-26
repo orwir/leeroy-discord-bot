@@ -9,6 +9,8 @@ import features from '../index.js'
 
 register('command', event.onMessage, channel.text)
 
+const _separator = /\s+/
+
 export default {
     name: 'command',
     group: groups.system,
@@ -64,7 +66,12 @@ async function parsePrefix(message, request) {
 async function parseFeature(message, request) {
     const raw = message.content
     const start = request.prefix.length
-    const end = raw.indexOf(' ', start) > 0 ? raw.indexOf(' ', start) : raw.length
+    let end = raw.slice(start).search(_separator)
+    if (end == -1) {
+        end = raw.length
+    } else {
+        end = start + end
+    }
     if (start + end > 0) {
         const name = raw.slice(start, end)
         request.feature = features[name]
@@ -80,12 +87,12 @@ async function parseArguments(message, request) {
     if (!rawargs.trim()) {
         // do nothing
     } else if (!request.feature.arguments) {
-        request.args.push(...rawargs.trim().split(' '))
+        request.args.push(...rawargs.trim().split(_separator))
     } else {
         for (let i = 1; i <= request.feature.arguments && rawargs.length > 0; i++) {
             let arg
             if (i < request.feature.arguments) {
-                let index = rawargs.indexOf(' ')
+                let index = rawargs.search(_separator)
                 arg = rawargs.slice(0, index > 0 ? index : rawargs.length)
                 rawargs = rawargs.slice(arg.length + 1)
             } else {
