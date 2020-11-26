@@ -1,12 +1,14 @@
 import fun from './fun/index.js'
 import management from './management/index.js'
 import settings from './settings/index.js'
+import system from './system/index.js'
 
 export function features() {
     return [
             ...settings,
             ...fun,
-            ...management
+            ...management,
+            ...system
         ]
         .reduce((features, feature) => {
             features[feature.name] = feature

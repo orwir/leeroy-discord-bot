@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'fs'
 import { obtain as language } from '../features/settings/language.js'
-import * as server from '../features/settings/server.js'
+import * as server from '../features/system/server.js'
 
 export const devConfig = (() => {
     const config = './dev-config.json'

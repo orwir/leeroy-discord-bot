@@ -9,13 +9,12 @@ register('reaction_guardian', channel.text, event.onReaction)
 
 export default {
     name: 'reaction_guardian',
-    group: groups.management,
+    group: groups.system,
     description: 'global.na',
     usage: 'N/A',
     examples: 'global.na',
     permissions: [],
     arguments: 0,
-    exclude: true,
 
     [event.onReaction]: async (context, user, reacted) => {
         const field = path(context.message, 'embeds[0].fields[0]')

@@ -85,7 +85,7 @@ async function showFeaturesList(context, features) {
     }
 
     Object.values(features)
-        .filter(feature => !feature.exclude)
+        .filter(feature => feature.group != groups.system)
         .sort(sorter)
         .reduce(formatter, {})
 

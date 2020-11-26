@@ -11,12 +11,11 @@ register('command', channel.text, event.onMessage)
 
 export default {
     name: 'command',
-    group: groups.management,
+    group: groups.system,
     description: 'command.description',
     usage: '[command] [arguments]?',
     examples: 'command.examples',
     permissions: [],
-    exclude: true,
     unstoppable: true,
 
     execute: async (context) => success({

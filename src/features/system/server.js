@@ -7,12 +7,11 @@ const SERVER_CONFIG = 'server-config'
 
 export default {
     name: 'server',
-    group: groups.settings,
+    group: groups.system,
     description: 'server.description',
     usage: 'n/a',
     examples: 'server.examples',
-    permissions: [P.ADMINISTRATOR],
-    exclude: true
+    permissions: [P.ADMINISTRATOR]
 }
 
 export async function obtain(context) {
