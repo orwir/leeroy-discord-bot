@@ -19,6 +19,8 @@ export default {
         return message({
             channel: context.channel,
             color: colors.highlightDefault,
+            command: 'help',
+            member: context.member,
             fields: [
                 {
                     name: context.t('help.version'),

@@ -39,12 +39,16 @@ export default {
                 }
                 return success({
                     context: context,
-                    description: context.t('sentry.on')
+                    description: context.t('sentry.on'),
+                    command: 'sentry',
+                    member: context.member
                 })
             } else {
                 return success({
                     context: context,
-                    description: context.t('sentry.already_on')
+                    description: context.t('sentry.already_on'),
+                    command: 'sentry',
+                    member: context.member
                 })
             }
         }
@@ -52,19 +56,25 @@ export default {
             delete _channels[channel.id]
             return success({
                 context: context,
-                description: context.t('sentry.off')
+                description: context.t('sentry.off'),
+                command: 'sentry',
+                member: context.member
             })
         }
         if (state === 'list') {
+            const description = _channels.size === 0
+                ? context.t('sentry.no_channels')
+                : Object.values(_channels)
+                    .filter(observable => observable.guildID === guild.id)
+                    .map(observable => `<#${observable.id}>`)
+                    .join('\n')
+
             return success({
                 channel: channel,
                 title: context.t('sentry.list_title'),
-                description: _channels.size === 0
-                    ? context.t('sentry.no_channels')
-                    : Object.values(_channels)
-                        .filter(observable => observable.guildID === guild.id)
-                        .map(observable => `<#${observable.id}>`)
-                        .join('\n')
+                description: description,
+                command: 'sentry',
+                member: context.member
             })
         }
     },

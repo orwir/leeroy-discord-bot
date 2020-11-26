@@ -30,19 +30,25 @@ export default {
         if (!role) {
             return error({
                 context: context,
-                description: context.t('role.role_not_found', { role: snowflake })
+                description: context.t('role.role_not_found', { role: snowflake }),
+                command: 'likerole',
+                member: context.member
             })
         }
         if (!verifyRolePosition(context, context.member, role)) {
             return error({
                 context: context,
-                description: context.t('role.role_should_be_lower', { role: snowflake })
+                description: context.t('role.role_should_be_lower', { role: snowflake }),
+                command: 'likerole',
+                member: context.member
             })
         }
         return message({
             channel: context.channel,
             text: description,
             color: colors.highlightDefault,
+            command: 'likerole',
+            member: context.member,
             fields: [
                 {
                     name: 'feature',

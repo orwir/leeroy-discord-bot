@@ -20,7 +20,9 @@ export default {
 
     execute: async (context) => success({
         context: context,
-        description: context.t('command.response')
+        description: context.t('command.response'),
+        command: 'command',
+        member: context.member
     }),
 
     [event.onMessage]: async (message) => {

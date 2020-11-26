@@ -23,17 +23,23 @@ export default {
                 channel: context.channel,
                 title: context.t('language.supported_languages'),
                 description: Object.keys(LANGUAGES).join(', '),
-                color: colors.highlightDefault
+                color: colors.highlightDefault,
+                command: 'language',
+                member: context.member
             })
         } else if (!LANGUAGES[language]) {
             return error({
                 context: context,
-                description: context.t('language.language_not_supported', { language: language })
+                description: context.t('language.language_not_supported', { language: language }),
+                command: 'language',
+                member: context.member
             })
         } else if (language === config.language) {
             return error({
                 context: context,
-                description: context.t('language.language_the_same')
+                description: context.t('language.language_the_same'),
+                command: 'language',
+                member: context.member
             })
         } else {
             config.language = language
@@ -42,7 +48,9 @@ export default {
             
             return success({
                 context: context,
-                description: context.t('language.language_changed')
+                description: context.t('language.language_changed'),
+                command: 'language',
+                member: context.member
             })
         }
     }

@@ -40,7 +40,9 @@ export default {
             })
             .then(channel => success({
                 context: context,
-                description: context.t('dynvoice.factory_created', { name: channel.name, parent: groupName })
+                description: context.t('dynvoice.factory_created', { name: channel.name, parent: groupName }),
+                command: 'dynvoice',
+                member: context.member
             }))
     },
 

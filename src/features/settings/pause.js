@@ -25,14 +25,18 @@ export default {
             running = false
             return success({
                 context: context,
-                description: context.t('pause.paused')
+                description: context.t('pause.paused'),
+                command: 'pause',
+                member: context.member
             })
         }
         if (state === 'off') {
             running = true
             return success({
                 context: context,
-                description: context.t('pause.resumed')
+                description: context.t('pause.resumed'),
+                command: 'pause',
+                member: context.member
             })
         }
         if (state === 'status') {
@@ -40,7 +44,9 @@ export default {
                 channel: context.channel,
                 title: context.t('pause.status'),
                 description: context.t(running ? 'pause.running' : 'pause.resumed'),
-                color: running ? colors.highlightSuccess : colors.highlightError
+                color: running ? colors.highlightSuccess : colors.highlightError,
+                command: 'pause',
+                member: context.member
             })
         }
     }

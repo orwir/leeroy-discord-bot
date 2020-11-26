@@ -21,7 +21,9 @@ export default {
         } else if (prefix.length > _maxLength) {
             return error({
                 context: context,
-                description: context.t('prefix._maxLength_exceeded', { length: _maxLength })
+                description: context.t('prefix._maxLength_exceeded', { length: _maxLength }),
+                command: 'prefix',
+                member: context.member
             })
         } else {
             const config = await Server.config(context)
@@ -30,7 +32,9 @@ export default {
 
             return success({
                 context: context,
-                description: context.t('prefix.new_prefix', { prefix: config.prefix })
+                description: context.t('prefix.new_prefix', { prefix: config.prefix }),
+                command: 'prefix',
+                member: context.member
             })
         }
     }
