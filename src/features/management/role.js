@@ -19,14 +19,14 @@ export default {
             return man(context, 'role')
         }
 
-        const role = context.guild.roles.get(reference(roleflake))
+        const role = await context.guild.roles.fetch(reference(roleflake))
         if (!role) {
             return error({
                 context: context,
                 description: context.t('role.role_not_found', { role: roleflake })
             })
         }
-        if (!(await verifyRolePosition(context, context.member, role))) {
+        if (!verifyRolePosition(context, context.member, role)) {
             return error({
                 context: context,
                 description: context.t('role.role_should_be_lower', { role: roleflake })
@@ -35,15 +35,15 @@ export default {
 
         const members = []
         if (userflake === 'voice') {
-            if (!context.member.voiceChannelID) {
+            if (!context.member.voice.channelID) {
                 return error({
                     context: context,
                     description: context.t('role.you_are_not_in_voice_channel')
                 })
             }
-            members.push(...context.member.voiceChannel.members.array())
+            members.push(...context.member.voice.channel.members.array())
         } else {
-            const member = context.guild.members.get(reference(userflake))
+            const member = await context.guild.members.fetch(reference(userflake))
             if (!member) {
                 return error({
                     context: context,
@@ -53,7 +53,7 @@ export default {
             members.push(member)
         }
         return Promise
-            .all(members.map(m => m.roles[action](role)))
+            .all(members.map(member => member.roles[action](role)))
             .then(success({
                 context: context,
                 description: context.t('role.role_is_updated', {

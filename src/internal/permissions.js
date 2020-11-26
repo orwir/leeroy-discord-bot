@@ -1,4 +1,4 @@
-import { error, ERROR_MISSING_PERMISSIONS } from '../utils/response'
+import { error, ERROR_MISSING_PERMISSIONS, log } from '../utils/response'
 
 export const PERMISSIONS = {
     CREATE_INSTANT_INVITE: 'CREATE_INSTANT_INVITE',
@@ -45,44 +45,49 @@ export const REQUIRED = [
 export default PERMISSIONS
 
 export async function verifyBotPermissions(context, request) {
-    const core = missing(context.client.user, context.guild, context.channel, REQUIRED)
+    const core = _missing(context.client.user, context.guild, context.channel, REQUIRED)
     if (core.length) {
-        await sendMissingPermissions(
-            context,
-            await context.author.createDM(),
-            context.t('permissions.bot_requires_core_permissions', { channel: context.channel.name, server: context.guild.name }),
-            core
-        )
+        await _sendMissingPermissions(
+                context,
+                await context.author.createDM(),
+                context.t('permissions.bot_requires_core_permissions', { channel: context.channel.name, server: context.guild.name }),
+                core
+            ).catch(error => { log(context, error) })
         throw ERROR_MISSING_PERMISSIONS
     }
-    const feature = missing(context.client.user, context.guild, context.channel, request.feature.permissions)
+    const feature = _missing(context.client.user, context.guild, context.channel, request.feature.permissions)
         .filter(p => p !== PERMISSIONS.ADMINISTRATOR)
     if (feature.length) {
-        await sendMissingPermissions(context, context.channel, context.t('permissions.bot_requires_permissions'), feature)
+        await _sendMissingPermissions(
+                context,
+                context.channel,
+                context.t('permissions.bot_requires_permissions'),
+                feature
+            ).catch(error => { log(context, error) })
         throw ERROR_MISSING_PERMISSIONS
     }
 }
 
 export async function verifyUserPermissions(context, request) {
-    const user = missing(context.author, context.guild, context.channel, request.feature.permissions)
+    const user = _missing(context.author, context.guild, context.channel, request.feature.permissions)
     if (user.length) {
-        await sendMissingPermissions(
-            context,
-            await context.author.createDM(),
-            context.t('permissions.user_requires_permissions', { channel: context.channel.name, server: context.guild.name }),
-            core
-        )
+        await _sendMissingPermissions(
+                context,
+                await context.author.createDM(),
+                context.t('permissions.user_requires_permissions', { channel: context.channel.name, server: context.guild.name }),
+                user
+            ).catch(error => { log(context, error) })
         throw ERROR_MISSING_PERMISSIONS
     }
 }
 
-function missing(user, guild, channel, permissions) {
+function _missing(user, guild, channel, permissions) {
     return channel
         .permissionsFor(guild.member(user))
         .missing(permissions)
 }
 
-async function sendMissingPermissions(context, channel, text, missing) {
+async function _sendMissingPermissions(context, channel, text, missing) {
     return error({
         context: context,
         channel: channel,

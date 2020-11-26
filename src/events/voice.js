@@ -16,12 +16,12 @@ export default async function(previous, current) {
         .filter(handler => handler.channel === channel.voice)
         .forEach(handler => {
             if (isRunning() || features[handler.feature].unstoppable) {
-                _handleMovement(handler, previous, current).catch(error => log(previous, error))
+                handleMovement(handler, previous, current).catch(error => log(previous, error))
             }
         })
 }
 
-async function _handleMovement(handler, previous, current) {
+async function handleMovement(handler, previous, current) {
     if (previous.voiceChannelID === current.voiceChannelID) return
     if (![event.onJoinVoice, event.onLeaveVoice].includes(handler.event)) return
 

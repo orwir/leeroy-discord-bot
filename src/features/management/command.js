@@ -16,7 +16,6 @@ export default {
     usage: '[command] [arguments]?',
     examples: 'command.examples',
     permissions: [],
-    arguments: 0,
     exclude: true,
     unstoppable: true,
 
@@ -26,9 +25,7 @@ export default {
     }),
 
     [event.onMessage]: async (message) => {
-        if (message.author.bot || !message.content.trim()) {
-            return
-        }
+        if (message.author.bot) return
         try {
             const request = {
                 prefix: undefined,
@@ -81,10 +78,8 @@ async function parseArguments(message, request) {
     let rawargs = message.content.slice(`${request.prefix}${request.feature.name} `.length)
     if (!rawargs.trim()) {
         // do nothing
-
     } else if (!request.feature.arguments) {
         request.args.push(...rawargs.trim().split(' '))
-
     } else {
         for (let i = 1; i <= request.feature.arguments && rawargs.length > 0; i++) {
             let arg

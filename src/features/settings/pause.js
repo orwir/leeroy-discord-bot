@@ -6,9 +6,7 @@ import { man } from './man'
 
 let running = true
 
-export function isRunning() {
-    return running
-}
+export function isRunning() { return running }
 
 export default {
     name: 'pause',
@@ -23,7 +21,6 @@ export default {
         if (!state || !['on', 'off', 'status'].includes(state)) {
             return man(context, 'pause')
         }
-
         if (state === 'on') {
             running = false
             return success({

@@ -1,5 +1,5 @@
-export async function verifyRolePosition(context, member, role) {
-    const bot = await context.guild.members.fetch(context.client.user)
+export function verifyRolePosition(context, member, role) {
+    const bot = context.guild.member(context.client.user)
     return isAllowed(bot, role) && (isAllowed(member, role) || member.id === context.guild.ownerID)
 }
 

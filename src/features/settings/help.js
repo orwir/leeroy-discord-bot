@@ -1,7 +1,7 @@
-import groups from '../../internal/groups'
 import colors from '../../internal/colors'
 import { Server, VERSION } from '../../internal/config'
-import { REQUIRED as REQUIRED_PERMISSIONS } from '../../internal/permissions'
+import groups from '../../internal/groups'
+import { REQUIRED as requiredPermissions } from '../../internal/permissions'
 import { message } from '../../utils/response'
 
 export default {
@@ -38,7 +38,7 @@ export default {
                 },
                 {
                     name: context.t('help.core_permissions'),
-                    value: REQUIRED_PERMISSIONS.map(p => context.t(`permissions.${p}`)).join('\n')
+                    value: requiredPermissions.map(p => context.t(`permissions.${p}`)).join('\n')
                 }
             ]
         })

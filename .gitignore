@@ -87,3 +87,4 @@ typings/
 .vscode
 .node-persist
 firebase-credentials.json
+dev-config.json

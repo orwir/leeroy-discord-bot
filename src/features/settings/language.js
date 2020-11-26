@@ -1,9 +1,9 @@
 import i18n from 'i18next'
-import groups from '../../internal/groups'
 import colors from '../../internal/colors'
+import { LANGUAGES, Server } from '../../internal/config'
+import groups from '../../internal/groups'
 import P from '../../internal/permissions'
-import { Server, LANGUAGES } from '../../internal/config'
-import { success, error, message } from '../../utils/response'
+import { error, message, success } from '../../utils/response'
 
 const languages = {}
 
@@ -25,19 +25,16 @@ export default {
                 description: Object.keys(LANGUAGES).join(', '),
                 color: colors.highlightDefault
             })
-
         } else if (!LANGUAGES[language]) {
             return error({
                 context: context,
                 description: context.t('language.language_not_supported', { language: language })
             })
-
         } else if (language === config.language) {
             return error({
                 context: context,
                 description: context.t('language.language_the_same')
             })
-
         } else {
             config.language = language
             await Server.save(context, config)

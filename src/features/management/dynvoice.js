@@ -10,13 +10,13 @@ import { man } from '../settings/man'
 register('dynvoice', channel.voice, event.onJoinVoice)
 register('dynvoice', channel.voice, event.onLeaveVoice)
 
-const FACTORY_PREFIX = '+'
-const CHANNEL_PREFIX = '>'
-const FACTORY_TEMPLATE = /^\+ #(\d+) \/(.*?)\/$/
-const CHANNEL_TEMPLATE = /^\> (.*)$/
+// const FACTORY_PREFIX = '+'
+// const CHANNEL_PREFIX = '>'
+// const FACTORY_TEMPLATE = /^\+ #(\d+) \/(.*?)\/$/
+// const CHANNEL_TEMPLATE = /^\> (.*)$/
 
-const COOLDOWN = 2 * 1000
-let USED = Date.now()
+// const COOLDOWN = 2 * 1000
+// let USED = Date.now()
 
 export default {
     name: 'dynvoice',

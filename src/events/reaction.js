@@ -7,7 +7,7 @@ import { handlers } from '../internal/register'
 import { log } from '../utils/response'
 
 export default async function reaction(context, user, reacted) {
-    if (context.me) return
+    if (user.bot) return
     context.t = await Server.language(context.message)
 
     handlers()

@@ -7,8 +7,8 @@ import { register } from '../../internal/register'
 import { message as response, success } from '../../utils/response'
 import { man } from '../settings/man'
 
-const channels = {}
-const cooldown = 10 * 1000
+const _channels = {}
+const _cooldown = 5 * 1000
 
 register('sentry', channel.text, event.onMessage)
 
@@ -30,8 +30,8 @@ export default {
         const guild = context.guild
 
         if (state === 'on') {
-            if (!channels.hasOwnProperty(channel.id)) {
-                channels[channel.id] = {
+            if (!_channels.hasOwnProperty(channel.id)) {
+                _channels[channel.id] = {
                     id: channel.id,
                     name: channel.name,
                     guildID: guild.id,
@@ -49,7 +49,7 @@ export default {
             }
         }
         if (state === 'off') {
-            delete channels[channel.id]
+            delete _channels[channel.id]
             return success({
                 context: context,
                 description: context.t('sentry.off')
@@ -59,9 +59,9 @@ export default {
             return success({
                 channel: channel,
                 title: context.t('sentry.list_title'),
-                description: channels.size === 0
+                description: _channels.size === 0
                     ? context.t('sentry.no_channels')
-                    : Object.values(channels)
+                    : Object.values(_channels)
                         .filter(observable => observable.guildID === guild.id)
                         .map(observable => `<#${observable.id}>`)
                         .join('\n')
@@ -70,13 +70,13 @@ export default {
     },
 
     [event.onMessage]: async (message) => {
-        const observable = channels[message.channel.id]
+        const observable = _channels[message.channel.id]
         if (!observable) return
         const last = observable.lastMessage
         observable.lastMessage = message
 
         if (!(last && last.author.id === message.author.id
-            && message.createdAt.getTime() - last.createdAt.getTime() < cooldown)) {
+            && message.createdAt.getTime() - last.createdAt.getTime() < _cooldown)) {
             return
         }
 

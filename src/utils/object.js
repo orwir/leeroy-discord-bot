@@ -18,9 +18,7 @@ export function path(object, path, def) {
         if (index >= 0) {
             object = object[index]
         }
-        if (!object) {
-            break
-        }
+        if (!object) break
     }
     return object ? object : def
 }

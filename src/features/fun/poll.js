@@ -17,7 +17,6 @@ export default {
     execute: async (context, question) => {
         if (!question) {
             return man(context, 'poll')
-
         } else {
             return message({
                 channel: context.channel,

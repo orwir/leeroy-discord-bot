@@ -8,13 +8,11 @@ export async function man(context, name) {
 
     if (!name) {
         return showFeaturesList(context, features)
-
     } else if (!features[name]) {
         return error({
             context: context,
             description: context.t('global.unknown_command', { command: name })
         })
-
     } else {
         const feature = features[name]
         const embed = {
@@ -38,10 +36,8 @@ export async function man(context, name) {
                 value: feature.permissions.map(p => context.t(`permissions.${p}`)).join('\n')
             })
         }
-
         return context.channel.send('', { embed: embed })
     }
-
 }
 
 export default {

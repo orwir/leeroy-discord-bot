@@ -3,7 +3,7 @@ import P from '../../internal/permissions'
 import reference from '../../utils/reference'
 import { error } from '../../utils/response'
 
-const LIMIT = 90
+const _limit = 90
 
 export default {
     name: 'purge',
@@ -15,17 +15,17 @@ export default {
 
     execute: async (context, last, userflake) => {
         const count = parseInt(last)
-        if (!count || count > LIMIT) {
+        if (!count || count > _limit) {
             return error({
                 context: context,
-                description: context.t('purge.limit_exceeded_or_not_number', { max: LIMIT })
+                description: context.t('purge.limit_exceeded_or_not_number', { max: _limit })
             })
         }
-        const member = context.guild.members.get(reference(userflake))
+        const member = userflake ? await context.guild.members.fetch(reference(userflake)) : null
 
-        return context.channel
-            .fetchMessages({
-                limit: LIMIT + 1,
+        return context.channel.messages
+            .fetch({
+                limit: _limit + 1,
                 before: context.channel.lastMessageID
             })
             .then(messages => messages.array())
@@ -33,6 +33,6 @@ export default {
                 .filter(m => !member || member.id === m.author.id)
                 .slice(0, count)
             )
-            .then(messages => Promise.all(messages.map(m => m.delete().catch({}))))
+            .then(messages => Promise.all(messages.map(message => message.delete().catch({}))))
     }
 }

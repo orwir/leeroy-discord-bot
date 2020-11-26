@@ -10,10 +10,10 @@ console.log('Initializing bot...')
 
 const bot = new discord.Client()
 
-bot.on('ready', () => { ready(bot) })
-bot.on('message', (context) => { message(context, event.onMessage) })
-bot.on('voiceStateUpdate', (previous, current) => { voice(previous, current) })
-bot.on('messageReactionAdd', (context, user) => { reaction(context, user, true) })
-bot.on('messageReactionRemove', (context, user) => { reaction(context, user, false) })
+bot.on('ready', () => ready(bot))
+bot.on('message', (context) => message(context, event.onMessage))
+bot.on('voiceStateUpdate', (previous, current) => voice(previous, current))
+bot.on('messageReactionAdd', (context, user) => reaction(context, user, true))
+bot.on('messageReactionRemove', (context, user) => reaction(context, user, false))
 
 bot.login(TOKEN)

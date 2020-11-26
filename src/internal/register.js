@@ -8,6 +8,4 @@ export function register(feature, channel, event) {
     })
 }
 
-export function handlers() {
-    return Object.freeze(_register)
-}
+export function handlers() { return Object.freeze(_register) }

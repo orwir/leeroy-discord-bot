@@ -38,8 +38,8 @@ template = {
 
     execute: async (context, ...args) => {} response command to user request
 
-    onMessage: async (context) => {}
+    onMessage: async (message) => {}
 
-    onReaction: async (context, emoji, reacted) => {}
+    onReaction: async (context, user, reacted) => {}
 }
 */

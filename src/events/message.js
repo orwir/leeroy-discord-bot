@@ -6,7 +6,7 @@ import { handlers } from "../internal/register"
 import { log } from "../utils/response"
 
 export default async function (message, event) {
-    if (!message.content) return
+    if (!(message.content || '').trim()) return
     message.t = await Server.language(message)
 
     handlers()

@@ -33,7 +33,7 @@ export default {
                 description: context.t('role.role_not_found', { role: snowflake })
             })
         }
-        if (!(await verifyRolePosition(context, context.member, role))) {
+        if (!verifyRolePosition(context, context.member, role)) {
             return error({
                 context: context,
                 description: context.t('role.role_should_be_lower', { role: snowflake })
@@ -68,12 +68,13 @@ export default {
         const field = path(context.message, 'embeds[0].fields[0]')
         if (field.name !== 'feature') return
         const feature = features[field.value]
-        if (!feature && feature.name !== 'likerole') return
+        if (!feature || feature.name !== 'likerole') return
         if (!feature.emojis.includes(context.emoji.name)) return
         
         const snowflake = context.message.embeds[0].fields[1].value
-        const role = context.message.guild.roles.get(reference(snowflake))
-        const member = context.guild.member(user)
+        const guild = context.message.guild
+        const role = await guild.roles.fetch(reference(snowflake))
+        const member = await guild.members.fetch(user)
         if (role && member) {
             await member.roles[reacted ? 'add' : 'remove'](role)
         }
