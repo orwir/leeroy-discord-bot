@@ -66,7 +66,7 @@ export default {
 
     [event.onReaction]: async (context, user, reacted) => {
         const field = path(context.message, 'embeds[0].fields[0]')
-        if (field.name !== 'feature') return
+        if (!field || field.name !== 'feature') return
         const feature = features[field.value]
         if (!feature || feature.name !== 'likerole') return
         if (!feature.emojis.includes(context.emoji.name)) return
