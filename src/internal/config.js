@@ -10,7 +10,7 @@ export const devConfig = (() => {
 
 export const TOKEN = devConfig.token || process.env.leeroy_auth_token
 
-export const PREFIX = devConfig.prefix || process.env.leeroy_prefix
+export const PREFIX = devConfig.prefix|| '$'
 
 export const VERSION = readFileSync('./VERSION', 'utf8')
 
