@@ -63,7 +63,8 @@ async function parsePrefix(message, request) {
 async function parseFeature(message, request) {
     const raw = message.content
     const start = request.prefix.length
-    const end = raw.indexOf(' ', start) > 0 ? raw.indexOf(' ', start) : raw.length
+    const separator = raw.indexOf(' ') < raw.indexOf('\n') ? ' ' : '\n'
+    const end = raw.indexOf(separator, start) > 0 ? raw.indexOf(separator, start) : raw.length
     if (start + end > 0) {
         const name = raw.slice(start, end)
         request.feature = features[name]
@@ -76,17 +77,19 @@ async function parseFeature(message, request) {
 
 async function parseArguments(message, request) {
     let rawargs = message.content.slice(`${request.prefix}${request.feature.name} `.length)
+    const separator = rawargs.indexOf(' ') < rawargs.indexOf('\n') ? ' ' : '\n'
+
     if (!rawargs.trim()) {
         // do nothing
     } else if (!request.feature.arguments) {
-        request.args.push(...rawargs.trim().split(' '))
+        request.args.push(...rawargs.trim().split(separator))
     } else {
         for (let i = 1; i <= request.feature.arguments && rawargs.length > 0; i++) {
             let arg
             if (i < request.feature.arguments) {
-                let index = rawargs.indexOf(' ')
+                let index = rawargs.indexOf(separator)
                 arg = rawargs.slice(0, index > 0 ? index : rawargs.length)
-                rawargs = rawargs.slice(arg.length + 1)
+                rawargs = rawargs.slice(arg.length + separator.length)
             } else {
                 arg = rawargs
             }

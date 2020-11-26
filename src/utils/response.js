@@ -36,6 +36,24 @@ export async function success({
     })
 }
 
+export async function editMessage({
+    message,
+    text = '',
+    title = null,
+    description = null,
+    color = null,
+    fields = null
+} = {}) {
+    return message.edit({text,
+        embed: {
+            title: title,
+            description: description,
+            color: color,
+            fields: fields
+        }
+    })
+}
+
 export async function message({
     channel,
     text = '',
