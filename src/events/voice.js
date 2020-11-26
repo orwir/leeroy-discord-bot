@@ -22,11 +22,11 @@ export default async function(previous, current) {
 }
 
 async function handleMovement(handler, previous, current) {
-    if (previous.voiceChannelID === current.voiceChannelID) return
+    if (previous.channelID === current.channelID) return
     if (![event.onJoinVoice, event.onLeaveVoice].includes(handler.event)) return
 
-    const member = handler.event === event.onJoinVoice ? current : previous
-    if (member.voiceChannelID) {
-        await features[handler.feature][handler.event](member)
+    const context = handler.event === event.onJoinVoice ? current : previous
+    if (context.channelID) {
+        await features[handler.feature][handler.event](context)
     }
 }

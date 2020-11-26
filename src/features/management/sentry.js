@@ -7,10 +7,10 @@ import { register } from '../../internal/register'
 import { message as response, success } from '../../utils/response'
 import { man } from '../settings/man'
 
+register('sentry', channel.text, event.onMessage)
+
 const _channels = {}
 const _cooldown = 5 * 1000
-
-register('sentry', channel.text, event.onMessage)
 
 export default {
     name: 'sentry',
