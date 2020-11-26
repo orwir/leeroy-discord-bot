@@ -5,6 +5,7 @@ import groups from '../../internal/groups.js'
 import P from '../../internal/permissions.js'
 import { register } from '../../internal/register.js'
 import { message as response, success } from '../../utils/response.js'
+import { isContentEmoji } from '../../utils/text.js'
 import { man } from '../settings/man.js'
 
 register('sentry', event.onMessage, channel.text)
@@ -86,7 +87,8 @@ export default {
         observable.lastMessage = message
 
         if (!(last && last.author.id === message.author.id
-            && message.createdAt.getTime() - last.createdAt.getTime() < _cooldown)) {
+            && message.createdAt.getTime() - last.createdAt.getTime() < _cooldown
+            && (isContentEmoji(last.content) === isContentEmoji(message.content)))) {
             return
         }
 
