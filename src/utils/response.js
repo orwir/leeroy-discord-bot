@@ -57,7 +57,7 @@ export async function message({
     if (command && member) {
         const field = {
             name: `----------`,
-            value: member.nickname ? member.nickname : member.user.username
+            value: `[${command}] ${member}`
         }
         if (!fields) fields = []
         fields.push(field)

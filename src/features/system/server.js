@@ -17,7 +17,9 @@ export default {
 export async function obtain(context) {
     return storage.obtain(context, SERVER_CONFIG, {
         bot_id: context.client.user.id,
+        bot_name: context.client.user.name,
         server_id: context.guild.id,
+        server_name: context.guild.name,
         language: 'en',
         prefix: PREFIX
     })
