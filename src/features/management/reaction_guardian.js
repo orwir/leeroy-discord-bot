@@ -5,10 +5,10 @@ import { register } from "../../internal/register"
 import { path } from "../../utils/object"
 import features from '../index'
 
-register('feature_guardian', channel.text, event.onReaction)
+register('reaction_guardian', channel.text, event.onReaction)
 
 export default {
-    name: 'feature_guardian',
+    name: 'reaction_guardian',
     group: groups.management,
     description: 'global.na',
     usage: 'N/A',
