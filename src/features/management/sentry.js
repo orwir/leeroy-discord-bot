@@ -7,7 +7,7 @@ import { register } from '../../internal/register.js'
 import { message as response, success } from '../../utils/response.js'
 import { man } from '../settings/man.js'
 
-register('sentry', channel.text, event.onMessage)
+register('sentry', event.onMessage, channel.text)
 
 const _channels = {}
 const _cooldown = 5 * 1000

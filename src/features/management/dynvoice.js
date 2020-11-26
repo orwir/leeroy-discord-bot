@@ -8,8 +8,8 @@ import { register } from '../../internal/register.js'
 import { success } from '../../utils/response.js'
 import { man } from '../settings/man.js'
 
-register('dynvoice', channel.voice, event.onJoinVoice)
-register('dynvoice', channel.voice, event.onLeaveVoice)
+register('dynvoice', event.onJoinVoice, channel.voice)
+register('dynvoice', event.onLeaveVoice, channel.voice)
 
 const _factoryPrefix = devConfig.dynvoice_fprefix || '+'
 const _channelPrefix = devConfig.dynvoice_cprefix || '>'
