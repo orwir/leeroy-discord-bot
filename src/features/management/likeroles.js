@@ -26,7 +26,7 @@ export default {
 
     execute: async (context, action, args) => {
 
-        if (!action || args.length === 0) {
+        if (!action || !args || !args.length) {
             return man(context, 'likeroles')
         }
 
