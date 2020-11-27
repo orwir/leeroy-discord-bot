@@ -93,7 +93,7 @@ export default {
                 }
             }).then(message => message.reactions.removeAll())
         }
-        else{
+        else {
             result = message({
                 channel: context.channel,
                 color: colors.highlightDefault,
@@ -101,9 +101,7 @@ export default {
             })
         }
 
-        return result.then(async message => {
-            emojis.forEach(async (emoji) => await message.react(emoji))
-        })
+        return result.then(message => Promise.all(emojis.map(emoji => message.react(emoji))))
     },
 
     [event.onReaction]: async (context, user, reacted) => {
@@ -129,6 +127,8 @@ export default {
                 if (member) {
                     await member.roles[reacted ? 'add' : 'remove'](role)
                 }
+
+                return;
             }
         }
     },
