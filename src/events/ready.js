@@ -1,6 +1,7 @@
 import features from '../features/index.js'
 import event from '../internal/event.js'
 import { handlers } from '../internal/register.js'
+import { log } from '../utils/response.js'
 
 export default async function (bot) {
     handlers()

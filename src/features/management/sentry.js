@@ -4,14 +4,17 @@ import event from '../../internal/event.js'
 import groups from '../../internal/groups.js'
 import P from '../../internal/permissions.js'
 import { register } from '../../internal/register.js'
+import storage from '../../internal/storage.js'
 import { message as response, success } from '../../utils/response.js'
 import { isContentEmoji } from '../../utils/text.js'
 import { man } from '../settings/man.js'
 
+register('sentry', event.onReady)
 register('sentry', event.onMessage, channel.text)
 
 const _channels = {}
 const _cooldown = 5 * 1000
+const _sentryCollection = 'sentry'
 
 export default {
     name: 'sentry',
@@ -38,12 +41,12 @@ export default {
                     guildID: guild.id,
                     lastMessage: null
                 }
-                return success({
+                return saveChannels(context).then(_ => success({
                     context: context,
                     description: context.t('sentry.on'),
                     command: 'sentry',
                     member: context.member
-                })
+                }))
             } else {
                 return success({
                     context: context,
@@ -55,20 +58,20 @@ export default {
         }
         if (state === 'off') {
             delete _channels[channel.id]
-            return success({
+            return saveChannels(context).then(_ => success({
                 context: context,
                 description: context.t('sentry.off'),
                 command: 'sentry',
                 member: context.member
-            })
+            }))
         }
         if (state === 'list') {
-            const description = _channels.size === 0
-                ? context.t('sentry.no_channels')
-                : Object.values(_channels)
+            const description = Object.getOwnPropertyNames(_channels).length
+                ? Object.values(_channels)
                     .filter(observable => observable.guildID === guild.id)
                     .map(observable => `<#${observable.id}>`)
                     .join('\n')
+                : context.t('sentry.no_channels')
 
             return success({
                 channel: channel,
@@ -107,5 +110,37 @@ export default {
                     .catch(error => log(message, error))
             }
         }
+    },
+
+    [event.onReady]: async (bot) => {
+        const saved = await storage.obtain(bot, _sentryCollection)
+        if (!saved) return
+        
+        saved.forEach(config => {
+            config.channels.forEach(observable => {
+                _channels[observable.id] = {
+                    id: observable.id,
+                    name: observable.name,
+                    guildID: observable.guild_id,
+                    lastMessage: null
+                }
+            })
+        })
     }
+}
+
+async function saveChannels(context) {
+    const channels = Object.values(_channels)
+        .filter(channel => channel.guildID === context.guild.id)
+        .map(channel => {
+            return {
+                guild_id: channel.guildID,
+                id: channel.id,
+                name: channel.name
+            }
+        })
+    await storage.save(context.client, _sentryCollection, context.guild, {
+        bot_id: context.client.user.id,
+        channels: channels
+    })
 }
