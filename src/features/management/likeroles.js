@@ -24,9 +24,9 @@ export default {
     arguments: 2,
     permissions: [P.MANAGE_ROLES],
 
-    execute: async (context, action, ...args) => {
+    execute: async (context, action, args) => {
 
-        if (!action) {
+        if (!action || args.length === 0) {
             return man(context, 'likeroles')
         }
 
@@ -36,13 +36,13 @@ export default {
 
         const msg = action === 'create' ? null : await context.channel.messages.fetch(action);
 
-        if (args.length === 0) {
+        if (action !== 'create' && !msg) {
             return man(context, 'likeroles')
         }
 
         const lines = [] 
-        args[0].trimStart('\n').split('\n').forEach((line) => {
-            let elements = line.split(' ').filter(x => x !== '')
+        args.trimStart('\n').split('\n').forEach((line) => {
+            let elements = line.split(' ').filter(x => x)
 
             if (elements.length < 2) {
                 return;
@@ -51,11 +51,11 @@ export default {
             lines.push({
                 emoji: elements[0],
                 role: elements[1],
-                description: elements.slice(2).join(' ') || ''
+                description: elements.slice(2).join(' ')
             })
         })
 
-        if (lines.length === 0) {
+        if (!lines.length) {
             return man(context, 'likeroles')
         }
 
@@ -63,9 +63,9 @@ export default {
         var emojis = []
 
         await Promise.all(lines.map(async obj => {
-            let emoji = await getEmoji(context, obj.emoji)
-            let role = await getRole(context, obj.role)
-            let description = obj.description
+            const emoji = await getEmoji(context, obj.emoji)
+            const role = await getRole(context, obj.role)
+            const description = obj.description
 
             if (!verifyRolePosition(context, context.member, role)) {
                 return error({
@@ -83,7 +83,7 @@ export default {
 
         let result
         if (msg) {
-            var embed = path(msg, 'embeds[0]');
+            const embed = path(msg, 'embeds[0]');
             result = msg.edit({
                 embed: {
                     title: embed.title,
@@ -101,39 +101,42 @@ export default {
             })
         }
 
-        return result.then(message => {
-            emojis.forEach((emoji) => message.react(emoji))
+        return result.then(async message => {
+            emojis.forEach(async (emoji) => await message.react(emoji))
         })
     },
 
     [event.onReaction]: async (context, user, reacted) => {
         const fields = path(context.message, 'embeds[0].fields')
-        const field = fields[0]
-        if (!field || field.name !== 'feature') return
-        const feature = features[field.value]
+        const featureField = fields[0]
+        if (!featureField || featureField.name !== 'feature') return
+        const feature = features[featureField.value]
         if (!feature || feature.name !== 'likeroles') return
 
-        const emojis = {}
         for (let idx = 1; idx < fields.length; idx += 3) {
-            const emoji = fields[idx].value
-            const role = await getRole(context.message, fields[idx + 1].value)
+            const emoji = fields[idx].value;
+            
+            if (emoji === context.emoji.toString()) {
+                
+                const role = await getRole(context.message, fields[idx + 1].value)
 
-            emojis[emoji] = role
-        }
+                if (!role) {
+                    // probably removed role
+                    return
+                }
 
-        const role = emojis[context.emoji]
-        if (!role) return;
-        
-        const member = await context.message.guild.members.fetch(user)
-        if (member) {
-            await member.roles[reacted ? 'add' : 'remove'](role)
+                const member = await context.message.guild.members.fetch(user)
+                if (member) {
+                    await member.roles[reacted ? 'add' : 'remove'](role)
+                }
+            }
         }
     },
 }
 
 async function getRole(context, text) {
 	if (!reference(text)) {
-			return;
+        return;
 	}
     return await context.guild.roles.fetch(reference(text))
 }
