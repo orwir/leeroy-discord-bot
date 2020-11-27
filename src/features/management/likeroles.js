@@ -41,7 +41,7 @@ export default {
         }
 
         const lines = [] 
-        args.trimStart('\n').split('\n').forEach((line) => {
+        args.split('\n').forEach((line) => {
             let elements = line.split(' ').filter(x => x)
 
             if (elements.length < 2) {
@@ -180,11 +180,3 @@ function getDescriptionField(context, description) {
         inline: true
     }
 }
-
-Object.defineProperty(String.prototype, "trimStart", {
-    value: function trimStart(trimText) {
-        return this.startsWith(trimText) ? this.slice(trimText.length) : this
-    },
-    writable: true,
-    configurable: true
-})
