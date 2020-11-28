@@ -8,9 +8,9 @@ const _serverCollection = 'server'
 export default {
     name: 'server',
     group: groups.system,
-    description: 'server.description',
+    description: 'gobal.na',
     usage: 'n/a',
-    examples: 'server.examples',
+    examples: 'global.na',
     permissions: [P.ADMINISTRATOR]
 }
 
@@ -19,8 +19,8 @@ export async function obtain(context) {
     
     config.bot_id = config.bot_id || context.client.user.id
     config.bot_name = config.bot_name || context.client.user.tag
-    config.server_id = config.server_id || context.guild.id
-    config.server_name = config.server_name || context.guild.name
+    config.id = config.id || context.guild.id
+    config.name = config.name || context.guild.name
     config.language = config.language || 'en'
     config.prefix = config.prefix || PREFIX
 

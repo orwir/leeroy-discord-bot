@@ -136,6 +136,7 @@ export default {
 async function saveChannels(context) {
     await storage.save(context.client, _sentryCollection, context.guild, {
         bot_id: context.client.user.id,
+        bot_name: context.client.user.tag,
         id: context.guild.id,
         name: context.guild.name,
         emoji: (_config[context.guild.id] || {}).emoji || _emoji,
