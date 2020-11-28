@@ -1,4 +1,3 @@
-import { GuildMember } from 'discord.js'
 import channel from '../../internal/channel.js'
 import { devConfig } from '../../internal/config.js'
 import event from '../../internal/event.js'
@@ -22,7 +21,7 @@ export default {
     name: 'dynvoice',
     group: groups.management,
     description: 'dynvoice.description',
-    usage: 'dynvoice [parent id] [limit] [template]',
+    usage: 'dynvoice [<category id>] [<limit>] [<template>]',
     examples: 'dynvoice.examples',
     arguments: 3,
     permissions: [P.MANAGE_CHANNELS, P.MOVE_MEMBERS],
@@ -57,7 +56,7 @@ export default {
                 userLimit: limit,
                 parent: context.channel.parent,
                 permissionOverwrites: context.channel.permissionOverwrites,
-                reason: context.t('dynvoice.user_created_channel', { username: context.member.user.tag, nickname: context.member.name()})
+                reason: context.t('dynvoice.user_created_channel', { username: context.member.user.tag, nickname: resolveName(context.member)})
             })
             .then(channel => context.setChannel(channel))
     },
@@ -72,10 +71,10 @@ export default {
 async function applyTemplate(context, template) {
     const playing = context.member.presence.activities.find(a => a.type === 'PLAYING')
     return template
-        .replace('<user>', context.member.name())
+        .replace('<user>', resolveName(context.member))
         .replace('<game>', playing ? playing.name : context.t('dynvoice.chill'))
 }
 
-GuildMember.prototype.name = function() {
-    return this.nickname ? this.nickname : this.user.username
+function resolveName(member) {
+    return member.nickname || member.user.nickname
 }

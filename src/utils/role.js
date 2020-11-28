@@ -1,8 +1,10 @@
-export function verifyRolePosition(context, member, role) {
+export function canSetRole(context, role) {
     const bot = context.guild.member(context.client.user)
-    return isAllowed(bot, role) && (isAllowed(member, role) || member.id === context.guild.ownerID)
+    const member = context.member
+    return hasRoleHigherThan(bot, role)
+        && (hasRoleHigherThan(member, role) || member.id === context.guild.ownerID)
 }
 
-function isAllowed(member, role) {
+export function hasRoleHigherThan(member, role) {
     return member.roles.highest.comparePositionTo(role) > 0
 }

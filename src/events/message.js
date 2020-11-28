@@ -6,14 +6,17 @@ import { handlers } from "../internal/register.js"
 import { log } from "../utils/response.js"
 
 export default async function (message, event) {
-    if (!(message.content || '').trim()) return
-    message.t = await Server.language(message)
+    const filter = (handler) => handler.channel === channel.text && handler.event === event
 
-    handlers()
-        .filter(handler => handler.channel === channel.text && handler.event === event)
-        .forEach(handler => {
+    try {
+        if (!(message.content || '').trim()) return
+        message.t = await Server.language(message)
+        for (const handler of handlers().filter(filter)) {
             if (isRunning() || features[handler.feature].unstoppable) {
-                features[handler.feature][handler.event](message).catch(error => log(message, error))
+                await features[handler.feature][handler.event](message).catch(error => log(message, error))
             }
-        })
+        }
+    } catch (error) {
+        log(message, error)
+    }
 }

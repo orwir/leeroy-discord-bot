@@ -3,20 +3,20 @@ import groups from '../../internal/groups.js'
 import { error } from '../../utils/response.js'
 import { features as getFeaturesList } from '../index.js'
 
-export async function man(context, name) {
+export async function man(context, command) {
     const features = getFeaturesList()
 
-    if (!name) {
-        return showFeaturesList(context, features)
-    } else if (!features[name]) {
+    if (!command) {
+        return _messageFeatures(context, features)
+    } else if (!features[command]) {
         return error({
             context: context,
-            description: context.t('global.unknown_command', { command: name }),
+            description: context.t('global.unknown_command', { command: command }),
             command: 'man',
             member: context.member
         })
     } else {
-        const feature = features[name]
+        const feature = features[command]
         const embed = {
             title: feature.name,
             description: context.t(feature.description),
@@ -48,7 +48,7 @@ export default {
     name: 'man',
     group: groups.settings,
     description: 'man.description',
-    usage: 'man [command]',
+    usage: 'man [<command>]',
     examples: 'man.examples',
     arguments: 1,
     permissions: [],
@@ -56,7 +56,7 @@ export default {
     execute: man
 }
 
-async function showFeaturesList(context, features) {
+async function _messageFeatures(context, features) {
     const embed = {
         title: context.t('man.list'),
         color: colors.highlightDefault,
@@ -89,7 +89,7 @@ async function showFeaturesList(context, features) {
     }
 
     Object.values(features)
-        .filter(feature => feature.group != groups.system)
+        .filter(feature => feature.group !== groups.system)
         .sort(sorter)
         .reduce(formatter, {})
 

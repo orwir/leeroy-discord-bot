@@ -7,7 +7,7 @@ import { register } from '../../internal/register.js'
 import { path } from '../../utils/object.js'
 import reference from '../../utils/reference.js'
 import { error, message } from '../../utils/response.js'
-import { verifyRolePosition } from '../../utils/role.js'
+import { canSetRole } from '../../utils/role.js'
 import features from '../index.js'
 import { man } from '../settings/man.js'
 
@@ -17,9 +17,7 @@ export default {
     name: 'likeroles',
     group: groups.management,
     description: 'likeroles.description',
-    usage: `likeroles \`create|message_id\`
-    [emoji] [@role] [description]
-    [emoji] [@role] [description]`,
+    usage: 'likeroles [create, <message id>]\n[<emoji1>] [@<role1>] [<description1>]\n[<emoji2>] [@<role2>] [<description2>]',
     examples: 'likeroles.examples',
     arguments: 2,
     permissions: [P.MANAGE_ROLES],
@@ -67,7 +65,7 @@ export default {
             const role = await getRole(context, obj.role)
             const description = obj.description
 
-            if (!verifyRolePosition(context, context.member, role)) {
+            if (!canSetRole(context, role)) {
                 return error({
                     context: context,
                     description: context.t('role.role_should_be_lower', { role: role })

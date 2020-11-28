@@ -9,7 +9,7 @@ export default {
     name: 'purge',
     group: groups.management,
     description: 'purge.description',
-    usage: 'purge [last] [@user]?',
+    usage: 'purge [<number>] [@<user>]?',
     examples: 'purge.examples',
     permissions: [P.MANAGE_MESSAGES],
 
@@ -35,6 +35,6 @@ export default {
                 .filter(m => !member || member.id === m.author.id)
                 .slice(0, count)
             )
-            .then(messages => Promise.all(messages.map(message => message.delete().catch({}))))
+            .then(messages => Promise.all(messages.map(message => message.delete().catch(() => {}))))
     }
 }

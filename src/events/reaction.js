@@ -6,15 +6,19 @@ import event from '../internal/event.js'
 import { handlers } from '../internal/register.js'
 import { log } from '../utils/response.js'
 
-export default async function reaction(context, user, reacted) {
-    if (user.bot) return
-    context.t = await Server.language(context.message)
+export default async function reaction(reaction, user, reacted) {
+    const filter = (handler) => handler.channel === channel.text && handler.event === event.onReaction
 
-    handlers()
-        .filter(handler => handler.channel === channel.text && handler.event === event.onReaction)
-        .forEach(handler => {
+    try {
+        if (user.bot) return
+        reaction.t = await Server.language(reaction.message)
+        for (const handler of handlers().filter(filter)) {
             if (isRunning() || features[handler.feature].unstoppable) {
-                features[handler.feature][handler.event](context, user, reacted).catch(error => log(context.message, error))
+                await features[handler.feature][handler.event](reaction, user, reacted)
+                    .catch(error => log(reaction, error))
             }
-        })
+        }
+    } catch (error) {
+        log(reaction, error)
+    }
 }

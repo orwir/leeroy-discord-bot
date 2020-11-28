@@ -45,49 +45,49 @@ export const REQUIRED = [
 export default PERMISSIONS
 
 export async function verifyBotPermissions(context, request) {
-    const core = _missing(context.client.user, context.guild, context.channel, REQUIRED)
+    const bot = context.guild.member(context.client.user)
+    const core = _missing(bot, context.channel, REQUIRED)
     if (core.length) {
-        await _sendMissingPermissions(
+        await _notify(
                 context,
                 await context.author.createDM(),
                 context.t('permissions.bot_requires_core_permissions', { channel: context.channel.name, server: context.guild.name }),
                 core
-            ).catch(error => { log(context, error) })
+            ).catch(error => log(context, error))
         throw ERROR_MISSING_PERMISSIONS
     }
-    const feature = _missing(context.client.user, context.guild, context.channel, request.feature.permissions)
-        .filter(p => p !== PERMISSIONS.ADMINISTRATOR)
+    const feature = _missing(bot, context.channel, request.feature.permissions).filter(p => p !== PERMISSIONS.ADMINISTRATOR)
     if (feature.length) {
-        await _sendMissingPermissions(
+        await _notify(
                 context,
                 context.channel,
                 context.t('permissions.bot_requires_permissions'),
                 feature
-            ).catch(error => { log(context, error) })
+            ).catch(error => log(context, error))
         throw ERROR_MISSING_PERMISSIONS
     }
 }
 
 export async function verifyUserPermissions(context, request) {
-    const user = _missing(context.author, context.guild, context.channel, request.feature.permissions)
-    if (user.length) {
-        await _sendMissingPermissions(
+    const missing = _missing(context.member, context.channel, request.feature.permissions)
+    if (missing.length) {
+        await _notify(
                 context,
                 await context.author.createDM(),
                 context.t('permissions.user_requires_permissions', { channel: context.channel.name, server: context.guild.name }),
-                user
+                missing
             ).catch(error => { log(context, error) })
         throw ERROR_MISSING_PERMISSIONS
     }
 }
 
-function _missing(user, guild, channel, permissions) {
+function _missing(member, channel, permissions) {
     return channel
-        .permissionsFor(guild.member(user))
+        .permissionsFor(member)
         .missing(permissions)
 }
 
-async function _sendMissingPermissions(context, channel, text, missing) {
+async function _notify(context, channel, text, missing) {
     return error({
         context: context,
         channel: channel,

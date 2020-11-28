@@ -10,7 +10,7 @@ export default {
     name: 'prefix',
     group: groups.settings,
     description: 'prefix.description',
-    usage: 'prefix [new prefix]',
+    usage: 'prefix [<prefix>, reset]',
     examples: 'prefix.examples',
     arguments: 1,
     permissions: [P.ADMINISTRATOR],

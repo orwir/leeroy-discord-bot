@@ -4,9 +4,14 @@ import { handlers } from '../internal/register.js'
 import { log } from '../utils/response.js'
 
 export default async function (bot) {
-    handlers()
-        .filter(handler => handler.event === event.onReady)
-        .forEach(handler => {
-            features[handler.feature][handler.event](bot).catch(error => log(bot, error))
-        })
+    const filter = (handler) => handler.event === event.onReady
+    
+    try {
+        for (const handler of handlers().filter(filter)) {
+            await features[handler.feature][handler.event](bot)
+                .catch(error => log(bot, error))
+        }
+    } catch (error) {
+        log(bot, error)
+    }
 }

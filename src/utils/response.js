@@ -49,7 +49,7 @@ export async function message({
     text = '',
     title = null,
     description = null,
-    color = null,
+    color = colors.highlightDefault,
     fields = null,
     command = null,
     member = null,

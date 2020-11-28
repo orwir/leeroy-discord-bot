@@ -1,4 +1,3 @@
-import colors from '../../internal/colors.js'
 import { Server, VERSION } from '../../internal/config.js'
 import groups from '../../internal/groups.js'
 import { REQUIRED as requiredPermissions } from '../../internal/permissions.js'
@@ -18,7 +17,6 @@ export default {
 
         return message({
             channel: context.channel,
-            color: colors.highlightDefault,
             command: 'help',
             member: context.member,
             fields: [
