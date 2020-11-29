@@ -123,7 +123,7 @@
         "examples": "pause on\npause status",
         "paused": "Бот приостановлен.",
         "resumed": "Бот снова активен.",
-        "running": "Бот работает.",
+        "running": "Бот активен.",
         "status": "Текущий статус"
     },
 

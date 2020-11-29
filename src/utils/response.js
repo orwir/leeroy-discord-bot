@@ -56,11 +56,11 @@ export async function message({
 } = {}) {
     return channel.send(text, {
         embed: {
+            author: !command ? null : { name: `• ${command} •` },
             title: title,
             description: description,
             color: color,
             fields: fields
-            //footer: !command ? null : { text: `• ${command} •` },
         }
     })
 }
