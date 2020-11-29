@@ -54,20 +54,13 @@ export async function message({
     command = null,
     member = null,
 } = {}) {
-    if (command && member) {
-        const field = {
-            name: `----------`,
-            value: `[${command}] ${member}`
-        }
-        if (!fields) fields = []
-        fields.push(field)
-    }
     return channel.send(text, {
         embed: {
             title: title,
             description: description,
             color: color,
             fields: fields
+            //footer: !command ? null : { text: `• ${command} •` },
         }
     })
 }

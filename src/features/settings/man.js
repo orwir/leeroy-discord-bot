@@ -1,6 +1,5 @@
-import colors from '../../internal/colors.js'
 import groups from '../../internal/groups.js'
-import { error } from '../../utils/response.js'
+import { error, message } from '../../utils/response.js'
 import { features as getFeaturesList } from '../index.js'
 
 export async function man(context, command) {
@@ -17,30 +16,30 @@ export async function man(context, command) {
         })
     } else {
         const feature = features[command]
-        const embed = {
-            title: feature.name,
-            description: context.t(feature.description),
-            color: colors.highlightDefault,
-            command: 'man',
-            member: context.member,
-            fields: [
-                {
-                    name: context.t('man.usage'),
-                    value: feature.usage
-                },
-                {
-                    name: context.t('man.examples_list'),
-                    value: context.t(`${feature.name}.examples`)
-                }
-            ]
-        }
+        const fields = [
+            {
+                name: context.t('man.usage'),
+                value: feature.usage
+            },
+            {
+                name: context.t('man.examples_list'),
+                value: context.t(`${feature.name}.examples`)
+            }
+        ]
         if (feature.permissions.length) {
-            embed.fields.push({
+            fields.push({
                 name: context.t('man.permissions'),
                 value: feature.permissions.map(p => context.t(`permissions.${p}`)).join('\n')
             })
         }
-        return context.channel.send('', { embed: embed })
+        return message({
+            channel: context.channel,
+            title: feature.name,
+            description: context.t(feature.description),
+            command: 'man',
+            member: context.member,
+            fields: fields
+        })
     }
 }
 
@@ -57,11 +56,7 @@ export default {
 }
 
 async function _messageFeatures(context, features) {
-    const embed = {
-        title: context.t('man.list'),
-        color: colors.highlightDefault,
-        fields: []
-    }
+    const fields = []
     const sorter = (a, b) => {
         if (a.group.order === b.group.order) {
             return (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0
@@ -79,7 +74,7 @@ async function _messageFeatures(context, features) {
                     value: ''
                 }
             }
-            embed.fields.push(group.field)
+            fields.push(group.field)
         }
         if (group.field.value.length > 0) {
             group.field.value += '\n'
@@ -93,5 +88,11 @@ async function _messageFeatures(context, features) {
         .sort(sorter)
         .reduce(formatter, {})
 
-    return context.channel.send('', { embed: embed })
+    return message({
+        channel: context.channel,
+        title: context.t('man.list'),
+        fields: fields,
+        command: 'man',
+        member: context.member
+    })
 }
