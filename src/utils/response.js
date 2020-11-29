@@ -9,14 +9,18 @@ export async function error({
     description,
     channel = null,
     text = '',
-    title = null
+    title = null,
+    command = null,
+    member = null,
 } = {}) {
     return message({
         channel: channel || context.channel,
         text: text,
         title: title || context.t('global.error'),
         description: description,
-        color: colors.highlightError
+        color: colors.highlightError,
+        command: command,
+        member: member
     })
 }
 
@@ -25,14 +29,18 @@ export async function success({
     description,
     channel = null,
     text = '',
-    title = null
+    title = null,
+    command = null,
+    member = null,
 } = {}) {
     return message({
         channel: channel || context.channel,
         text: text,
         title: title || context.t('global.success'),
         description: description,
-        color: colors.highlightSuccess
+        color: colors.highlightSuccess,
+        command: command,
+        member: member
     })
 }
 
@@ -41,11 +49,14 @@ export async function message({
     text = '',
     title = null,
     description = null,
-    color = null,
-    fields = null
+    color = colors.highlightDefault,
+    fields = null,
+    command = null,
+    member = null,
 } = {}) {
     return channel.send(text, {
         embed: {
+            author: !command ? null : { name: `• ${command} •` },
             title: title,
             description: description,
             color: color,

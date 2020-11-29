@@ -1,6 +1,6 @@
 import { existsSync, readFileSync } from 'fs'
-import { obtain as language } from '../features/settings/language.js'
-import * as server from '../features/settings/server.js'
+import * as language from '../features/settings/language.js'
+import * as server from '../features/system/server.js'
 
 export const devConfig = (() => {
     const config = './dev-config.json'
@@ -25,7 +25,7 @@ export const Server = {
 
     language: async (context) => {
         const config = await server.obtain(context)
-        return language(config.language)
+        return language.obtain(config.language)
     },
 
     save: async (context, config) => server.save(context, config)

@@ -1,5 +1,4 @@
 import i18n from 'i18next'
-import colors from '../../internal/colors.js'
 import { LANGUAGES, Server } from '../../internal/config.js'
 import groups from '../../internal/groups.js'
 import P from '../../internal/permissions.js'
@@ -11,7 +10,7 @@ export default {
     name: 'language',
     group: groups.settings,
     description: 'language.description',
-    usage: 'language [lang]',
+    usage: 'language [<lang>]',
     examples: 'language.examples',
     permissions: [P.ADMINISTRATOR],
 
@@ -23,17 +22,22 @@ export default {
                 channel: context.channel,
                 title: context.t('language.supported_languages'),
                 description: Object.keys(LANGUAGES).join(', '),
-                color: colors.highlightDefault
+                command: 'language',
+                member: context.member
             })
         } else if (!LANGUAGES[language]) {
             return error({
                 context: context,
-                description: context.t('language.language_not_supported', { language: language })
+                description: context.t('language.language_not_supported', { language: language }),
+                command: 'language',
+                member: context.member
             })
         } else if (language === config.language) {
             return error({
                 context: context,
-                description: context.t('language.language_the_same')
+                description: context.t('language.language_the_same'),
+                command: 'language',
+                member: context.member
             })
         } else {
             config.language = language
@@ -42,7 +46,9 @@ export default {
             
             return success({
                 context: context,
-                description: context.t('language.language_changed')
+                description: context.t('language.language_changed'),
+                command: 'language',
+                member: context.member
             })
         }
     }
@@ -60,6 +66,8 @@ async function initLocalization() {
     })
     .then(t => {
         Object.keys(LANGUAGES)
-            .forEach(language => { languages[language] = i18n.getFixedT(language) })
+            .forEach(language => {
+                languages[language] = i18n.getFixedT(language)
+            })
     })
 }

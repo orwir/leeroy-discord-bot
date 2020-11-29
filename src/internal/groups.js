@@ -1,7 +1,7 @@
 export default {
     fun: {
         name: 'group.fun',
-        icon: ':ok_hand:',
+        icon: ':partying_face:',
         order: 0
     },
     management: {
@@ -13,5 +13,10 @@ export default {
         name: 'group.settings',
         icon: ':gear:',
         order: 2
+    },
+    system: {
+        name: 'group.system',
+        icon: ':magic_wand:',
+        order: 3
     }
 }

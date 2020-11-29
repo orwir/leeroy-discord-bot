@@ -1,14 +1,17 @@
-import { PREFIX } from "../internal/config.js"
-import { log } from "../utils/response.js"
+import features from '../features/index.js'
+import event from '../internal/event.js'
+import { handlers } from '../internal/register.js'
+import { log } from '../utils/response.js'
 
 export default async function (bot) {
-    bot.user.setPresence({
-            status: 'online',
-            activity: {
-                name: `${PREFIX}help`,
-                type: 'PLAYING'
-            }
-        })
-        .catch(error => log(bot, error))
-    console.log(`${bot.user.tag} has been started.`)
+    const filter = (handler) => handler.event === event.onReady
+    
+    try {
+        for (const handler of handlers().filter(filter)) {
+            await features[handler.feature][handler.event](bot)
+                .catch(error => log(bot, error))
+        }
+    } catch (error) {
+        log(bot, error)
+    }
 }

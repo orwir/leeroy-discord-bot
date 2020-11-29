@@ -9,7 +9,7 @@ export default {
     name: 'purge',
     group: groups.management,
     description: 'purge.description',
-    usage: 'purge [last] [@user]?',
+    usage: 'purge [<number>] [@<user>]?',
     examples: 'purge.examples',
     permissions: [P.MANAGE_MESSAGES],
 
@@ -18,7 +18,9 @@ export default {
         if (!count || count > _limit) {
             return error({
                 context: context,
-                description: context.t('purge.limit_exceeded_or_not_number', { max: _limit })
+                description: context.t('purge.limit_exceeded_or_not_number', { max: _limit }),
+                command: 'purge',
+                member: context.member
             })
         }
         const member = userflake ? await context.guild.members.fetch(reference(userflake)) : null
@@ -33,6 +35,6 @@ export default {
                 .filter(m => !member || member.id === m.author.id)
                 .slice(0, count)
             )
-            .then(messages => Promise.all(messages.map(message => message.delete().catch({}))))
+            .then(messages => Promise.all(messages.map(message => message.delete().catch(() => {}))))
     }
 }

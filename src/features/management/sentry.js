@@ -4,25 +4,31 @@ import event from '../../internal/event.js'
 import groups from '../../internal/groups.js'
 import P from '../../internal/permissions.js'
 import { register } from '../../internal/register.js'
+import storage from '../../internal/storage.js'
+import { hasOnlyEmojis } from '../../utils/emoji.js'
 import { message as response, success } from '../../utils/response.js'
 import { man } from '../settings/man.js'
 
-register('sentry', channel.text, event.onMessage)
+register('sentry', event.onReady)
+register('sentry', event.onMessage, channel.text)
 
+const _config = {}
 const _channels = {}
 const _cooldown = 5 * 1000
+const _emoji = '🤡'
+const _sentryCollection = 'sentry'
 
 export default {
     name: 'sentry',
     group: groups.management,
     description: 'sentry.description',
-    usage: 'sentry [on,off,list]',
+    usage: 'sentry [on, off]',
     examples: 'sentry.examples',
     arguments: 1,
     permissions: [P.ADMINISTRATOR],
-
+    
     execute: async (context, state) => {
-        if (!state || !['on', 'off', 'list'].includes(state)) {
+        if (state && !['on', 'off'].includes(state)) {
             return man(context, 'sentry')
         }
 
@@ -37,51 +43,61 @@ export default {
                     guildID: guild.id,
                     lastMessage: null
                 }
-                return success({
-                    context: context,
-                    description: context.t('sentry.on')
-                })
+                return saveChannels(context)
+                    .then(_ => success({
+                        context: context,
+                        description: context.t('sentry.on'),
+                        command: 'sentry',
+                        member: context.member
+                    }))
             } else {
                 return success({
                     context: context,
-                    description: context.t('sentry.already_on')
+                    description: context.t('sentry.already_on'),
+                    command: 'sentry',
+                    member: context.member
                 })
             }
         }
         if (state === 'off') {
             delete _channels[channel.id]
-            return success({
-                context: context,
-                description: context.t('sentry.off')
-            })
+            return saveChannels(context)
+                .then(_ => success({
+                    context: context,
+                    description: context.t('sentry.off'),
+                    command: 'sentry',
+                    member: context.member
+                }))
         }
-        if (state === 'list') {
-            return success({
-                channel: channel,
-                title: context.t('sentry.list_title'),
-                description: _channels.size === 0
-                    ? context.t('sentry.no_channels')
-                    : Object.values(_channels)
-                        .filter(observable => observable.guildID === guild.id)
-                        .map(observable => `<#${observable.id}>`)
-                        .join('\n')
-            })
-        }
+        const description = Object.getOwnPropertyNames(_channels).length
+            ? Object.values(_channels)
+                .filter(channel => channel.guildID === guild.id)
+                .map(channel => `<#${channel.id}>`)
+                .join('\n')
+            : context.t('sentry.no_channels')
+
+        return response({
+            channel: channel,
+            title: context.t('sentry.list_title'),
+            description: description,
+            command: 'sentry',
+            member: context.member
+        })
     },
 
     [event.onMessage]: async (message) => {
-        const observable = _channels[message.channel.id]
-        if (!observable) return
-        const last = observable.lastMessage
-        observable.lastMessage = message
+        const channel = _channels[message.channel.id]
+        if (!channel) return
+        const last = channel.lastMessage
+        channel.lastMessage = message
 
-        if (!(last && last.author.id === message.author.id
-            && message.createdAt.getTime() - last.createdAt.getTime() < _cooldown)) {
-            return
-        }
+        if (!last || last.author.id !== message.author.id) return
+        if (message.createdAt - last.createdAt > _cooldown) return
+        if (hasOnlyEmojis(last.content) !== hasOnlyEmojis(message.content)) return
 
         try {
-            await Promise.all([message.react('🤡'), last.react('🤡')]).catch(error => log(message, error))
+            const emoji = (_config[message.guild.id] || {}).emoji || _emoji
+            await Promise.all([message.react(emoji), last.react(emoji)])
         } catch (error) {
             if (error.code === 90001) {
                 await Promise
@@ -92,8 +108,43 @@ export default {
                         description: `${last.content} ${message.content}`,
                         color: colors.highlightDefault
                     }))
-                    .catch(error => log(message, error))
+            } else {
+                throw error
             }
         }
+    },
+
+    [event.onReady]: async (bot) => {
+        const saved = await storage.obtain(bot, _sentryCollection) || []
+        
+        saved.forEach(config => {
+            _config[config.id] = {
+                emoji: config.emoji
+            }
+            config.channels.forEach(channel => {
+                _channels[channel.id] = {
+                    id: channel.id,
+                    name: channel.name,
+                    guildID: config.id,
+                    lastMessage: null
+                }
+            })
+        })
     }
+}
+
+async function saveChannels(context) {
+    await storage.save(context.client, _sentryCollection, context.guild, {
+        bot_id: context.client.user.id,
+        bot_name: context.client.user.tag,
+        id: context.guild.id,
+        name: context.guild.name,
+        emoji: (_config[context.guild.id] || {}).emoji || _emoji,
+        channels: Object.values(_channels)
+                .filter(channel => channel.guildID === context.guild.id)
+                .map(channel => { return {
+                    id: channel.id,
+                    name: channel.name
+                }})
+    })
 }

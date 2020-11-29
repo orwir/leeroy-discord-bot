@@ -1,4 +1,3 @@
-import colors from '../../internal/colors.js'
 import groups from '../../internal/groups.js'
 import P from '../../internal/permissions.js'
 import { message } from '../../utils/response.js'
@@ -8,7 +7,7 @@ export default {
     name: 'poll',
     group: groups.fun,
     description: 'poll.description',
-    usage: 'poll [your message]',
+    usage: 'poll [<your question>]',
     examples: 'poll.examples',
     arguments: 1,
     emojis: ['👍', '👎'],
@@ -21,7 +20,8 @@ export default {
             return message({
                 channel: context.channel,
                 text: question,
-                color: colors.highlightDefault,
+                command: 'poll',
+                member: context.member,
                 fields: [
                     {
                         name: 'feature',

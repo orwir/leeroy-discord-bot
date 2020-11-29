@@ -1,12 +1,15 @@
+import { path } from '../utils/object.js'
 import fun from './fun/index.js'
 import management from './management/index.js'
 import settings from './settings/index.js'
+import system from './system/index.js'
 
 export function features() {
     return [
             ...settings,
             ...fun,
-            ...management
+            ...management,
+            ...system
         ]
         .reduce((features, feature) => {
             features[feature.name] = feature
@@ -15,6 +18,13 @@ export function features() {
 }
 
 export default features()
+
+export function resolve(message) {
+    const info = path(message, 'embeds[0].fields[0]')
+    if (info && info.name === 'feature') {
+        return features[info.value]
+    }
+}
 
 /*
 template = {

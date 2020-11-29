@@ -8,38 +8,50 @@ const _cache = {}
 const _database = connect()
 
 export default {
-    save: async (context, collection, object) => {
+    save: async (bot, collection, guild, object) => {
         if (_database) {
             return _database
                 .collection(collection)
-                .doc(key(context))
+                .doc(key(bot, guild))
                 .set(object)
-                .then(() => { _cache[cacheKey(context, collection)] = object })
+                .then(() => { _cache[cacheKey(bot, guild, collection)] = object })
         } else {
-            _cache[cacheKey(context, collection)] = object
+            _cache[cacheKey(bot, guild, collection)] = object
         }
     },
-    obtain: async (context, collection, def) => {
-        let data = _cache[cacheKey(context, collection)]
+    obtain: async (bot, collection, guild, def) => {
+        let data = _cache[cacheKey(bot, guild, collection)]
         if (data) return data
 
         if (_database) {
-            data = (await _database
-                .collection(collection)
-                .doc(key(context))
-                .get())
-                .data()
+            if (guild) {
+                data = (await _database
+                    .collection(collection)
+                    .doc(key(bot, guild))
+                    .get())
+                    .data()
+            } else {
+                data = (await _database
+                    .collection(collection)
+                    .where('bot_id', '==', bot.user.id)
+                    .get())
+                    .docs
+                    .map(doc => doc.data())
+            }
         }
         if (!data) data = def
-        _cache[cacheKey(context, collection)] = data
+        _cache[cacheKey(bot, guild, collection)] = data
 
         return data
     }
 }
 
-function key(context) { return `${context.client.user.id}#${context.guild.id}` }
+function key(bot, guild) {
+    const suffix = guild ? guild.id : 'all'
+    return `${bot.user.id}#${suffix}`
+}
 
-function cacheKey(context, collection) { return `${collection}|${key(context)}` }
+function cacheKey(bot, guild, collection) { return `${collection}|${key(bot, guild)}` }
 
 function connect() {
     try {

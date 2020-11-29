@@ -4,24 +4,27 @@ import event from '../../internal/event.js'
 import groups from '../../internal/groups.js'
 import { verifyBotPermissions, verifyUserPermissions } from '../../internal/permissions.js'
 import { register } from '../../internal/register.js'
-import { ERROR_NOT_COMMAND, log, success } from '../../utils/response.js'
+import { error, ERROR_NOT_COMMAND, IGNORED_ERRORS, log, success } from '../../utils/response.js'
 import features from '../index.js'
 
-register('command', channel.text, event.onMessage)
+register('command', event.onMessage, channel.text)
+
+const _separator = /\s+/
 
 export default {
     name: 'command',
-    group: groups.management,
+    group: groups.system,
     description: 'command.description',
-    usage: '[command] [arguments]?',
+    usage: '[<command>] [<arg>]*',
     examples: 'command.examples',
     permissions: [],
-    exclude: true,
     unstoppable: true,
 
     execute: async (context) => success({
         context: context,
-        description: context.t('command.response')
+        description: context.t('command.response'),
+        command: 'command',
+        member: context.member
     }),
 
     [event.onMessage]: async (message) => {
@@ -35,15 +38,23 @@ export default {
             await parsePrefix(message, request)
             await parseFeature(message, request)
             await parseArguments(message, request)
-            progress(message, true)
+            showProgress(message, true)
             await verifyBotPermissions(message, request)
             await verifyUserPermissions(message, request)
             await execute(message, request)
             await clean(message)
-        } catch (error) {
-            log(message, error)
+        } catch (e) {
+            log(message, e)
+            if (!IGNORED_ERRORS.includes(e)) {
+                await error({
+                    context: message,
+                    description: e,
+                    command: message.content,
+                    member: message.member
+                }).catch(() => {})
+            }
         } finally {
-            progress(message, false)
+            showProgress(message, false)
         }
     }
 }
@@ -54,7 +65,7 @@ async function parsePrefix(message, request) {
         request.prefix = config.prefix
     } else if (message.content.startsWith(PREFIX)) {
         request.prefix = PREFIX
-        request.stablePrefix = true
+        request.onlyStable = true
     } else {
         throw ERROR_NOT_COMMAND
     }
@@ -63,11 +74,16 @@ async function parsePrefix(message, request) {
 async function parseFeature(message, request) {
     const raw = message.content
     const start = request.prefix.length
-    const end = raw.indexOf(' ', start) > 0 ? raw.indexOf(' ', start) : raw.length
+    let end = raw.slice(start).search(_separator)
+    if (end == -1) {
+        end = raw.length
+    } else {
+        end = start + end
+    }
     if (start + end > 0) {
         const name = raw.slice(start, end)
         request.feature = features[name]
-        if (request.feature && !(request.stablePrefix && !request.feature.stable)) {
+        if (request.feature && !(request.onlyStable && !request.feature.stable)) {
             return
         }
     }
@@ -79,14 +95,14 @@ async function parseArguments(message, request) {
     if (!rawargs.trim()) {
         // do nothing
     } else if (!request.feature.arguments) {
-        request.args.push(...rawargs.trim().split(' '))
+        request.args.push(...rawargs.trim().split(_separator))
     } else {
         for (let i = 1; i <= request.feature.arguments && rawargs.length > 0; i++) {
             let arg
             if (i < request.feature.arguments) {
-                let index = rawargs.indexOf(' ')
-                arg = rawargs.slice(0, index > 0 ? index : rawargs.length)
-                rawargs = rawargs.slice(arg.length + 1)
+                let index = rawargs.search(_separator) || rawargs.length
+                arg = rawargs.slice(0, index === -1 ? rawargs.length : index)
+                rawargs = rawargs.slice(arg.length + 1).trimStart()
             } else {
                 arg = rawargs
             }
@@ -102,10 +118,10 @@ async function execute(message, request) {
 }
 
 async function clean(message) {
-    return message.delete().catch({})
+    return message.delete().catch(error => log(message, error))
 }
 
-function progress(message, show) {
+function showProgress(message, show) {
     if (show) {
         message.channel.startTyping()
     } else {
