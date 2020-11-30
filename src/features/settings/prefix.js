@@ -26,9 +26,9 @@ export default {
                 member: context.member
             })
         } else {
-            const config = await Server.config(context)
+            const config = await Server.config(context.guild)
             config.prefix = prefix === 'reset' ? PREFIX : prefix
-            await Server.save(context, config)
+            await Server.save(context.guild, config)
 
             return success({
                 context: context,

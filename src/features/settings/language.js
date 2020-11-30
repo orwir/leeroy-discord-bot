@@ -15,7 +15,7 @@ export default {
     permissions: [P.ADMINISTRATOR],
 
     execute: async (context, language) => {
-        const config = await Server.config(context)
+        const config = await Server.config(context.guild)
 
         if (!language) {
             return message({
@@ -41,7 +41,7 @@ export default {
             })
         } else {
             config.language = language
-            await Server.save(context, config)
+            await Server.save(context.guild, config)
             context.t = await obtain(config.language)
             
             return success({

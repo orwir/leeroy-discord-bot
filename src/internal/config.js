@@ -21,13 +21,13 @@ export const LANGUAGES = {
 
 export const Server = {
 
-    config: async (context) => server.obtain(context),
+    config: async (guild) => server.obtain(guild),
 
-    language: async (context) => {
-        const config = await server.obtain(context)
+    language: async (guild) => {
+        const config = await server.obtain(guild)
         return language.obtain(config.language)
     },
 
-    save: async (context, config) => server.save(context, config)
+    save: async (guild, config) => server.save(guild, config)
 
 }

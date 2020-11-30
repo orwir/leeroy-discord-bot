@@ -60,7 +60,7 @@ export default {
 }
 
 async function parsePrefix(message, request) {
-    const config = await Server.config(message)
+    const config = await Server.config(message.guild)
     if (message.content.startsWith(config.prefix)) {
         request.prefix = config.prefix
     } else if (message.content.startsWith(PREFIX)) {

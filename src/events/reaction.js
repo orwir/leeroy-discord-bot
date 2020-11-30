@@ -11,7 +11,7 @@ export default async function reaction(reaction, user, reacted) {
 
     try {
         if (user.bot) return
-        reaction.t = await Server.language(reaction.message)
+        reaction.t = await Server.language(reaction.message.guild)
         for (const handler of handlers().filter(filter)) {
             if (isRunning() || features[handler.feature].unstoppable) {
                 await features[handler.feature][handler.event](reaction, user, reacted)
