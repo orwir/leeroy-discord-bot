@@ -7,7 +7,7 @@ import { register } from '../../internal/register.js'
 import { error, ERROR_NOT_COMMAND, IGNORED_ERRORS, log, success } from '../../utils/response.js'
 import features from '../index.js'
 
-register('command', event.onMessage, channel.text)
+register('command', event.onMessage, { channel: channel.text })
 
 const _separator = /\s+/
 

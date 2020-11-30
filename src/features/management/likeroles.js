@@ -11,7 +11,7 @@ import { canSetRole } from '../../utils/role.js'
 import features from '../index.js'
 import { man } from '../settings/man.js'
 
-register('likeroles', event.onReaction, channel.text)
+register('likeroles', event.onReaction, { channel: channel.text })
 
 export default {
     name: 'likeroles',

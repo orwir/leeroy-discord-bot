@@ -6,7 +6,7 @@ import { register } from "../../internal/register.js"
 import { isAllowedEmoji } from '../../utils/emoji.js'
 import { resolve } from '../index.js'
 
-register('reaction_guardian', event.onReaction, channel.text)
+register('reaction_guardian', event.onReaction, { channel: channel.text })
 
 export default {
     name: 'reaction_guardian',

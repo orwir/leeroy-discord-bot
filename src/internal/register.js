@@ -1,10 +1,11 @@
 const _register = []
 
-export function register(feature, event, channel) {
+export function register(feature, event, {channel, interval} = {}) {
     _register.push({
         feature: feature,
         event: event,
-        channel: channel
+        channel: channel,
+        interval: interval
     })
 }
 

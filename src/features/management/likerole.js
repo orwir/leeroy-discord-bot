@@ -10,7 +10,7 @@ import { canSetRole } from '../../utils/role.js'
 import { resolve } from '../index.js'
 import { man } from '../settings/man.js'
 
-register('likerole', event.onReaction, channel.text)
+register('likerole', event.onReaction, { channel: channel.text })
 
 export default {
     name: 'likerole',
