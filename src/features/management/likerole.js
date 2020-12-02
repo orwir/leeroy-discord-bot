@@ -71,7 +71,7 @@ export default {
     [event.onReaction]: async (reaction, user, reacted) => {
         const feature = resolve(reaction.message)
         if (!feature || feature.name !== 'likerole') return
-        if (!isAllowedEmoji(feature, reaction.message, reaction.emoji)) {
+        if (!( await isAllowedEmoji(feature, reaction.message, reaction.emoji))) {
             return
         }
         const snowflake = reaction.message.embeds[0].fields[1].value

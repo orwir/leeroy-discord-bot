@@ -53,6 +53,7 @@ export async function message({
     fields = null,
     command = null,
     member = null,
+    footer = null
 } = {}) {
     return channel.send(text, {
         embed: {
@@ -60,7 +61,8 @@ export async function message({
             title: title,
             description: description,
             color: color,
-            fields: fields
+            fields: fields,
+            footer: footer
         }
     })
 }
