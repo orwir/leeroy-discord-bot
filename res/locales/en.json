@@ -111,7 +111,8 @@
         "off": "No law in this wild channel anymore!",
         "list_title": "Observable channels",
         "no_channels": "No observable channels yet.",
-        "user_said": "{{- username}} said:"
+        "user_said": "<@{{username}}> said:",
+        "disgust": "/watches <@{{username}}> with disgust 🤢/"
     },
 
     "pause": {

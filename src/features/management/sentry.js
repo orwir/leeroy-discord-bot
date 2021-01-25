@@ -95,7 +95,7 @@ export default {
         // roleplay
         if (_roleplay.test(message)) {
             if (message.author.bot) return
-            await message.channel.send(`/наблюдает с отвращением за ${message.author}/`);
+            await message.channel.send(message.t('sentry.disgust', {username: message.author}));
         }
 
         // poetry
