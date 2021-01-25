@@ -16,7 +16,8 @@ const _config = {}
 const _channels = {}
 const _cooldown = 5 * 1000
 const _emoji = '🤡'
-const _roleplay = /.*?\/.+?\/.*/
+const _roleplay = /(?!http).*?\/.+?\/.*/
+const _httpLink = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
 const _sentryCollection = 'sentry'
 
 export default {
@@ -93,8 +94,7 @@ export default {
         channel.lastMessage = message
 
         // roleplay
-        if (_roleplay.test(message)) {
-            if (message.author.bot) return
+        if (!message.author.bot && _roleplay.test(message) && !_httpLink.test(message)) {
             await message.channel.send(message.t('sentry.disgust', {username: message.author}));
         }
 
