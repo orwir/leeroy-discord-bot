@@ -16,6 +16,7 @@ const _config = {}
 const _channels = {}
 const _cooldown = 5 * 1000
 const _emoji = '🤡'
+const _roleplay = /.*?\/.+?\/.*/
 const _sentryCollection = 'sentry'
 
 export default {
@@ -91,6 +92,13 @@ export default {
         const last = channel.lastMessage
         channel.lastMessage = message
 
+        // roleplay
+        if (_roleplay.test(message)) {
+            if (message.author.bot) return
+            await message.channel.send(`/наблюдает с отвращением за ${message.author}/`);
+        }
+
+        // poetry
         if (!last || last.author.id !== message.author.id) return
         if (message.createdAt - last.createdAt > _cooldown) return
         if (hasOnlyEmojis(last.content) !== hasOnlyEmojis(message.content)) return
