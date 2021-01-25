@@ -112,7 +112,7 @@
         "list_title": "Observable channels",
         "no_channels": "No observable channels yet.",
         "user_said": "<@{{username}}> said:",
-        "disgust": "/stared at <@{{username}}> with disgust 🤢/"
+        "disgust": "/stared at <@{{username}}> with disgust/ 🤢"
     },
 
     "pause": {
