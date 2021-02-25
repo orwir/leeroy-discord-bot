@@ -99,7 +99,8 @@ export default {
     },
 
     [event.onReaction]: async (reaction, user, reacted) => {
-        if (!reaction.message.author.bot) return
+        if (reaction.message.author.bot) return
+        if (!reaction.message.embeds[0]) return
         if (reaction.message.embeds[0].title !== '__likerole__') return
 
         const emojis = reaction
