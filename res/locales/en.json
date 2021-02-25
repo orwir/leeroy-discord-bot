@@ -5,20 +5,17 @@
         "unknown_command": "Unknown command [{{command}}]!",
         "na": "N/A"
     },
-
     "group": {
         "fun": "Fun",
         "management": "Management",
         "settings": "Settings",
         "system": "System"
     },
-
     "command": {
         "description": "A command the bot can perform.",
         "examples": "man\nhelp\nlanguage en",
         "response": "So what are you expected?"
     },
-
     "language": {
         "description": "Changes bot's language.",
         "examples": "language en\nlanguage ru",
@@ -27,7 +24,6 @@
         "language_the_same": "{{language}} is current language.",
         "language_changed": "Language successfully changed."
     },
-
     "help": {
         "description": "Shows general information",
         "examples": "help",
@@ -37,7 +33,6 @@
         "prefix": "Prefix",
         "core_permissions": "Core Permissions"
     },
-
     "man": {
         "description": "Shows usage command info. Without any parameter shows list of all commands.",
         "examples": "man help\nman",
@@ -46,21 +41,18 @@
         "examples_list": "Examples",
         "permissions": "Permissions"
     },
-
     "prefix": {
         "description": "Changes commands prefix.\n'reset' restores default prefix.",
         "examples": "prefix !\nprefix reset",
         "max_length_exceeded": "Max length for prefix is {{length}}",
         "new_prefix": "New prefix: {{prefix}}"
     },
-
     "poll": {
         "description": "Creates [yes, no] poll.\n👍 - yes, 👎 - no.",
         "examples": "poll Am I the best bot?",
         "reactions": "Reactions",
         "yesno": "Yes - 👍 / No - 👎"
     },
-
     "role": {
         "description": "Adds or removes role from specified member or applies to everyone in the voice channel with you.",
         "examples": "role add @role @user\nrole remove @role voice",
@@ -72,22 +64,13 @@
         "remove": "removed from",
         "role_is_updated": "Role {{- role}} is {{action}}:\n\n{{- members}}"
     },
-
     "likerole": {
-        "description": "Allows to add/remove role by reacting on a \"role message\".",
-        "examples": "likerole @role With this role you will be awesome!",
-        "howto": "Reaction",
-        "role": "Role"
-    },
-
-    "likeroles": {
-        "description": "Allows to add/remove roles by reacting on a \"role message\". To modify existed message use <message id> instead of \"create\"",
-        "examples": "likeroles create\n👍 @role1 This role suits best for ...! \n🤡 @role2 If you like ... this role for you!",
-        "howto": "Description",
+        "description": "Allows to add/remove role(s) by reacting with a specific emoji under message.\nMaximum roles in 1 message is 20.",
+        "examples": "likerole create\n👍 @role1 This role suits best for ...! \n🤡 @role2 If you like ... this role for you!",
+        "emoji": "Emoji",
         "role": "Role",
-        "emoji": "Reaction"
+        "desc": "Description"
     },
-
     "dynvoice": {
         "description": "Creates voice channels on demand with customizable name and permissions. Command creates channel-factory and when user joins it creates a new \"managed\" channel and moves user into it. Permissions inherits from factory. Name of new channel is special prefix + factory template. If no users left in a channel auto-remove it.\nParameters:\n* [<category id>] - ID of a channel group to add a factory and managed channels\n* [<limit>] - users limit for managed channel (0 - unlimited)\n* [<template>] - Name of a managed channel\n - <user> is replaced by username\n - <game> is replaced by game in the status at the moment of creation",
         "examples": "dynvoice 12345 4 squad\ndynvoice 12345 2 1x1 <user>\ndynvoice 12345 5 <game>",
@@ -96,13 +79,11 @@
         "chill": "Chill",
         "user_created_channel": "{{- username}} ({{- nickname}}) created the channel"
     },
-
     "purge": {
         "description": "Deletes last messages from a channel. Can be filtered by user.",
         "examples": "purge 10\npurge 5 @<user>",
         "limit_exceeded_or_not_number": "Exceed limit of handling messages ({{max}}) or not a number."
     },
-
     "sentry": {
         "description": "Observes current channel and sets emoji for every message if they are written by a single person in a sequence. If a person blocks the bot - deletes last two messages and rewrite them into one.",
         "examples": "sentry on\nsentry",
@@ -114,7 +95,6 @@
         "user_said": "<@{{username}}> said:",
         "disgust": "/stared at <@{{username}}> with disgust/ 🤢"
     },
-
     "pause": {
         "description": "Pauses handling of all events but commands.",
         "examples": "pause on\npause",
@@ -123,7 +103,6 @@
         "running": "The bot is running.",
         "status": "Current status"
     },
-
     "permissions": {
         "bot_requires_core_permissions": "Bot doesn't have required core permissions in channel [#{{channel}}] on server [{{server}}].",
         "bot_requires_permissions": "Bot doesn't have required permissions.",
