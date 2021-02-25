@@ -58,6 +58,7 @@ export default {
         const emojis = []
         await Promise.all(data.split('\n').map(async (line) => {
             const values = line.match(_roleLine)
+            if (!values) return
 
             const emoji = await getEmoji(context, values[1])
             const role = await getRole(context, values[2])
@@ -75,7 +76,7 @@ export default {
             fields[1].value += `${role}`
 
             if (fields[2].value) fields[2].value += '\n'
-            fields[2].value += description
+            fields[2].value += description || '—'
         }))
 
         let result
@@ -99,7 +100,7 @@ export default {
     },
 
     [event.onReaction]: async (reaction, user, reacted) => {
-        if (reaction.message.author.bot) return
+        if (!reaction.message.author.bot || user.bot) return
         if (!reaction.message.embeds[0]) return
         if (reaction.message.embeds[0].title !== '__likerole__') return
 
