@@ -39,17 +39,17 @@ export default {
 
         const fields = [
             {
-                name: 'Emoji',
+                name: context.t('likerole.emoji'),
                 value: '',
                 inline: true,
             },
             {
-                name: 'Role',
+                name: context.t('likerole.role'),
                 value: '',
                 inline: true,
             },
             {
-                name: 'Description',
+                name: context.t('likerole.desc'),
                 value: '',
                 inline: true,
             }
