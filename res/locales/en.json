@@ -48,10 +48,8 @@
         "new_prefix": "New prefix: {{prefix}}"
     },
     "poll": {
-        "description": "Creates [yes, no] poll.\n👍 - yes, 👎 - no.",
-        "examples": "poll Am I the best bot?",
-        "reactions": "Reactions",
-        "yesno": "Yes - 👍 / No - 👎"
+        "description": "Creates poll. If no variants - creates yes/no poll. Maximum number of variants - 9.",
+        "examples": "poll Am I the best bot?\n\npoll 2x2?\n4\n5\nI dunno..."
     },
     "role": {
         "description": "Adds or removes role from specified member or applies to everyone in the voice channel with you.",
