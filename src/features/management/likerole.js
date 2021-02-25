@@ -6,9 +6,8 @@ import P from '../../internal/permissions.js'
 import { register } from '../../internal/register.js'
 import { unicodeEmojis } from '../../utils/emoji.js'
 import reference from '../../utils/reference.js'
-import { error, message } from '../../utils/response.js'
+import { message } from '../../utils/response.js'
 import { canSetRole } from '../../utils/role.js'
-import { resolve } from '../index.js'
 import { man } from '../settings/man.js'
 
 register('likerole', event.onReaction, channel.text)
@@ -118,7 +117,10 @@ export default {
             .split('\n')
 
         const index = emojis.findIndex(emoji => emoji === reaction.emoji.toString())
-        if (index === -1) return
+        if (index === -1) {
+            await reaction.remove()
+            return
+        }
 
         const role = await getRole(reaction.message, roles[index])
         if (!role) return
