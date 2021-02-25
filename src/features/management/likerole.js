@@ -116,7 +116,7 @@ export default {
             .value
             .split('\n')
 
-        const index = emojis.findIndex(emoji => emoji === reaction.emoji.toString())
+        const index = emojis.indexOf(reaction.emoji.toString())
         if (index === -1) {
             await reaction.remove()
             return
