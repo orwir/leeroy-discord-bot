@@ -14,17 +14,17 @@
         "url": "https://github.com/orwir/leeroy-discord-bot"
     },
     "dependencies": {
-        "discord.js": "^12.5.1",
-        "firebase-admin": "^9.4.1",
+        "discord.js": "^12.5.3",
+        "firebase-admin": "^9.11.0",
         "i18next": "^17.3.1",
-        "node-forge": ">=0.10.0",
-        "lz-string": "^1.4.4"
+        "lz-string": "^1.4.4",
+        "node-forge": ">=0.10.0"
     },
     "devDependencies": {
-        "@babel/core": "^7.12.9",
-        "@babel/node": "^7.12.6",
-        "@babel/preset-env": "^7.12.7",
-        "chai": "^4.2.0",
+        "@babel/core": "^7.15.0",
+        "@babel/node": "^7.14.9",
+        "@babel/preset-env": "^7.15.0",
+        "chai": "^4.3.4",
         "chai-as-promised": "^7.1.1",
         "mocha": "^6.2.3",
         "sinon": "^7.5.0"
