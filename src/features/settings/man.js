@@ -34,9 +34,8 @@ export async function man(context, command) {
         }
         return message({
             channel: context.channel,
-            title: feature.name,
+            title: `__${feature.name}__`,
             description: context.t(feature.description),
-            command: 'man',
             member: context.member,
             fields: fields
         })

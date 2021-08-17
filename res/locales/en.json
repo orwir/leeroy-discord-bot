@@ -48,10 +48,8 @@
         "new_prefix": "New prefix: {{prefix}}"
     },
     "poll": {
-        "description": "Creates [yes, no] poll.\n👍 - yes, 👎 - no.",
-        "examples": "poll Am I the best bot?",
-        "reactions": "Reactions",
-        "yesno": "Yes - 👍 / No - 👎"
+        "description": "Creates poll. If no variants - creates yes/no poll. Maximum number of variants - 9.",
+        "examples": "poll Am I the best bot?\n\npoll 2x2?\n4\n5\nI dunno..."
     },
     "role": {
         "description": "Adds or removes role from specified member or applies to everyone in the voice channel with you.",
@@ -65,17 +63,11 @@
         "role_is_updated": "Role {{- role}} is {{action}}:\n\n{{- members}}"
     },
     "likerole": {
-        "description": "Allows to add/remove role by reacting on a \"role message\".",
-        "examples": "likerole @role With this role you will be awesome!",
-        "howto": "Reaction",
-        "role": "Role"
-    },
-    "likeroles": {
-        "description": "Allows to add/remove roles by reacting on a \"role message\". To modify existed message use <message id> instead of \"create\"",
-        "examples": "likeroles create\n👍 @role1 This role suits best for ...! \n🤡 @role2 If you like ... this role for you!",
-        "howto": "Description",
+        "description": "Allows to add/remove role(s) by reacting with a specific emoji under message.\nMaximum roles in 1 message is 20.",
+        "examples": "likerole create\n👍 @role1 This role suits best for ...! \n🤡 @role2 If you like ... this role for you!",
+        "emoji": "Emoji",
         "role": "Role",
-        "emoji": "Reaction"
+        "desc": "Description"
     },
     "dynvoice": {
         "description": "Creates voice channels on demand with customizable name and permissions. Command creates channel-factory and when user joins it creates a new \"managed\" channel and moves user into it. Permissions inherits from factory. Name of new channel is special prefix + factory template. If no users left in a channel auto-remove it.\nParameters:\n* [<category id>] - ID of a channel group to add a factory and managed channels\n* [<limit>] - users limit for managed channel (0 - unlimited)\n* [<template>] - Name of a managed channel\n - <user> is replaced by username\n - <game> is replaced by game in the status at the moment of creation",
@@ -98,7 +90,8 @@
         "off": "No law in this wild channel anymore!",
         "list_title": "Observable channels",
         "no_channels": "No observable channels yet.",
-        "user_said": "{{- username}} said:"
+        "user_said": "<@{{username}}> said:",
+        "disgust": "/stared at <@{{username}}> with disgust/ 🤢"
     },
     "pause": {
         "description": "Pauses handling of all events but commands.",
