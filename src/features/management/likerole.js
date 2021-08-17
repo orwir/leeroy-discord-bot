@@ -10,7 +10,7 @@ import { message } from '../../utils/response.js'
 import { canSetRole } from '../../utils/role.js'
 import { man } from '../settings/man.js'
 
-register('likerole', event.onReaction, channel.text)
+register('likerole', event.onReaction, { channel: channel.text })
 
 const _roleLine = /([^\s]+)\s+([^\s]+)\s*?(.*)/i
 

@@ -40,4 +40,14 @@ export default {
             await message.react(_numbers[index])
         }
     },
+
+    isAllowedEmoji: (message, emoji) => {
+        const data = meta.resolve(message)
+        if (!data || data.feature !== 'poll') return true
+        if (data.type === 'yesno') {
+            return _yesno.includes(emoji)
+        } else {
+            return _numbers.slice(0, _numbers).includes(emoji)
+        }
+    }
 }

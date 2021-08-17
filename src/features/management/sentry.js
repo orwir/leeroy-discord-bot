@@ -10,7 +10,7 @@ import { message as response, success } from '../../utils/response.js'
 import { man } from '../settings/man.js'
 
 register('sentry', event.onReady)
-register('sentry', event.onMessage, channel.text)
+register('sentry', event.onMessage, { channel: channel.text })
 
 const _config = {}
 const _channels = {}

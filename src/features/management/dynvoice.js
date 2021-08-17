@@ -1,14 +1,15 @@
-import channel from '../../internal/channel.js'
-import { devConfig } from '../../internal/config.js'
+import type from '../../internal/channel.js'
+import { devConfig, Server } from '../../internal/config.js'
 import event from '../../internal/event.js'
 import groups from '../../internal/groups.js'
 import P from '../../internal/permissions.js'
 import { register } from '../../internal/register.js'
-import { success } from '../../utils/response.js'
+import { log, success } from '../../utils/response.js'
 import { man } from '../settings/man.js'
 
-register('dynvoice', event.onJoinVoice, channel.voice)
-register('dynvoice', event.onLeaveVoice, channel.voice)
+register('dynvoice', event.periodic, { interval: 10 })
+register('dynvoice', event.onJoinVoice, { channel: type.voice })
+register('dynvoice', event.onLeaveVoice, { channel: type.voice })
 
 const _factoryPrefix = devConfig.dynvoice_fprefix || '+'
 const _channelPrefix = devConfig.dynvoice_cprefix || '>'
@@ -33,7 +34,7 @@ export default {
         const group = context.guild.channels.resolve(parent)
         const groupName = group ? group.name : context.t('dynvoice.root')
         return context.guild.channels.create(`${_factoryPrefix} #${limit} /${template}/`, {
-                type: channel.voice,
+                type: type.voice,
                 userLimit: 1,
                 parent: group
             })
@@ -45,34 +46,56 @@ export default {
             }))
     },
 
-    [event.onJoinVoice]: async (context) => {
-        const factory = context.channel.name.match(_factoryTemplate)
-        if (!factory || Date.now() - _lastUsed < _cooldown) return
-        _lastUsed = Date.now()
-        let [ , limit, template ] = factory
+    [event.periodic]: async (bot) => {
+        for (const guild of bot.guilds.cache.array()) {
+            const language = await Server.language(guild)
+            for (const channel of guild.channels.cache.array()) {
+                if (channel.members.size) {
+                    await createVoiceChannel(guild, channel, channel.members.first(), language)
+                        .catch(error => log(bot, error))
+                } else {
+                    await deleteChannelIfEmpty(channel).catch(error => log(bot, error))
+                }
+            }
+        }
+    },
 
-        await context.guild.channels.create(`${_channelPrefix} ${await applyTemplate(context, template)}`, {
-                type: channel.voice,
-                userLimit: limit,
-                parent: context.channel.parent,
-                permissionOverwrites: context.channel.permissionOverwrites,
-                reason: context.t('dynvoice.user_created_channel', { username: context.member.user.tag, nickname: resolveName(context.member)})
-            })
-            .then(channel => context.setChannel(channel))
+    [event.onJoinVoice]: async (context) => {
+        await createVoiceChannel(context.guild, context.channel, context.member, context.t)
     },
 
     [event.onLeaveVoice]: async (context) => {
-        if (_channelTemplate.test(context.channel.name) && !context.channel.members.size) {
-            await context.channel.delete()
-        }
+        await deleteChannelIfEmpty(context.channel)
     }
 }
 
-async function applyTemplate(context, template) {
-    const playing = context.member.presence.activities.find(a => a.type === 'PLAYING')
+async function createVoiceChannel(guild, channel, member, language) {
+    const factory = channel.name.match(_factoryTemplate)
+    if (!factory || Date.now() - _lastUsed < _cooldown) return
+    _lastUsed = Date.now()
+    let [ , limit, template ] = factory
+
+    await guild.channels.create(`${_channelPrefix} ${await applyTemplate(member, template, language)}`, {
+            type: type.voice,
+            userLimit: limit,
+            parent: channel.parent,
+            permissionOverwrites: channel.permissionOverwrites,
+            reason: language('dynvoice.user_created_channel', { username: member.user.tag, nickname: resolveName(member)})
+        })
+        .then(channel => member.voice.setChannel(channel))
+}
+
+async function deleteChannelIfEmpty(channel) {
+    if (channel && _channelTemplate.test(channel.name) && !channel.members.size) {
+        await channel.delete()
+    }
+}
+
+async function applyTemplate(member, template, language) {
+    const playing = member.presence.activities.find(a => a.type === 'PLAYING')
     return template
-        .replace('<user>', resolveName(context.member))
-        .replace('<game>', playing ? playing.name : context.t('dynvoice.chill'))
+        .replace('<user>', resolveName(member))
+        .replace('<game>', playing ? playing.name : language('dynvoice.chill'))
 }
 
 function resolveName(member) {

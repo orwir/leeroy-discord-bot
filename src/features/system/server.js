@@ -14,19 +14,19 @@ export default {
     permissions: [P.ADMINISTRATOR]
 }
 
-export async function obtain(context) {
-    const config = await storage.obtain(context.client, _serverCollection, context.guild, {})
+export async function obtain(guild) {
+    const config = await storage.obtain(guild.client, _serverCollection, guild, {})
     
-    config.bot_id = config.bot_id || context.client.user.id
-    config.bot_name = config.bot_name || context.client.user.tag
-    config.id = config.id || context.guild.id
-    config.name = config.name || context.guild.name
+    config.bot_id = config.bot_id || guild.client.user.id
+    config.bot_name = config.bot_name || guild.client.user.tag
+    config.id = config.id || guild.id
+    config.name = config.name || guild.name
     config.language = config.language || 'en'
     config.prefix = config.prefix || PREFIX
 
     return config
 }
 
-export async function save(context, config) {
-    return storage.save(context.client, _serverCollection, context.guild, config)
+export async function save(guild, config) {
+    return storage.save(guild.client, _serverCollection, guild, config)
 }

@@ -13,7 +13,7 @@ export default {
     stable: true,
 
     execute: async (context) => {
-        const config = await Server.config(context)
+        const config = await Server.config(context.guild)
 
         return message({
             channel: context.channel,

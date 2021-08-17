@@ -104,6 +104,13 @@
         "running": "Бот активен.",
         "status": "Текущий статус"
     },
+    "ask": {
+        "description": "Задай вопрос другому от имени бота.",
+        "examples": "ask @user Как дела?",
+        "member_not_found": "Участник [{{- member}}] не найден.",
+        "question_from": "Вопрос от анонимуса:",
+        "answer_from": "Ответ от {{- member}}:"
+    },
     "permissions": {
         "bot_requires_core_permissions": "Боту необходимы основные права доступа в канале [#{{channel}}] на сервере [{{server}}].",
         "bot_requires_permissions": "Боту необходимы права доступа.",

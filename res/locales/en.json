@@ -101,6 +101,13 @@
         "running": "The bot is running.",
         "status": "Current status"
     },
+    "ask": {
+        "description": "Ask any question on behalf of bot.",
+        "examples": "ask @user How are you?",
+        "member_not_found": "Member [{{- member}}] not found.",
+        "question_from": "Question from anonymous:",
+        "answer_from": "Answer from {{- member}}:"
+    },
     "permissions": {
         "bot_requires_core_permissions": "Bot doesn't have required core permissions in channel [#{{channel}}] on server [{{server}}].",
         "bot_requires_permissions": "Bot doesn't have required permissions.",

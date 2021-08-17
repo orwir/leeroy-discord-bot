@@ -10,7 +10,7 @@ export default async function(previous, current) {
     const filter = (handler) => handler.channel === channel.voice
 
     try {
-        const language = await Server.language(previous)
+        const language = await Server.language(previous.guild)
         previous.t = language
         current.t = language
         
