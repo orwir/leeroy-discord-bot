@@ -5,7 +5,6 @@ import { error, message } from '../../utils/response.js'
 import { man } from '../settings/man.js'
 import { register } from '../../internal/register.js'
 import channel from '../../internal/channel.js'
-import { MessageEmbed } from 'discord.js'
 
 register('ask', event.onMessage, { channel: channel.text })
 
