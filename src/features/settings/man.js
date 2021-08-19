@@ -26,7 +26,7 @@ export async function man(context, command) {
                 value: context.t(`${feature.name}.examples`)
             }
         ]
-        if (feature.permissions.length) {
+        if (feature.permissions?.length) {
             fields.push({
                 name: context.t('man.permissions'),
                 value: feature.permissions.map(p => context.t(`permissions.${p}`)).join('\n')
