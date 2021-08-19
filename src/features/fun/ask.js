@@ -44,6 +44,7 @@ export default {
         const originChannel = await message.client.channels.fetch(message.reference.channelID)
         const originMessage = await originChannel.messages.fetch(message.reference.messageID)
 
+        if (originMessage.member.user.id !== message.client.user.id) return
         if (originMessage.embeds[0]?.footer.text !== 'command: ask') return
         if (originMessage.embeds[0].fields.length > 0) return
         if (originMessage.content.indexOf(message.member.id) === -1) return
@@ -53,6 +54,7 @@ export default {
             value: message.content
         })
         await originMessage.edit(originMessage.embeds)
+        await message.delete()
     }
 }
 
