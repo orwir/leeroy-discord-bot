@@ -16,7 +16,7 @@ export default {
         let data = _cache[cacheKey(bot, guild, collection)]
         if (data) return data
 
-        data = obtainFromDB(bot, collection, guild)
+        data = await obtainFromDB(bot, collection, guild)
         if (!data) data = def
         _cache[cacheKey(bot, guild, collection)] = data
 
