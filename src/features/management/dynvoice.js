@@ -7,7 +7,7 @@ import { register } from '../../internal/register.js'
 import { log, success } from '../../utils/response.js'
 import { man } from '../settings/man.js'
 
-register('dynvoice', event.periodic, { interval: 10 })
+register('dynvoice', event.periodic, { schedule: '*/10 * * * * *' })
 register('dynvoice', event.onJoinVoice, { channel: type.voice })
 register('dynvoice', event.onLeaveVoice, { channel: type.voice })
 
@@ -34,10 +34,10 @@ export default {
         const group = context.guild.channels.resolve(parent)
         const groupName = group ? group.name : context.t('dynvoice.root')
         return context.guild.channels.create(`${_factoryPrefix} #${limit} /${template}/`, {
-                type: type.voice,
-                userLimit: 1,
-                parent: group
-            })
+            type: type.voice,
+            userLimit: 1,
+            parent: group
+        })
             .then(channel => success({
                 context: context,
                 description: context.t('dynvoice.factory_created', { name: channel.name, parent: groupName }),
@@ -73,15 +73,15 @@ async function createVoiceChannel(guild, channel, member, language) {
     const factory = channel.name.match(_factoryTemplate)
     if (!factory || Date.now() - _lastUsed < _cooldown) return
     _lastUsed = Date.now()
-    let [ , limit, template ] = factory
+    let [, limit, template] = factory
 
     await guild.channels.create(`${_channelPrefix} ${await applyTemplate(member, template, language)}`, {
-            type: type.voice,
-            userLimit: limit,
-            parent: channel.parent,
-            permissionOverwrites: channel.permissionOverwrites,
-            reason: language('dynvoice.user_created_channel', { username: member.user.tag, nickname: resolveName(member)})
-        })
+        type: type.voice,
+        userLimit: limit,
+        parent: channel.parent,
+        permissionOverwrites: channel.permissionOverwrites,
+        reason: language('dynvoice.user_created_channel', { username: member.user.tag, nickname: resolveName(member) })
+    })
         .then(channel => member.voice.setChannel(channel))
 }
 
