@@ -9,36 +9,14 @@ const _database = connect()
 
 export default {
     save: async (bot, collection, guild, object) => {
-        if (_database) {
-            return _database
-                .collection(collection)
-                .doc(key(bot, guild))
-                .set(object)
-                .then(() => { _cache[cacheKey(bot, guild, collection)] = object })
-        } else {
-            _cache[cacheKey(bot, guild, collection)] = object
-        }
+        await saveToDB(bot, collection, guild, object)
+        _cache[cacheKey(bot, guild, collection)] = object
     },
     obtain: async (bot, collection, guild, def) => {
         let data = _cache[cacheKey(bot, guild, collection)]
         if (data) return data
 
-        if (_database) {
-            if (guild) {
-                data = (await _database
-                    .collection(collection)
-                    .doc(key(bot, guild))
-                    .get())
-                    .data()
-            } else {
-                data = (await _database
-                    .collection(collection)
-                    .where('bot_id', '==', bot.user.id)
-                    .get())
-                    .docs
-                    .map(doc => doc.data())
-            }
-        }
+        data = obtainFromDB(bot, collection, guild)
         if (!data) data = def
         _cache[cacheKey(bot, guild, collection)] = data
 
@@ -71,4 +49,34 @@ function connect() {
         console.log(`Database connection failure:\n${error}`)
         return null
     }
+}
+
+async function saveToDB(bot, collection, guild, object) {
+    if (_database) {
+        return await _database
+            .collection(collection)
+            .doc(key(bot, guild))
+            .set(object)
+    }
+    return null
+}
+
+async function obtainFromDB(bot, collection, guild) {
+    if (_database) {
+        if (guild) {
+            return (await _database
+                .collection(collection)
+                .doc(key(bot, guild))
+                .get())
+                .data()
+        } else {
+            return (await _database
+                .collection(collection)
+                .where('bot_id', '==', bot.user.id)
+                .get())
+                .docs
+                .map(doc => doc.data())
+        }
+    }
+    return null
 }
