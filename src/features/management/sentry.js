@@ -20,15 +20,15 @@ const _roleplay = /(?!http).*?\/.+?\/.*/
 const _httpLink = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/
 const _sentryCollection = 'sentry'
 
+// TODO: implement specific features enable/disable mechanism
 export default {
     name: 'sentry',
     group: groups.management,
     description: 'sentry.description',
     usage: 'sentry [on, off]',
     examples: 'sentry.examples',
-    arguments: 1,
     permissions: [P.ADMINISTRATOR],
-    
+
     execute: async (context, state) => {
         if (state && !['on', 'off'].includes(state)) {
             return man(context, 'sentry')
@@ -94,9 +94,10 @@ export default {
         channel.lastMessage = message
 
         // roleplay
-        if (!message.author.bot && _roleplay.test(message) && !_httpLink.test(message)) {
-            await message.channel.send(message.t('sentry.disgust', {username: message.author}));
-        }
+        // TODO: restore when targetable features will be implemented
+        // if (!message.author.bot && _roleplay.test(message) && !_httpLink.test(message)) {
+        //     await message.channel.send(message.t('sentry.disgust', { username: message.author }));
+        // }
 
         // poetry
         if (!last || last.author.id !== message.author.id) return
@@ -124,7 +125,7 @@ export default {
 
     [event.onReady]: async (bot) => {
         const saved = await storage.obtain(bot, _sentryCollection) || []
-        
+
         saved.forEach(config => {
             _config[config.id] = {
                 emoji: config.emoji
@@ -149,10 +150,12 @@ async function saveChannels(context) {
         name: context.guild.name,
         emoji: (_config[context.guild.id] || {}).emoji || _emoji,
         channels: Object.values(_channels)
-                .filter(channel => channel.guildID === context.guild.id)
-                .map(channel => { return {
+            .filter(channel => channel.guildID === context.guild.id)
+            .map(channel => {
+                return {
                     id: channel.id,
                     name: channel.name
-                }})
+                }
+            })
     })
 }
