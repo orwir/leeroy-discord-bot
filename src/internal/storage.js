@@ -1,5 +1,6 @@
 import firebase from 'firebase-admin'
 import { existsSync, readFileSync } from 'fs'
+import { log } from '../utils/response.js'
 
 const _firebaseCredentialsFile = './firebase-credentials.json'
 const _firebaseCredentialsEnv = 'leeroy_firebase_credentials'
@@ -9,18 +10,40 @@ const _database = connect()
 
 export default {
     save: async (bot, collection, guild, object) => {
-        await saveToDB(bot, collection, guild, object)
-        _cache[cacheKey(bot, guild, collection)] = object
+        _cache[cacheKey(bot, guild, collection)] = {
+            collection: collection,
+            guild: guild ? { id: guild.id } : null,
+            data: object,
+            flush: true
+        }
     },
     obtain: async (bot, collection, guild, def) => {
-        let data = _cache[cacheKey(bot, guild, collection)]
-        if (data) return data
+        let cached = _cache[cacheKey(bot, guild, collection)]
+        if (cached) return cached.data
 
-        data = await obtainFromDB(bot, collection, guild)
+        let data = await obtainFromDB(bot, collection, guild)
         if (!data) data = def
-        _cache[cacheKey(bot, guild, collection)] = data
-
+        _cache[cacheKey(bot, guild, collection)] = {
+            collection: collection,
+            guild: guild ? { id: guild.id } : null,
+            data: data,
+            flush: false
+        }
         return data
+    },
+    flush: async (bot) => {
+        if (!_database) return
+
+        for (const [_, cached] of Object.entries(_cache)) {
+            if (cached.flush) {
+                try {
+                    await saveToDB(bot, cached.collection, cached.guild, cached.data)
+                    cached.flush = false
+                } catch (error) {
+                    log(bot, error)
+                }
+            }
+        }
     }
 }
 
