@@ -1,4 +1,4 @@
-const _onlyEmojis = /^(((?:<(:\w+:|a:\w+:)(\d+)>|(?:\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff]))(\s*?))+)$/
+const _onlyEmojis = /^(<?a?:[\w\d]+:>?)*|(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])*$/
 
 export const unicodeEmojis = /(\u00a9|\u00ae|[\u2000-\u3300]|\ud83c[\ud000-\udfff]|\ud83d[\ud000-\udfff]|\ud83e[\ud000-\udfff])/
 

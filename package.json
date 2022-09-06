@@ -15,7 +15,7 @@
     },
     "dependencies": {
         "discord.js": "^12.5.3",
-        "firebase-admin": "^9.11.0",
+        "firebase-admin": "^10.0.1",
         "i18next": "^17.3.1",
         "lz-string": "^1.4.4",
         "node-cron": "^3.0.0",
@@ -27,7 +27,7 @@
         "@babel/preset-env": "^7.15.0",
         "chai": "^4.3.4",
         "chai-as-promised": "^7.1.1",
-        "mocha": "^6.2.3",
+        "mocha": "^9.1.4",
         "sinon": "^7.5.0"
     },
     "engines": {
